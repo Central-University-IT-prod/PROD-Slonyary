@@ -1,6 +1,7 @@
 body {
 	width: 100vw;
 	overflow-x: hidden;
+	background-color: var(--body-bg-color);
 }
 .container {
 	max-width: 1200px;
@@ -14,11 +15,10 @@ a {
 }
 .App {
 	height: 100vh;
-	background-color: var(--body-bg-color);
 }
 main {
 	flex: 1 1 auto;
 }
-[data-theme="dark"] input::-webkit-calendar-picker-indicator {
+[theme='dark'] input::-webkit-calendar-picker-indicator {
 	filter: invert(1);
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import './App.css'
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material'
@@ -19,8 +19,14 @@ function App() {
 			}),
 		[themeMode]
 	)
+
+	useEffect(() => {
+		const body = document.querySelector('body')
+		body?.setAttribute('theme', themeMode)
+	}, [themeMode])
+
 	return (
-		<div className="App" data-theme={themeMode}>
+		<div className="App">
 			<ThemeProvider theme={theme}>
 				<Outlet />
 			</ThemeProvider>
