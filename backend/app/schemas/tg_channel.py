@@ -9,7 +9,7 @@ class TgChannelUpdate(BaseSchema):
     pass
 
 
-# from app.schemas.user import UserOut
+# from app.schemas.user import UserRead
 from pydantic import BaseModel
 
 

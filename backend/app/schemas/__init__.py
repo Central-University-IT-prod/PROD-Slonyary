@@ -1,10 +1,15 @@
 from .image import ImageCreate, ImageRead, ImageUpdate
-from .post import PostCreate, PostRead, PostUpdate
-from .tg_channel import TgChannelCreate, TgChannelRead, TgChannelUpdate
+from .post import PostRead, PostUpdate, PreviewPost, PostCreate
+from .tg_channel import TgChannelCreate, TgChannelUpdate, TgChannelRead, TgChannelMember, PreviewTgChannel
 from .user import UserCreate, UserRead, UserTelegramData, UserUpdate
 from .vk_channel import VkChannelCreate, VkChannelRead, VkChannelUpdate
 
+
 __all__ = (
+    "PreviewTgChannel",
+    "TgChannelMember",
+    "TgChannelMember",
+    "PreviewPost",
     "UserCreate",
     "UserRead",
     "UserTelegramData",
