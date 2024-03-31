@@ -2,6 +2,8 @@
   border-radius: 40px;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .postInner {
@@ -104,6 +106,7 @@
   margin-top: auto;
   display: flex;
   align-content: stretch;
+  justify-self: flex-end;
 }
 .bottomButtons button {
   height: 60px;
