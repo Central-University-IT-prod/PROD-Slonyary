@@ -1,5 +1,5 @@
 import { Paper } from "@mui/material";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 
 interface IPageElement {
 	children: ReactNode;

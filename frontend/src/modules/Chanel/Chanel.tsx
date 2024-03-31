@@ -1,5 +1,5 @@
 import PageElement from "../../Ui/PageElement/PageElement";
-import biba from "../../imgs/biba.jpg";
+import biba from "../../assets/imgs/biba.jpg";
 import "./Chanel.css";
 
 function Chanel() {

@@ -63,7 +63,7 @@ export const Posts: FC = () => {
 						<AccessTimeIcon color="info" fontSize="large" />
 						<Typography sx={{ color: '#202020' }} textAlign="center">
 							{new Date().getDate()} {getMonthName(new Date().getMonth())}{' '}
-							{getHoursWithMinutes()}
+							{getHoursWithMinutes(new Date())}
 						</Typography>
 					</Stack>
 					<Stack
