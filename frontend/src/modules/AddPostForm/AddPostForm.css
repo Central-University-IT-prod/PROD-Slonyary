@@ -3,8 +3,28 @@
 }
 
 .AddPost_input {
-  margin-top: 10px;
+  margin-top: 5px;
   border: 1px solid var(--alpha5);
   border-radius: 5px;
   padding: 10px 5px;
+}
+
+.AddPostForm-buttonGroup {
+  display: flex;
+  gap: 5px;
+}
+.AddPostForm-buttonGroup button {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: background-color 0.2s linear;
+}
+.AddPostForm-buttonGroup button:hover {
+  background-color: var(--grey-color-1);
+}
+.AddPostForm-buttonGroup button svg {
+  fill: #5578e3;
 }/*# sourceMappingURL=AddPostForm.css.map */

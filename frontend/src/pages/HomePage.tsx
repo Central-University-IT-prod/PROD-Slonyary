@@ -1,9 +1,9 @@
-import Chanel from '../modules/Chanel/Chanel'
+import AddPostForm from '../modules/AddPostForm/AddPostForm'
 
 function HomePage() {
 	return (
 		<>
-			<Chanel />
+			<AddPostForm />
 		</>
 	)
 }

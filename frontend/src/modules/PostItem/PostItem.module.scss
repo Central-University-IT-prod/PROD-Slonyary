@@ -1,0 +1,161 @@
+.post {
+  border-radius: 40px;
+  box-shadow: 0 0 15px 0 #00000033;
+  height: 100%;
+}
+
+.postInner {
+  padding: 24px;
+}
+
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #D9D9D9;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+.leftText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h4 {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  p {
+    color: #E49701;
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+}
+
+.publicised {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  div {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+
+  span {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &.published {
+    div {
+      background-color: #7BF15D;
+    }
+
+    span {
+      color: #7BF15D;
+    }
+  }
+
+  &.moderation {
+    div {
+      background-color: #5894EF;
+    }
+
+    span {
+      color: #5894EF;
+    }
+  }
+
+  &.planned {
+    div {
+      background-color: #FFB13C;
+    }
+
+    span {
+      color: #FFB13C;
+    }
+  }
+}
+
+.adminName {
+  font-size: 16px;
+  color: #A146CF;
+}
+
+.postImages {
+  margin-top: 16px;
+  background-color: #808080;
+  border-radius: 40px;
+  height: 200px;
+}
+
+.postText {
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+.bottomButtons {
+  margin-top: auto;
+  display: flex;
+  align-content: stretch;
+
+  button {
+    height: 60px;
+    width: 100%;
+    color: #000;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all .3s;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .leftButton {
+    border-radius: 0 0 0 40px;
+  }
+
+  .rightButton {
+    border-radius: 0 0 40px 0;
+  }
+
+  .red {
+    background-color: #F15D5D;
+  }
+
+  .grey {
+    background-color: #E6E6E6;
+  }
+
+  .green {
+    background-color: #7BF15D;
+  }
+
+  .orange {
+    background-color: #FFB13C;
+  }
+}
