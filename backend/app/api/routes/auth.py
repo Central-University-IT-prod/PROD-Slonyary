@@ -12,7 +12,7 @@ router = APIRouter()
 @router.post("/", status_code=200)
 async def auth_user(
     user_telegram_data_hash: str, user_telegram_data: UserTelegramData, db: SessionDep
-) -> UserOut:
+) -> dict:
     """
     Регистрация пользователя в системе.
     Для регистрация отправляются данные о его тг аккаунте и хэш для проверки валидности.
@@ -24,7 +24,7 @@ async def auth_user(
         user_telegram_data: UserTelegramData - данные пользователя от телеграм-аккаунта.
 
     Returns:
-        user: UserOut - данные пользователя, если все валиадция прошла успешно.
+        {"status": "ok"}
 
     Errors:
         400 - проблемы валидации pyndatic
@@ -58,5 +58,4 @@ async def auth_user(
             ),
         )
 
-    user = await crud_user.get_by_telegram_id(db, telegram_id=user_telegram_data.id)
-    return user
+    return {"status": "ok"}
