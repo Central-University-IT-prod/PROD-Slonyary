@@ -63,12 +63,12 @@ services:
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - SENTRY_DSN=${SENTRY_DSN}
-
     build:
       context: ./backend
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
     platform: linux/amd64 # Patch for M1 Mac
+    ports: ["5000:80"]
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public

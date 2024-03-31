@@ -32,3 +32,16 @@ class CrudUser(CrudBase[User, UserCreate]):
         query = sqlalchemy.select(User).where(User.telegram_id == telegram_id)
         result = await db.scalar(query)
         return result
+
+    async def is_telegram_id(self, db: Session, telegram_id: int) -> bool:
+        """
+        Checking if there is user with telegram_id.
+
+        Parameters:
+            telegram_id: int - telegram id to check
+        Returns:
+            flag: bool - flag if there is user with given telegram_id.
+        """
+        query = sqlalchemy.select(User).where(User.telegram_id == telegram_id)
+        result = await db.scalar(query)
+        return result != None

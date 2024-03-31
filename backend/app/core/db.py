@@ -2,8 +2,8 @@ from typing import Any
 
 from app.core.config import settings
 from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.orm.exc import DetachedInstanceError
 
 
@@ -51,8 +51,8 @@ class Base(DeclarativeBase):
 
 
 engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
-SessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine, class_=AsyncSession
+SessionLocal = async_sessionmaker(
+    autocommit=False, autoflush=False, bind=engine, future=True
 )
 
 
