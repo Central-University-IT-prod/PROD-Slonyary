@@ -11,6 +11,8 @@ if TYPE_CHECKING:
 
 
 class PostsToTgChannels(Base):
+    __tablename__ = "posts_to_tg_channels"
+
     post_id: Mapped[int] = mapped_column(
         ForeignKey("posts.id", ondelete="cascade"),
         primary_key=True,

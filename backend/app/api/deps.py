@@ -1,9 +1,10 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
+from app.core import security
 from app.core.db import get_db_session
 from app.models import User
 
