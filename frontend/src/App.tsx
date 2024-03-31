@@ -1,14 +1,31 @@
-import { FC } from 'react'
-import { Posts } from './pages/Posts/Posts.tsx'
-import { Container } from '@mui/material'
+import React, { useMemo } from "react";
+import "./App.css";
+import { Outlet } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material";
+import useAppSelector from "./hooks/useAppSelector";
 
-const App: FC = () => {
+function App() {
+	const { mode: themeMode } = useAppSelector((state) => state.theme);
 
-  return (
-    <Container maxWidth="lg">
-      <Posts />
-    </Container>
-  )
+	const theme = useMemo(
+		() =>
+			createTheme({
+				palette: {
+					mode: themeMode,
+					primary: {
+						main: "#ffdd2d",
+					},
+				},
+			}),
+		[themeMode]
+	);
+	return (
+		<div className="App" data-theme={themeMode}>
+			<ThemeProvider theme={theme}>
+				<Outlet />
+			</ThemeProvider>
+		</div>
+	);
 }
 
-export default App
+export default App;

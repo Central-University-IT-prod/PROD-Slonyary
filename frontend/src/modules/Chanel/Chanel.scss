@@ -1,0 +1,21 @@
+.Chanel {
+	display: flex;
+	gap: 15px;
+
+	&-image {
+		height: 50px;
+		width: 50px;
+		img {
+			width: inherit;
+			height: inherit;
+			border-radius: 50%;
+		}
+	}
+	&-title {
+		font-size: 16px;
+		font-weight: 700;
+	}
+	&-name {
+		font-size: 14px;
+	}
+}

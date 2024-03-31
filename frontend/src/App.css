@@ -1,0 +1,24 @@
+body {
+	width: 100vw;
+	overflow-x: hidden;
+}
+.container {
+	max-width: 1200px;
+	width: 100%;
+	margin: auto;
+	padding: 0px 10px;
+	box-sizing: border-box;
+}
+a {
+	cursor: pointer;
+}
+.App {
+	height: 100vh;
+	background-color: var(--body-bg-color);
+}
+main {
+	flex: 1 1 auto;
+}
+[data-theme="dark"] input::-webkit-calendar-picker-indicator {
+	filter: invert(1);
+}

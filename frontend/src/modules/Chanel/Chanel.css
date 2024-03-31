@@ -1,0 +1,20 @@
+.Chanel {
+  display: flex;
+  gap: 15px;
+}
+.Chanel-image {
+  height: 50px;
+  width: 50px;
+}
+.Chanel-image img {
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+}
+.Chanel-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.Chanel-name {
+  font-size: 14px;
+}/*# sourceMappingURL=Chanel.css.map */
