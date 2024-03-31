@@ -1,28 +1,24 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import style from './Registration.module.css'
 import { Button, Grid, Link, TextField } from '@mui/material'
 import { inputsProps } from './inputsProps'
 import { useActions } from '../../hooks/useActions'
 import { useNavigate } from 'react-router-dom'
 import { NavigatePath, paths } from '../../routes'
-import { useDispatch } from 'react-redux'
 import PageElement from '../../Ui/PageElement/PageElement'
 
-export default function Registration() {
+const Registration: FC = () => {
 	const [name, setName] = useState<string>('')
 	const [dateBorn, setDateBorn] = useState<string>('')
 	const { setUser } = useActions()
-	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault()
-		dispatch(
-			setUser({
-				name,
-				dateBorn: dateBorn || null
-			})
-		)
+		setUser({
+			name,
+			dateBorn: dateBorn || null
+		})
 		navigate(NavigatePath(paths.HOME))
 	}
 
@@ -73,3 +69,4 @@ export default function Registration() {
 		</div>
 	)
 }
+export default Registration

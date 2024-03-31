@@ -72,7 +72,7 @@ export const Posts: FC = () => {
 					Опубликованные
 				</Button>
 			</Stack>
-			<Grid container mt={3} spacing={2}>
+			<Grid container rowSpacing={4} mt={3} spacing={2}>
 				{testData
 					.filter(post => category === 'all' ? true : post.category === category)
 					.map((post, index) => <Grid  item xs={12} sm={6} key={index}><PostItem {...post} /></Grid>)}
