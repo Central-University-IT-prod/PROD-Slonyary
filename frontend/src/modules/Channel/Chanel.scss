@@ -1,17 +1,25 @@
 .Chanel {
 	padding: 0px 15px;
 
+	&:not(&:last-child) &-box {
+		border-bottom: 1px solid var(--alpha3);
+	}
 	&-box {
 		padding: 15px 0px;
-		border-bottom: 1px solid var(--alpha5);
+		display: flex;
+		gap: 15px;
+		align-items: center;
+	}
+	&-mainContant {
+		flex: 1 1 auto;
 		display: flex;
 		gap: 15px;
 		align-items: center;
 	}
 
 	&-image {
-		height: 40px;
-		width: 40px;
+		height: 45px;
+		width: 45px;
 		img {
 			width: inherit;
 			height: inherit;
@@ -20,10 +28,12 @@
 	}
 	&-textContent {
 		flex: 1 1 auto;
+		overflow: hidden;
 	}
 	.textContent-title {
-		font-size: 16px;
-		font-weight: 500;
+		min-width: 300px;
+		font-size: 22px;
+		font-weight: 600;
 	}
 	.info-subsribers {
 		font-size: 14px;
@@ -42,7 +52,7 @@
 			color: #fff;
 			border: none;
 			border-radius: 13px;
-			opacity: 0.7;
+			opacity: 0.8;
 			transition: opacity 0.2s linear;
 			&:hover {
 				opacity: 1;
@@ -50,6 +60,17 @@
 		}
 		.open-btn {
 			background-color: var(--green-color-2);
+		}
+	}
+	@media (max-width: 570px) {
+		& {
+			&-box {
+				display: block;
+			}
+			&-manageBtns {
+				flex-direction: row;
+				justify-content: flex-end;
+			}
 		}
 	}
 }

@@ -19,15 +19,17 @@ function Chanel({ chanelData }: IProps) {
 	return (
 		<div className="Chanel">
 			<div className="Chanel-box">
-				<div className="Chanel-image">
-					<img src={biba} />
-				</div>
-				<div className="Chanel-textContent">
-					<div className="textContent-title">
-						<h2>{title}</h2>
+				<div className="Chanel-mainContant">
+					<div className="Chanel-image">
+						<img src={biba} />
 					</div>
-					<div className="info-subsribers">
-						<h4>{subscribers} подписчика</h4>
+					<div className="Chanel-textContent">
+						<div className="textContent-title">
+							<h2>{title}</h2>
+						</div>
+						<div className="info-subsribers">
+							<h4>{subscribers} подписчика</h4>
+						</div>
 					</div>
 				</div>
 				<div className="Chanel-manageBtns">

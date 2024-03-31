@@ -32,8 +32,7 @@ function App() {
 				<Navbar />
 				<Container
 					maxWidth={'lg'}
-					sx={{ marginTop: '20px' }}
-					className="App"
+					sx={{ marginTop: '20px', pb: '15px' }}
 					data-theme={themeMode}
 				>
 					<Outlet />

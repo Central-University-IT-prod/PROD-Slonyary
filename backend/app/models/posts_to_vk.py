@@ -1,8 +1,8 @@
-from mypy.typeshed.stdlib.typing import TYPE_CHECKING
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
 from app.core.db import Base
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from app.models.posts import Post
@@ -10,6 +10,8 @@ if TYPE_CHECKING:
 
 
 class PostsToVkChannels(Base):
+    __tablename__ = "posts_to_vk_channels"
+
     post_id: Mapped[int] = mapped_column(
         ForeignKey("posts.id", ondelete="cascade"),
         primary_key=True,
