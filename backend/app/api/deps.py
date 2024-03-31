@@ -9,14 +9,23 @@ from app.models import User
 
 SessionDepends = Annotated[Session, Depends(get_db_session)]
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 async def get_current_user(
     db: SessionDepends,
-    token: Annotated[str, Depends(oauth2_scheme)],
+    hash: Annotated[str, Header()],
+    data_check_string: Annotated[str, Header()],
 ) -> User:
-    pass
+    """Get current user by tg oauth2 data."""
+    if security.verify_user_data(data_check_string, hash):
+        for row in data_check_string.split("\n"):
+            key, value = row.split("=")
+            if key == "id":
+                return await crud_user.get_by_telegram_id(db, int(value))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Данные неверны",
+        )
 
 
 CurrentUserDep = Annotated[User, Depends(get_current_user)]
