@@ -8,7 +8,7 @@ export const PostItem: FC<TPostItem> = (props) => {
 	const mainEditor = true
 	let rightText
 	switch (props.category) {
-		case 'planned':
+		case 'pending':
 			rightText = 'Не опубликован'
 			break
 		case 'published':
@@ -53,7 +53,7 @@ export const PostItem: FC<TPostItem> = (props) => {
 				<p className={s.postText}>{props.postText}</p>
 			</div>
 			{
-				props.category === 'planned' &&
+				props.category === 'pending' &&
 				<div className={s.bottomButtons}>
 					<button className={`${s.leftButton} ${s.grey}`}>Изменить</button>
 					<button className={`${s.rightButton} ${s.orange}`}>Опубликовать</button>

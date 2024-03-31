@@ -6,5 +6,6 @@ export type TPostItem = {
 	admin: string,
 	postImages: string[],
 	postText: string,
-	category: 'planned' | 'moderation' | 'published',
+	category: 'pending' | 'moderation' | 'published',
+	ownerName: string,
 }
