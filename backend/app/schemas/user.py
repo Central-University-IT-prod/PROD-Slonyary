@@ -1,0 +1,2 @@
+class UserCreate:
+    pass
