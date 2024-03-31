@@ -1,21 +1,55 @@
 .Chanel {
-	display: flex;
-	gap: 15px;
+	padding: 0px 15px;
+
+	&-box {
+		padding: 15px 0px;
+		border-bottom: 1px solid var(--alpha5);
+		display: flex;
+		gap: 15px;
+		align-items: center;
+	}
 
 	&-image {
-		height: 50px;
-		width: 50px;
+		height: 40px;
+		width: 40px;
 		img {
 			width: inherit;
 			height: inherit;
 			border-radius: 50%;
 		}
 	}
-	&-title {
-		font-size: 16px;
-		font-weight: 700;
+	&-textContent {
+		flex: 1 1 auto;
 	}
-	&-name {
+	.textContent-title {
+		font-size: 16px;
+		font-weight: 500;
+	}
+	.info-subsribers {
 		font-size: 14px;
+		font-weight: 400;
+	}
+
+	&-manageBtns {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+
+		button {
+			padding: 5px 15px;
+			font-size: 14px;
+			font-weight: 400;
+			color: #fff;
+			border: none;
+			border-radius: 13px;
+			opacity: 0.7;
+			transition: opacity 0.2s linear;
+			&:hover {
+				opacity: 1;
+			}
+		}
+		.open-btn {
+			background-color: var(--green-color-2);
+		}
 	}
 }

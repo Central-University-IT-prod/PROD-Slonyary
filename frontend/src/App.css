@@ -10,6 +10,9 @@ body {
 	padding: 0 10px;
 	box-sizing: border-box;
 }
+button {
+	cursor: pointer;
+}
 a {
 	cursor: pointer;
 }
