@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
 				element: <HomePage />
 			},
 			{
-				path: paths.POST,
+				path: paths.POSTS,
 				element: <PostPage />
 			}
 		]

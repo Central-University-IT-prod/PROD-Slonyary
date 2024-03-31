@@ -2,7 +2,8 @@ enum paths {
     REGISTRATION = 'registration',
     TELEGRAMAUTH = 'telegramauth',
     HOME = 'home',
-    POST = 'post'
+    POSTS = 'posts',
+    CHANELS = "chanels"
   }
 
 const NavigatePath = (path:string):string => `/${path}`
