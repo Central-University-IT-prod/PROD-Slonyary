@@ -27,11 +27,11 @@ function App() {
 
 	return (
 		<div className="App">
-			<Container maxWidth={'lg'} sx={{ marginTop: '20px' }} className="App" data-theme={themeMode}>
 				<ThemeProvider theme={theme}>
-					<Outlet />
+					<Container maxWidth={'lg'} sx={{ marginTop: '20px' }} className="App" data-theme={themeMode}>
+						<Outlet />
+					</Container>
 				</ThemeProvider>
-			</Container>
 		</div>
 	)
 }
