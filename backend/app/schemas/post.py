@@ -1,0 +1,31 @@
+from datetime import datetime
+
+# from app.schemas.user import UserOut
+from pydantic import BaseModel, Field
+
+
+class PreviewPost(BaseModel):
+    id: int = 0
+    satus: str
+    channel_avatars: list[str]
+    channel_name: str
+    publish_time: datetime
+    owner_name: str
+    photos: list[str]
+    html_text: str | None = None
+    plain_text: str | None = None
+    views: int = 0
+    reactions: int = 0
+    shared: int = 0
+    is_owner: bool
+
+class ChannelOut(BaseModel):
+    id: int
+    name: str
+    avatar: str
+    url: str
+    type: str
+
+class PostOut(PreviewPost):
+    owner_avatar: str
+    publish_channels: list[ChannelOut]
