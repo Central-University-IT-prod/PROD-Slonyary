@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "../../SMM-manager/node_modules/.bin/vite",
+    "dev": "vite",
     "build": "../../SMM-manager/node_modules/.bin/tsc && vite build",
     "lint": "../../SMM-manager/node_modules/.bin/eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "../../SMM-manager/node_modules/.bin/vite preview"
@@ -20,7 +20,8 @@
     "draft-js-export-html": "^1.4.1",
     "draft-js-utils": "^1.4.1",
     "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "web-vitals": "^3.5.2"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^2.2.1",
