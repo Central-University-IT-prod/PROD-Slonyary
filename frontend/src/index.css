@@ -75,3 +75,9 @@
 		--basic-padding-horizontally-wide: 15px;
 	}
 }
+
+button, input {
+	background: transparent;
+	border: none;
+	outline: none;
+}

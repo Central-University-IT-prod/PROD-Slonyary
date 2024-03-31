@@ -1,6 +1,7 @@
 .post {
   border-radius: 40px;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+  height: 100%;
 }
 
 .postInner {
@@ -97,6 +98,43 @@
 .postText {
   margin-top: 16px;
   font-size: 16px;
+}
+
+.bottomButtons {
+  margin-top: auto;
+  display: flex;
+  align-content: stretch;
+}
+.bottomButtons button {
+  height: 60px;
+  width: 100%;
+  color: #000;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s;
+  opacity: 0.8;
+}
+.bottomButtons button:hover {
+  opacity: 1;
+}
+.bottomButtons .leftButton {
+  border-radius: 0 0 0 40px;
+}
+.bottomButtons .rightButton {
+  border-radius: 0 0 40px 0;
+}
+.bottomButtons .red {
+  background-color: #F15D5D;
+}
+.bottomButtons .grey {
+  background-color: #E6E6E6;
+}
+.bottomButtons .green {
+  background-color: #7BF15D;
+}
+.bottomButtons .orange {
+  background-color: #FFB13C;
 }
 
 /*# sourceMappingURL=PostItem.module.css.map */

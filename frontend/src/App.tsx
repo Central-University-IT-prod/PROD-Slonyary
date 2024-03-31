@@ -28,7 +28,7 @@ function App() {
 	return (
 		<div className="App">
 				<ThemeProvider theme={theme}>
-					<Container maxWidth={'lg'} sx={{ marginTop: '20px' }} className="App" data-theme={themeMode}>
+					<Container maxWidth={'lg'} sx={{ paddingTop: '20px', paddingBottom: '20px' }} className="App" data-theme={themeMode}>
 						<Outlet />
 					</Container>
 				</ThemeProvider>
