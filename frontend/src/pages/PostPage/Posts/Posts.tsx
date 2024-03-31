@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 import { Button, Grid, Stack } from '@mui/material'
 import { PostItem } from '../../../modules/PostItem/PostItem.tsx'
 import { TPostItem } from '../../../models/PostsModels.ts'
+import bibaImg from '../../../assets/imgs/biba.jpg'
 
 const testData: TPostItem[] = [
 	{
@@ -10,7 +11,7 @@ const testData: TPostItem[] = [
 		date: '2024-03-31T10:05:03.255Z',
 		publicised: true,
 		admin: 'K1rles',
-		postImages: ['asd', 'ads'],
+		postImages: [bibaImg, bibaImg],
 		postText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto cum illum inventore nam odio quasi!',
 		category: 'planned'
 	},
@@ -20,7 +21,7 @@ const testData: TPostItem[] = [
 		date: '2024-03-31T10:05:03.255Z',
 		publicised: false,
 		admin: 'StreveSuksess',
-		postImages: ['asd', 'ads'],
+		postImages: ['https://img.freepik.com/free-photo/a-painting-of-a-mountain-lake-with-a-mountain-in-the-background_188544-9126.jpg', bibaImg, bibaImg, bibaImg, bibaImg, bibaImg],
 		postText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto cum illum inventore nam odio quasi!',
 		category: 'published'
 	},
@@ -30,7 +31,7 @@ const testData: TPostItem[] = [
 		date: '2024-03-31T10:05:03.255Z',
 		publicised: false,
 		admin: 'Jake Fish',
-		postImages: ['asd', 'ads'],
+		postImages: [bibaImg, bibaImg, bibaImg, bibaImg, bibaImg, bibaImg, bibaImg, bibaImg],
 		postText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto cum illum inventore nam odio quasi!',
 		category: 'moderation'
 	}
@@ -72,10 +73,10 @@ export const Posts: FC = () => {
 					Опубликованные
 				</Button>
 			</Stack>
-			<Grid container rowSpacing={4} mt={3} spacing={2}>
+			<Grid container rowSpacing={4} mt={1} spacing={2}>
 				{testData
 					.filter(post => category === 'all' ? true : post.category === category)
-					.map((post, index) => <Grid  item xs={12} sm={6} key={index}><PostItem {...post} /></Grid>)}
+					.map((post, index) => <Grid item xs={12} sm={6} key={index}><PostItem {...post} /></Grid>)}
 			</Grid>
 		</>
 	)

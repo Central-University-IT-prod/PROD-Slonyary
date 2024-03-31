@@ -2,6 +2,7 @@ import { FC } from 'react'
 import bibaImg from '../../assets/imgs/biba.jpg'
 import s from './PostItem.module.scss'
 import { TPostItem } from '../../models/PostsModels.ts'
+import { ImageList, ImageListItem } from '@mui/material'
 
 export const PostItem: FC<TPostItem> = (props) => {
 	const mainEditor = true
@@ -37,7 +38,18 @@ export const PostItem: FC<TPostItem> = (props) => {
 						<p className={s.adminName}>{props.admin}</p>
 					</div>
 				</div>
-				<div className={s.postImages}></div>
+				{
+					!!props.postImages?.length &&
+					<ImageList sx={{ width: '100%', borderRadius: '40px', marginTop: '10px' }}
+										 cols={props.postImages.length > 3 ? 3 : props.postImages.length}
+					>
+						{props.postImages.map((imgUrl, index) => (
+							<ImageListItem key={index}>
+								<img src={imgUrl} alt='Картинка' />
+							</ImageListItem>
+						))}
+					</ImageList>
+				}
 				<p className={s.postText}>{props.postText}</p>
 			</div>
 			{
