@@ -16,9 +16,8 @@ export const getMonthName = (month: number): string => {
 	return months[month - 1]
 }
 
-export const getHoursWithMinutes = (): string => {
-	const now = new Date()
-	const hours = String(now.getHours()).padStart(2, '0')
-	const minutes = String(now.getMinutes()).padStart(2, '0')
+export const getHoursWithMinutes = (date: Date): string => {
+	const hours = String(date.getHours()).padStart(2, '0')
+	const minutes = String(date.getMinutes()).padStart(2, '0')
 	return `${hours}:${minutes}`
 }
