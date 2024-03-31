@@ -6,7 +6,7 @@ from typing import Union
 
 import sqlalchemy
 from app.crud.base import CrudBase
-from app.models.user import User
+from app.models.users import User
 from app.schemas import UserCreate, UserUpdate
 from sqlalchemy.orm import Session
 
