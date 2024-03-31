@@ -2,10 +2,9 @@ from typing import Any
 
 from app.core.config import settings
 from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.orm.exc import DetachedInstanceError
-from sqlmodel import Session, create_engine, select
 
 
 class Base(DeclarativeBase):
@@ -51,9 +50,9 @@ class Base(DeclarativeBase):
         return f"<{self.__class__.__name__} {id(self)}>"
 
 
-engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
-SessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine, class_=AsyncSession
+engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+SessionLocal = async_sessionmaker(
+    autocommit=False, autoflush=False, bind=engine, future=True
 )
 
 

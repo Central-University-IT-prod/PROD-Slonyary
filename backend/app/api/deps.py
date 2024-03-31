@@ -1,22 +1,23 @@
+import contextlib
+from collections.abc import AsyncIterator
 from typing import Annotated
 
-from app.core import security
-from app.core.config import settings
-from app.core.db import SessionLocal, engine
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from pydantic import ValidationError
+from app.core.db import SessionLocal
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
-reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
-)
 
-
-async def get_db():
-    async with SessionLocal() as session:
+async def get_async_session() -> AsyncIterator[AsyncSession]:
+    session = SessionLocal()
+    try:
         yield session
+    except Exception as e:
+        await session.rollback()
+        raise e
+    finally:
+        await session.commit()
+        await session.close()
 
 
-SessionDep = Annotated[Session, Depends(get_db)]
+SessionDep = Annotated[Session, Depends(get_async_session)]
