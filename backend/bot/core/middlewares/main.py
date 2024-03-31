@@ -1,8 +1,7 @@
-from abc import ABC
-from typing import Callable, Dict, Awaitable, Any
+from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
-from aiogram.types import Message, TelegramObject
+from aiogram.types import Message
 
 
 class Middleware(BaseMiddleware):
@@ -13,9 +12,8 @@ class Middleware(BaseMiddleware):
         self,
         handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
         event: Message,
-        data: Dict[str, Any]
+        data: Dict[str, Any],
     ) -> Any:
-
         # Тут нужно встроить защиту от спама и кеширование данных
 
         return await handler(event, data)

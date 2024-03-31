@@ -1,7 +1,6 @@
 from aiogram import Bot
-from aiogram.exceptions import TelegramBadRequest
 from aiogram.methods.set_my_commands import SetMyCommands
-from aiogram.types import BotCommandScopeAllPrivateChats, BotCommandScopeChat
+from aiogram.types import BotCommandScopeAllPrivateChats
 from aiogram.types.bot_command import BotCommand
 
 # Команды для пользователя
@@ -15,4 +14,6 @@ async def set_commands(bot: Bot) -> None:
     Устанавливает команды для пользователей бота
     """
 
-    await SetMyCommands(commands=user_commands, scope=BotCommandScopeAllPrivateChats()).as_(bot)
+    await SetMyCommands(
+        commands=user_commands, scope=BotCommandScopeAllPrivateChats()
+    ).as_(bot)

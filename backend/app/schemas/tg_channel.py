@@ -1,7 +1,16 @@
-from datetime import datetime
+from app.schemas.base import BaseSchema
+
+
+class TgChannelCreate(BaseSchema):
+    pass
+
+
+class TgChannelUpdate(BaseSchema):
+    pass
+
 
 # from app.schemas.user import UserOut
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class TgChannelMember(BaseModel):
@@ -11,7 +20,7 @@ class TgChannelMember(BaseModel):
     photo_url: str | None = None
 
 
-class TgChannelOut(BaseModel):
+class TgChannelRead(BaseModel):
     id: int
     photo_url: str | None = None
     name: str

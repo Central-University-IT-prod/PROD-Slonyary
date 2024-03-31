@@ -1,20 +1,7 @@
-from typing import Any
+from fastapi import APIRouter
 
-from app.api.deps import CurrentUserDep, SessionDep, User
-from app.core import security, settings
-from app.crud import crud_user
-from app.schemas import (
-    ChannelOut,
-    PostOut,
-    PreviewPost,
-    PreviewTgChannel,
-    TgChannelMember,
-    TgChannelOut,
-    UserCreate,
-    UserOut,
-    UserTelegramData,
-)
-from fastapi import APIRouter, Depends, HTTPException, status
+from app.api.deps import CurrentUserDep, SessionDep
+from app.schemas import PreviewPost, TgChannelOut
 
 router = APIRouter()
 

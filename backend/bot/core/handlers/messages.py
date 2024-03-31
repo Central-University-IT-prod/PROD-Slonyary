@@ -8,4 +8,4 @@ async def message_handler(message: Message):
 
     print(message)
 
-    await message.answer('test')
+    await message.answer("test")
