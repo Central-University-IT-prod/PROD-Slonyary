@@ -1,18 +1,17 @@
-from typing import Any
-
-from app.api.deps import SessionDep
-from app.core import security, settings
-from app.crud import crud_user
-from app.schemas import UserCreate, UserOut, UserTelegramData
-from fastapi import APIRouter, Depends, HTTPException, status
+from app.core import security
+from app.crud import CrudUserDepends
+from app.schemas import UserCreate, UserRead, UserTelegramData
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter()
 
 
 @router.post("/", status_code=200)
 async def auth_user(
-    user_telegram_data_hash: str, user_telegram_data: UserTelegramData, db: SessionDep
-) -> UserOut:
+    user_telegram_data_hash: str,
+    user_telegram_data: UserTelegramData,
+    user_crud: CrudUserDepends,
+) -> UserRead:
     """
     Регистрация пользователя в системе.
     Для регистрация отправляются данные о его тг аккаунте и хэш для проверки валидности.
@@ -22,9 +21,10 @@ async def auth_user(
     Parameters:
         user_telegram_data_hash: str - хэш для проверки.
         user_telegram_data: UserTelegramData - данные пользователя от телеграм-аккаунта.
+        user_crud:
 
     Returns:
-        user: UserOut - данные пользователя, если все валиадция прошла успешно.
+        user: UserRead - данные пользователя, если все валиадция прошла успешно.
 
     Errors:
         400 - проблемы валидации pyndatic
@@ -45,12 +45,11 @@ async def auth_user(
             detail="Данные неверны",
         )
 
-    is_user = await crud_user.is_telegram_id(db, telegram_id=user_telegram_data.id)
+    is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.
     if not is_user:
-        await crud_user.create(
-            db,
+        await user_crud.create(
             UserCreate(
                 telegram_id=user_telegram_data.id,
                 username=user_telegram_data.username,
@@ -58,5 +57,5 @@ async def auth_user(
             ),
         )
 
-    user = await crud_user.get_by_telegram_id(db, telegram_id=user_telegram_data.id)
+    user = await user_crud.get_by_telegram_id(telegram_id=user_telegram_data.id)
     return user
