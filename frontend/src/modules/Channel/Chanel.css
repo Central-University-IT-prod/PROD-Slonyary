@@ -1,20 +1,51 @@
 .Chanel {
+  padding: 0px 15px;
+}
+.Chanel-box {
+  padding: 15px 0px;
+  border-bottom: 1px solid var(--alpha5);
   display: flex;
   gap: 15px;
+  align-items: center;
 }
 .Chanel-image {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
 }
 .Chanel-image img {
   width: inherit;
   height: inherit;
   border-radius: 50%;
 }
-.Chanel-title {
-  font-size: 16px;
-  font-weight: 700;
+.Chanel-textContent {
+  flex: 1 1 auto;
 }
-.Chanel-name {
+.Chanel .textContent-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+.Chanel .info-subsribers {
   font-size: 14px;
+  font-weight: 400;
+}
+.Chanel-manageBtns {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.Chanel-manageBtns button {
+  padding: 5px 15px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  border: none;
+  border-radius: 13px;
+  opacity: 0.7;
+  transition: opacity 0.2s linear;
+}
+.Chanel-manageBtns button:hover {
+  opacity: 1;
+}
+.Chanel-manageBtns .open-btn {
+  background-color: var(--green-color-2);
 }/*# sourceMappingURL=Chanel.css.map */

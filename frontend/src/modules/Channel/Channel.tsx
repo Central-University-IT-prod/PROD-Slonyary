@@ -1,28 +1,41 @@
-import PageElement from "../../Ui/PageElement/PageElement";
-import biba from "../../assets/imgs/biba.jpg";
-import "./Chanel.css";
+import biba from '../../assets/imgs/biba.jpg'
+import './Chanel.css'
 
-function Channel() {
-  return (
-    <PageElement>
-      <div className="Chanel">
-        <div className="Chanel-image">
-          <img src={biba}/>
-        </div>
-        <div className="Chanel-textContent">
-          <div className="textContent-title">
-            <h2>Название канала</h2>
-          </div>
-          <div className="textContent-name">
-            <h3>@chanelName</h3>
-          </div>
-        </div>
-        <div className="Chanel-info">
-          <div className="info-subsribers"></div>
-        </div>
-      </div>
-    </PageElement>
-  );
+type TypeChanel = {
+	title: string
+	name: string
+	subscribers: number
+	category: string
+	//img: string
 }
 
-export default Channel;
+interface IProps {
+	chanelData: TypeChanel
+}
+
+function Chanel({ chanelData }: IProps) {
+	const { title, subscribers } = chanelData
+
+	return (
+		<div className="Chanel">
+			<div className="Chanel-box">
+				<div className="Chanel-image">
+					<img src={biba} />
+				</div>
+				<div className="Chanel-textContent">
+					<div className="textContent-title">
+						<h2>{title}</h2>
+					</div>
+					<div className="info-subsribers">
+						<h4>{subscribers} подписчика</h4>
+					</div>
+				</div>
+				<div className="Chanel-manageBtns">
+					<button className="open-btn">Открыть</button>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+export default Chanel
