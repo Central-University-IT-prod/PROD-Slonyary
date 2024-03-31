@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import './App.css'
 import { Outlet } from 'react-router-dom'
-import {ThemeProvider, createTheme, Container} from '@mui/material'
+import { ThemeProvider, createTheme, Container } from '@mui/material'
 import useAppSelector from './hooks/useAppSelector'
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
 				palette: {
 					mode: themeMode,
 					primary: {
-						main: '#ffdd2d'
+						main: '#5578e3'
 					}
 				}
 			}),
@@ -27,11 +27,16 @@ function App() {
 
 	return (
 		<div className="App">
-				<ThemeProvider theme={theme}>
-					<Container maxWidth={'lg'} sx={{ marginTop: '20px' }} className="App" data-theme={themeMode}>
-						<Outlet />
-					</Container>
-				</ThemeProvider>
+			<ThemeProvider theme={theme}>
+				<Container
+					maxWidth={'lg'}
+					sx={{ marginTop: '20px' }}
+					className="App"
+					data-theme={themeMode}
+				>
+					<Outlet />
+				</Container>
+			</ThemeProvider>
 		</div>
 	)
 }

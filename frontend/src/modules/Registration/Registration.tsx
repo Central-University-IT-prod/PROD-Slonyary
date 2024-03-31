@@ -1,46 +1,40 @@
-import React, { useState } from "react";
-import style from "./Registration.module.css";
-import { Button, Grid, Link, TextField } from "@mui/material";
-import { inputsProps } from "./inputsProps";
-import { useActions } from "../../hooks/useActions";
-import { useNavigate } from "react-router-dom";
-import { NavigatePath, paths } from "../../routes";
-import { useDispatch } from "react-redux";
-import PageElement from "../../Ui/PageElement/PageElement";
-import { THEME_KEY } from "../../constants";
+import React, { useState } from 'react'
+import style from './Registration.module.css'
+import { Button, Grid, Link, TextField } from '@mui/material'
+import { inputsProps } from './inputsProps'
+import { useActions } from '../../hooks/useActions'
+import { useNavigate } from 'react-router-dom'
+import { NavigatePath, paths } from '../../routes'
+import { useDispatch } from 'react-redux'
+import PageElement from '../../Ui/PageElement/PageElement'
 
 export default function Registration() {
-	const [name, setName] = useState<string>("");
-	const [dateBorn, setDateBorn] = useState<string>("");
-	const { setUser } = useActions();
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	const [name, setName] = useState<string>('')
+	const [dateBorn, setDateBorn] = useState<string>('')
+	const { setUser } = useActions()
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
+		e.preventDefault()
 		dispatch(
 			setUser({
 				name,
-				dateBorn: dateBorn || null,
+				dateBorn: dateBorn || null
 			})
-		);
-		navigate(NavigatePath(paths.HOME));
-	};
+		)
+		navigate(NavigatePath(paths.HOME))
+	}
 
-	type changer = (e: React.ChangeEvent<HTMLInputElement>) => void;
-	const nameOnChange: changer = (e) => setName(e.target.value);
-	const dateOnChange: changer = (e) => setDateBorn(e.target.value);
+	type changer = (e: React.ChangeEvent<HTMLInputElement>) => void
+	const nameOnChange: changer = (e) => setName(e.target.value)
+	const dateOnChange: changer = (e) => setDateBorn(e.target.value)
 	return (
 		<div className={style.Registration_wrapper}>
 			<div className="container">
 				<PageElement>
 					<h1 className={style.Registration_title}>Регистрация</h1>
-					<Grid
-						container
-						spacing="15px"
-						wrap="wrap"
-						justifyContent="center"
-					>
+					<Grid container spacing="15px" wrap="wrap" justifyContent="center">
 						<Grid item md={12} sm={12} xs={12}>
 							<TextField
 								{...inputsProps.name}
@@ -66,7 +60,7 @@ export default function Registration() {
 					<Button
 						disabled={name.length === 0}
 						variant="contained"
-						sx={{ m: "auto", display: "block", mt: 3 }}
+						sx={{ m: 'auto', display: 'block', mt: 3 }}
 						onClick={onSubmit}
 					>
 						Зарегистрироваться
@@ -77,5 +71,5 @@ export default function Registration() {
 				</PageElement>
 			</div>
 		</div>
-	);
+	)
 }

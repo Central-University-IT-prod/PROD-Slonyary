@@ -27,4 +27,26 @@
 			}
 		}
 	}
+	.fileInputLabel {
+		margin-top: 15px;
+		cursor: pointer;
+		width: 100%;
+		padding: 10px 10px;
+		text-align: center;
+		border: 2px solid #5578e3;
+		background-color: rgba($color: #5578e3, $alpha: 0.3);
+		box-sizing: border-box;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		color: #5578e3;
+		border-radius: 8px;
+		transition: background-color 0.2s ease;
+		margin-bottom: 10px;
+
+		&:hover {
+			background-color: rgba($color: #5578e3, $alpha: 0.5);
+		}
+	}
 }
