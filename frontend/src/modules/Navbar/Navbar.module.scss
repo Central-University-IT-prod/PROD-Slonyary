@@ -11,22 +11,22 @@
 .left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .logo {
-  width: 55px;
-  height: 55px;
+  width: 45px;
+  height: 45px;
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .link {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
   color: rgba(#000, 0.6);
   transition: all .3s;
@@ -38,17 +38,17 @@
 
 .right {
   display: flex;
-  gap: 16px;
+  gap: 15px;
   align-items: center;
 }
 
 .userLogo {
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
 }
 
 .userName {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 400;
 }
