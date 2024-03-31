@@ -59,7 +59,7 @@ class Settings(BaseSettings):
 
     @computed_field  # type: ignore[misc]
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
+    def sqlalachemy_database_uri(self) -> PostgresDsn:
         return MultiHostUrl.build(
             scheme="postgresql+psycopg",
             username=self.POSTGRES_USER,

@@ -67,7 +67,7 @@ def async_session_factory(
     async_engine_default_params = {"poolclass": NullPool}
     async_engine_default_params.update(engine_params)
 
-    url = str(settings.SQLALCHEMY_DATABASE_URI)
+    url = str(settings.sqlalachemy_database_uri)
     async_engine = create_async_engine(url, **async_engine_default_params)
     session_factory = async_sessionmaker(
         bind=async_engine,
