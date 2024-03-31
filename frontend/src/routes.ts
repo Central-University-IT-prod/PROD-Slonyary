@@ -1,11 +1,11 @@
 enum paths {
-    REGISTRATION = 'registration',
-    TELEGRAMAUTH = 'telegramauth',
-    HOME = 'home',
-    POSTS = 'posts',
-    CHANELS = "chanels"
-  }
+  REGISTRATION = 'registration',
+  TELEGRAMAUTH = 'telegramauth',
+  HOME = 'home',
+  POSTS = 'posts',
+  CHANNELS = "channels"
+}
 
-const NavigatePath = (path:string):string => `/${path}`
+const NavigatePath = (path: string): string => `/${path}`
 
 export {paths, NavigatePath}
