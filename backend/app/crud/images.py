@@ -5,7 +5,6 @@ from app.crud.base import CrudBase
 # from app.models import Image
 from app.schemas import ImageCreate, ImageRead, ImageUpdate
 
-
 Image = None  # !!
 
 

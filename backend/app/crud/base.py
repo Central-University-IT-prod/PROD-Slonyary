@@ -1,13 +1,11 @@
 from typing import Generic, Type, TypeVar, Union
 
 import sqlalchemy
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Base
-from fastapi.encoders import jsonable_encoder
-
 from app.schemas.base import BaseSchema
-
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseSchema)

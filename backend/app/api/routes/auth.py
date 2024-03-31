@@ -1,7 +1,8 @@
+from fastapi import APIRouter, HTTPException, status
+
 from app.core import security
 from app.crud import CrudUserDepends
-from app.schemas import UserCreate, UserRead, UserTelegramData
-from fastapi import APIRouter, HTTPException, status
+from app.schemas import UserCreate, UserTelegramData
 
 router = APIRouter()
 
@@ -11,7 +12,7 @@ async def auth_user(
     user_telegram_data_hash: str,
     user_telegram_data: UserTelegramData,
     user_crud: CrudUserDepends,
-) -> UserRead:
+) -> dict:
     """
     Регистрация пользователя в системе.
     Для регистрация отправляются данные о его тг аккаунте и хэш для проверки валидности.
@@ -24,7 +25,7 @@ async def auth_user(
         user_crud:
 
     Returns:
-        user: UserRead - данные пользователя, если все валиадция прошла успешно.
+        {"status": "ok"}
 
     Errors:
         400 - проблемы валидации pyndatic
@@ -57,5 +58,4 @@ async def auth_user(
             ),
         )
 
-    user = await user_crud.get_by_telegram_id(telegram_id=user_telegram_data.id)
-    return user
+    return {"status": "ok"}

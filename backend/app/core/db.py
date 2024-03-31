@@ -1,7 +1,6 @@
 import contextlib
 from typing import Any, AsyncIterator, Callable
 
-from app.core.config import settings
 from sqlalchemy import MetaData, NullPool
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -9,8 +8,10 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Session
 from sqlalchemy.orm.exc import DetachedInstanceError
+
+from app.core.config import settings
 
 
 class Base(DeclarativeBase):
@@ -110,7 +111,6 @@ def init_db(session: Session) -> None:
     # from app.core.engine import engine
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
-    from app.models import User
-    from app.schemas import UserCreate
+    pass
 
     # TODO: superuser registration

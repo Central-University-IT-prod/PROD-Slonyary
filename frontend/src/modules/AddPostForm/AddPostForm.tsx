@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import {
 	CompositeDecorator,
 	ContentBlock,
@@ -16,22 +16,23 @@ import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough'
+import LinkIcon from '@mui/icons-material/Link'
+import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.css'
+import ImageTable from '../ImageTable/ImageTable'
 
 function AddPostForm() {
+	const maxLength = 9
 	type LinkProps = {
 		children: React.ReactNode
 		contentState: ContentState
 		entityKey: string
 	}
 
-	const Link: React.FC<LinkProps> = ({ contentState, entityKey, children }) => {
-		/* Получаем url с помощью уникального ключа Entity */
+	const Link: FC<LinkProps> = ({ contentState, entityKey, children }) => {
 		const { url } = contentState.getEntity(entityKey).getData()
 
-		const handlerClick = () => {
-			alert(`URL: ${url}`)
-		}
+		const handlerClick = () => alert(`URL: ${url}`)
 
 		return (
 			<a href={url} onClick={handlerClick}>
@@ -97,21 +98,16 @@ function AddPostForm() {
 			mutability: DraftEntityMutability
 		) => {
 			setEditorState((currentState) => {
-				/* Получаем текущий контент */
 				const contentState = currentState.getCurrentContent()
-				/* Создаем Entity с данными */
 				const contentStateWithEntity = contentState.createEntity(
 					entityType,
 					mutability,
 					data
 				)
-				/* Получаем уникальный ключ Entity */
 				const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
-				/* Обьединяем текущее состояние с новым */
 				const newState = EditorState.set(currentState, {
 					currentContent: contentStateWithEntity
 				})
-				/* Вставляем ссылку в указанное место */
 				return RichUtils.toggleLink(
 					newState,
 					newState.getSelection(),
@@ -123,19 +119,17 @@ function AddPostForm() {
 	)
 
 	const addLink = useCallback(
-		(url: string) => {
-			addEntity('link', { url }, 'MUTABLE')
-		},
+		(url: string) => addEntity('link', { url }, 'MUTABLE'),
 		[addEntity]
 	)
 
 	const handlerAddLink = () => {
 		const url = prompt('URL:')
 
-		if (url) {
-			addLink(url)
-		}
+		if (!url) return
+		addLink(url)
 	}
+	type TypeFileList = FileList | null
 
 	function findLinkEntities(
 		/* Блок в котором производилось последнее изменение */
@@ -157,8 +151,85 @@ function AddPostForm() {
 		}, callback)
 	}
 
+	const [files, setFiles] = useState<File[]>([])
+
+	const onDragEnter = (e: any) => {
+		e.preventDefault()
+		e.stopPropagation()
+	}
+
+	const filterFiles = (newFiles: TypeFileList): File[] => {
+		if (!newFiles) return []
+
+		const res: File[] = [...files]
+		for (let index = newFiles.length - 1; index >= 0; index--) {
+			const file = newFiles[index]
+
+			if (res.length === maxLength) break
+
+			if ('image/jpeg,image/png'.split(',').includes(file.type)) {
+				res.push(file)
+			} else {
+				continue
+			}
+		}
+		return res
+	}
+
+	const onDrop = (e: any) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setFiles(filterFiles(e.dataTransfer.files))
+	}
+
+	const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		const input = document.querySelector(
+			'#upload-postImage'
+		) as HTMLInputElement
+		setFiles(filterFiles(input.files))
+	}
+
+	const deleteMedia = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		index: number
+	) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		const arrFiles = [...files]
+		arrFiles.splice(index, 1)
+		setFiles(arrFiles)
+	}
+
+	const onDragOver = (e: any) => e.preventDefault()
 	return (
 		<div className="AddPostForm">
+			<ImageTable deleteImage={deleteMedia} files={files} />
+			<label
+				className="fileInputLabel"
+				htmlFor="upload-postImage"
+				onDragEnter={onDragEnter}
+				onDrop={onDrop}
+				onDragOver={onDragOver}
+			>
+				<ImageIcon />
+				<h4>Добавить</h4>
+			</label>
+			<h2>Текст поста</h2>
+			<p>Выделите текст и нажмите на кнопку стиля или ссылки.</p>
+			<input
+				type="file"
+				maxLength={maxLength}
+				name="upload-postImage"
+				id="upload-postImage"
+				style={{ display: 'none' }}
+				onChange={changeInput}
+				multiple
+				hidden
+				accept="image/jpeg,image/png"
+			/>
 			<div className="AddPostForm-buttonGroup">
 				<button onClick={onBoldClick}>
 					<FormatBoldIcon />
@@ -173,10 +244,9 @@ function AddPostForm() {
 					<FormatStrikethroughIcon />
 				</button>
 				<button onClick={handlerAddLink}>
-					<FormatStrikethroughIcon />
+					<LinkIcon />
 				</button>
 			</div>
-
 			<div className="AddPost_input">
 				<Editor
 					editorState={editorState}
@@ -189,6 +259,7 @@ function AddPostForm() {
 					<TextField
 						fullWidth
 						size="small"
+						type="date"
 						placeholder="Дата публикации"
 						sx={{
 							display: 'flex',
@@ -201,6 +272,7 @@ function AddPostForm() {
 						fullWidth
 						size="small"
 						placeholder="Время публикации"
+						type="time"
 						sx={{
 							display: 'flex',
 							alignItems: 'flex-end'
@@ -208,7 +280,6 @@ function AddPostForm() {
 					/>
 				</Grid>
 			</Grid>
-
 			<Button
 				variant="contained"
 				sx={{

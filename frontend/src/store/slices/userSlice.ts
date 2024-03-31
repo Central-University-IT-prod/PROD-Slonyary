@@ -3,7 +3,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 type TypeUser = {
     name: string,
     dateBorn: string | null,
-
 }
 
 const initialState:TypeUser = {

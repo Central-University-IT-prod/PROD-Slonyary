@@ -27,4 +27,27 @@
 }
 .AddPostForm-buttonGroup button svg {
   fill: #5578e3;
-}/*# sourceMappingURL=AddPostForm.css.map */
+}
+.AddPostForm .fileInputLabel {
+  margin-top: 15px;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 10px;
+  text-align: center;
+  border: 2px solid #5578e3;
+  background-color: rgba(85, 120, 227, 0.3);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: #5578e3;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  margin-bottom: 10px;
+}
+.AddPostForm .fileInputLabel:hover {
+  background-color: rgba(85, 120, 227, 0.5);
+}
+
+/*# sourceMappingURL=AddPostForm.css.map */

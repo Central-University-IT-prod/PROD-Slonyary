@@ -5,7 +5,6 @@ from app.crud.base import CrudBase
 # from app.models import Post
 from app.schemas import PostCreate, PostRead, PostUpdate
 
-
 Post = None  # !!
 
 

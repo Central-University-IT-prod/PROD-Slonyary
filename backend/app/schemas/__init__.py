@@ -1,8 +1,8 @@
+from .image import ImageCreate, ImageRead, ImageUpdate
+from .post import PostCreate, PostRead, PostUpdate
+from .tg_channel import TgChannelCreate, TgChannelRead, TgChannelUpdate
 from .user import UserCreate, UserRead, UserTelegramData, UserUpdate
-from .tg_channel import TgChannelRead, TgChannelCreate, TgChannelUpdate
-from .vk_channel import VkChannelRead, VkChannelUpdate, VkChannelCreate
-from .post import PostRead, PostCreate, PostUpdate
-from .image import ImageCreate, ImageUpdate, ImageRead
+from .vk_channel import VkChannelCreate, VkChannelRead, VkChannelUpdate
 
 __all__ = (
     "UserCreate",

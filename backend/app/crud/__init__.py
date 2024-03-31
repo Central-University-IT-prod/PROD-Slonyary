@@ -2,12 +2,12 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from .post import CrudPost
-from .user import CrudUser
-from .images import CrudImage
-from .tg_channel import CrudTgChannel
-from .vk_channel import CrudVkChannel
 from ..api.deps import SessionDepends
+from .images import CrudImage
+from .post import CrudPost
+from .tg_channel import CrudTgChannel
+from .user import CrudUser
+from .vk_channel import CrudVkChannel
 
 
 def crud_user(db: SessionDepends) -> CrudUser:

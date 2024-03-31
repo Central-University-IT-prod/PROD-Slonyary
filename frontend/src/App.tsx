@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from 'react'
 import './App.css'
 import { Outlet } from 'react-router-dom'
-import {ThemeProvider, createTheme, Container} from '@mui/material'
+import { ThemeProvider, createTheme, Container } from '@mui/material'
 import useAppSelector from './hooks/useAppSelector'
+import { Navbar } from './modules/Navbar/Navbar.tsx'
 
 function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
@@ -13,7 +14,7 @@ function App() {
 				palette: {
 					mode: themeMode,
 					primary: {
-						main: '#ffdd2d'
+						main: '#5578e3'
 					}
 				}
 			}),
@@ -27,11 +28,17 @@ function App() {
 
 	return (
 		<div className="App">
-				<ThemeProvider theme={theme}>
-					<Container maxWidth={'lg'} sx={{ paddingTop: '20px', paddingBottom: '20px' }} className="App" data-theme={themeMode}>
-						<Outlet />
-					</Container>
-				</ThemeProvider>
+			<ThemeProvider theme={theme}>
+				<Navbar />
+				<Container
+					maxWidth={'lg'}
+					sx={{ marginTop: '20px' }}
+					className="App"
+					data-theme={themeMode}
+				>
+					<Outlet />
+				</Container>
+			</ThemeProvider>
 		</div>
 	)
 }
