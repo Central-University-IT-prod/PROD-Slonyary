@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { NavigatePath, paths } from "../../routes";
 import { useDispatch } from "react-redux";
 import PageElement from "../../Ui/PageElement/PageElement";
-import { THEME_KEY } from "../../constants";
 
 export default function Registration() {
 	const [name, setName] = useState<string>("");
