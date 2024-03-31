@@ -52,7 +52,9 @@ services:
     ports:
       - 8000:8080
 
-  # frontend:  
-  #   restart: always
-  #   build:
-  #     context: ./frontend
+  frontend:  
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - 80:80
