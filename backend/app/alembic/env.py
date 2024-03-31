@@ -18,7 +18,6 @@ if config.config_file_name is not None:
 import dotenv
 
 dotenv.load_dotenv()
-from app.core import settings
 
 
 def get_url():
@@ -35,7 +34,6 @@ config.set_main_option("sqlalchemy.url", get_url())
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymode
-import app.models
 from app.core.db import Base
 
 target_metadata = Base.metadata

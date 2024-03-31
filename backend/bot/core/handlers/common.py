@@ -1,10 +1,10 @@
 # Регистрация обработчиков
-from aiogram import Router, F
-from aiogram.filters import CommandStart, Command
+from aiogram import F, Router
+from aiogram.filters import CommandStart
 
 from .chat_shared import shared_handler
-from .start import start_handler
 from .messages import message_handler
+from .start import start_handler
 
 
 async def register_main_handlers(router: Router) -> None:

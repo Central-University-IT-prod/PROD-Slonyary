@@ -43,7 +43,7 @@ export const Posts: FC = () => {
 					Опубликованные
 				</Button>
 			</Stack>
-			<Stack mt={3} spacing={2}>
+			<Stack spacing={2}>
 				<PageElement>
 					<Stack
 						direction="row"
