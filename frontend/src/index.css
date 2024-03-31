@@ -9,7 +9,7 @@
 :root,
 [theme='light'] {
 	--main-bg-color: #fff;
-	--body-bg-color: #d9d9d9;
+	--body-bg-color: #fff;
 	--alternative-bg-color: #ebe6e6;
 	--alternative-bg-color--hover: rgba(174, 183, 194, 0.12);
 	--second-bg-color: rgb(222, 222, 222);

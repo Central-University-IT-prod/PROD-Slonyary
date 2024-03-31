@@ -1,5 +1,6 @@
 enum paths {
     REGISTRATION = 'registration',
+    TELEGRAMAUTH = 'telegramauth',
     HOME = 'home',
     POST = 'post'
   }

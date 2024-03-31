@@ -1,4 +1,5 @@
-import { Posts } from '../modules/Post/Posts'
+import { Posts } from './Posts/Posts.tsx'
+
 
 function PostPage() {
 	return <Posts />
