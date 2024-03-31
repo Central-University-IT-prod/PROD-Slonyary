@@ -1,86 +1,181 @@
-import { useState } from "react";
-import { Editor, EditorState, RichUtils } from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import { Button, ButtonGroup, Grid, TextField } from "@mui/material";
-import FormatBoldIcon from "@mui/icons-material/FormatBold";
-import FormatItalicIcon from "@mui/icons-material/FormatItalic";
-import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
-import PageElement from "../../Ui/PageElement/PageElement";
-import FormatStrikethroughIcon from "@mui/icons-material/FormatStrikethrough";
-import "./AddPostForm.css";
+import { useCallback, useState } from 'react'
+import {
+	CompositeDecorator,
+	ContentBlock,
+	ContentState,
+	DraftDecorator,
+	DraftEntityMutability,
+	DraftEntityType,
+	Editor,
+	EditorState,
+	RichUtils
+} from 'draft-js'
+import { stateToHTML } from 'draft-js-export-html'
+import { Button, Grid, TextField } from '@mui/material'
+import FormatBoldIcon from '@mui/icons-material/FormatBold'
+import FormatItalicIcon from '@mui/icons-material/FormatItalic'
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
+import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough'
+import './AddPostForm.css'
 
 function AddPostForm() {
-	const [editorState, setEditorState] = useState<EditorState>(() =>
-		EditorState.createEmpty()
-	);
+	type LinkProps = {
+		children: React.ReactNode
+		contentState: ContentState
+		entityKey: string
+	}
 
+	const Link: React.FC<LinkProps> = ({ contentState, entityKey, children }) => {
+		/* Получаем url с помощью уникального ключа Entity */
+		const { url } = contentState.getEntity(entityKey).getData()
+
+		const handlerClick = () => {
+			alert(`URL: ${url}`)
+		}
+
+		return (
+			<a href={url} onClick={handlerClick}>
+				{children}
+			</a>
+		)
+	}
+
+	const decorator: DraftDecorator = {
+		strategy: findLinkEntities,
+		component: Link
+	}
+
+	const dec = new CompositeDecorator([decorator])
+	const [editorState, setEditorState] = useState<EditorState>(() =>
+		EditorState.createEmpty(dec)
+	)
 	enum InlineStyle {
-		BOLD = "BOLD",
-		ITALIC = "ITALIC",
-		UNDERLINE = "UNDERLINE",
-		STRIKE = "STRIKETHROUGH",
+		BOLD = 'BOLD',
+		ITALIC = 'ITALIC',
+		UNDERLINE = 'UNDERLINE',
+		STRIKE = 'STRIKETHROUGH'
 	}
 
 	const handleKeyCommand = (command: string, editorState: EditorState) => {
-		const newState = RichUtils.handleKeyCommand(editorState, command);
+		const newState = RichUtils.handleKeyCommand(editorState, command)
 		if (newState) {
-			setEditorState(newState);
-			return "handled";
+			setEditorState(newState)
+			return 'handled'
 		}
-		return "not-handled";
-	};
+		return 'not-handled'
+	}
 
 	const onBoldClick = () => {
-		setEditorState(
-			RichUtils.toggleInlineStyle(editorState, InlineStyle.BOLD)
-		);
-	};
+		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.BOLD))
+	}
 
 	const onItalicClick = () => {
-		setEditorState(
-			RichUtils.toggleInlineStyle(editorState, InlineStyle.ITALIC)
-		);
-	};
+		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.ITALIC))
+	}
 
 	const onUnderLineClick = () => {
 		setEditorState(
 			RichUtils.toggleInlineStyle(editorState, InlineStyle.UNDERLINE)
-		);
-	};
+		)
+	}
 
 	const onStrikeClick = () => {
-		setEditorState(
-			RichUtils.toggleInlineStyle(editorState, InlineStyle.STRIKE)
-		);
-	};
+		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.STRIKE))
+	}
 
 	const getText = () => {
-		const contentState = editorState.getCurrentContent();
-		let html = stateToHTML(contentState);
-		const text = contentState.getPlainText();
-		console.log(html, text);
-	};
+		const contentState = editorState.getCurrentContent()
+		let html = stateToHTML(contentState)
+		const text = contentState.getPlainText()
+		console.log(html, text)
+	}
+
+	const addEntity = useCallback(
+		(
+			entityType: DraftEntityType,
+			data: Record<string, string>,
+			mutability: DraftEntityMutability
+		) => {
+			setEditorState((currentState) => {
+				/* Получаем текущий контент */
+				const contentState = currentState.getCurrentContent()
+				/* Создаем Entity с данными */
+				const contentStateWithEntity = contentState.createEntity(
+					entityType,
+					mutability,
+					data
+				)
+				/* Получаем уникальный ключ Entity */
+				const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
+				/* Обьединяем текущее состояние с новым */
+				const newState = EditorState.set(currentState, {
+					currentContent: contentStateWithEntity
+				})
+				/* Вставляем ссылку в указанное место */
+				return RichUtils.toggleLink(
+					newState,
+					newState.getSelection(),
+					entityKey
+				)
+			})
+		},
+		[]
+	)
+
+	const addLink = useCallback(
+		(url: string) => {
+			addEntity('link', { url }, 'MUTABLE')
+		},
+		[addEntity]
+	)
+
+	const handlerAddLink = () => {
+		const url = prompt('URL:')
+
+		if (url) {
+			addLink(url)
+		}
+	}
+
+	function findLinkEntities(
+		/* Блок в котором производилось последнее изменение */
+		contentBlock: ContentBlock,
+		/* Функция, которая должна быть вызвана с индексами фрагмента текста */
+		callback: (start: number, end: number) => void,
+		/* Текущая карта контента */
+		contentState: ContentState
+	): void {
+		/* Для каждого символа в блоке выполняем функцию фильтрации */
+		contentBlock.findEntityRanges((character) => {
+			/* Получаем ключ Entity */
+			const entityKey = character.getEntity()
+			/* Проверяем что Entity относится к типу Entity-ссылок */
+			return (
+				entityKey !== null &&
+				contentState.getEntity(entityKey).getType() === 'link'
+			)
+		}, callback)
+	}
 
 	return (
-		<PageElement>
-			<ButtonGroup
-				sx={{ justifyContent: "center", display: "flex" }}
-				variant="outlined"
-				aria-label="Basic button group"
-			>
-				<Button onClick={onBoldClick}>
+		<div className="AddPostForm">
+			<div className="AddPostForm-buttonGroup">
+				<button onClick={onBoldClick}>
 					<FormatBoldIcon />
-				</Button>
-				<Button onClick={onItalicClick}>
+				</button>
+				<button onClick={onItalicClick}>
 					<FormatItalicIcon />
-				</Button>
-				<Button onClick={onUnderLineClick}>
+				</button>
+				<button onClick={onUnderLineClick}>
 					<FormatUnderlinedIcon />
-				</Button>
-				<Button onClick={onStrikeClick}>
+				</button>
+				<button onClick={onStrikeClick}>
 					<FormatStrikethroughIcon />
-				</Button>
-			</ButtonGroup>
+				</button>
+				<button onClick={handlerAddLink}>
+					<FormatStrikethroughIcon />
+				</button>
+			</div>
 
 			<div className="AddPost_input">
 				<Editor
@@ -89,15 +184,15 @@ function AddPostForm() {
 					onChange={setEditorState}
 				/>
 			</div>
-			<Grid container spacing="10px" sx={{ mt: "10px" }}>
+			<Grid container spacing="10px" sx={{ mt: '10px' }}>
 				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
 					<TextField
 						fullWidth
 						size="small"
 						placeholder="Дата публикации"
 						sx={{
-							display: "flex",
-							alignItems: "flex-end",
+							display: 'flex',
+							alignItems: 'flex-end'
 						}}
 					/>
 				</Grid>
@@ -107,8 +202,8 @@ function AddPostForm() {
 						size="small"
 						placeholder="Время публикации"
 						sx={{
-							display: "flex",
-							alignItems: "flex-end",
+							display: 'flex',
+							alignItems: 'flex-end'
 						}}
 					/>
 				</Grid>
@@ -117,17 +212,17 @@ function AddPostForm() {
 			<Button
 				variant="contained"
 				sx={{
-					mt: "15px",
-					ml: "auto",
-					display: "block",
-					fontWeight: 600,
+					mt: '15px',
+					ml: 'auto',
+					display: 'block',
+					fontWeight: 600
 				}}
 				onClick={getText}
 			>
 				Отправить
 			</Button>
-		</PageElement>
-	);
+		</div>
+	)
 }
 
-export default AddPostForm;
+export default AddPostForm
