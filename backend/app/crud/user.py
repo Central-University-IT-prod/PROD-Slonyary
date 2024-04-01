@@ -2,8 +2,8 @@ import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CrudBase
-from app.models.users import User
 from app.schemas import UserCreate, UserRead, UserUpdate
+from shared.database.models.users import User
 
 
 class CrudUser(CrudBase[User, UserCreate, UserRead, UserUpdate]):

@@ -1,15 +1,18 @@
-from mypy.typeshed.stdlib.typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
-    from app.models.posts import Post
-    from app.models.vk_channels import VkChannel
+    from shared.database.models.posts import Post
+    from shared.database.models.vk_channels import VkChannel
 
 
-class PostsToVkChannels(Base):
+class PostsToVkChannels(AlchemyBaseModel):
+    __tablename__ = "posts_to_vk_channels"
+
     post_id: Mapped[int] = mapped_column(
         ForeignKey("posts.id", ondelete="cascade"),
         primary_key=True,

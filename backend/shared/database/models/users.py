@@ -4,15 +4,15 @@ from typing import TYPE_CHECKING
 from sqlalchemy import BigInteger, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
-    from app.models.posts import Post
-    from app.models.tg_channels import TgChannel
-    from app.models.vk_channels import VkChannel
+    from shared.database.models.posts import Post
+    from shared.database.models.tg_channels import TgChannel
+    from shared.database.models.vk_channels import VkChannel
 
 
-class User(Base):
+class User(AlchemyBaseModel):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

@@ -3,14 +3,16 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
-    from app.models.posts import Post
-    from app.models.tg_channels import TgChannel
+    from shared.database.models.posts import Post
+    from shared.database.models.tg_channels import TgChannel
 
 
-class PostsToTgChannels(Base):
+class PostsToTgChannels(AlchemyBaseModel):
+    __tablename__ = "posts_to_tg_channels"
+
     post_id: Mapped[int] = mapped_column(
         ForeignKey("posts.id", ondelete="cascade"),
         primary_key=True,

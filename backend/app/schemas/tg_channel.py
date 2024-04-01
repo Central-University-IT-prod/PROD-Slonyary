@@ -9,18 +9,14 @@ class TgChannelUpdate(BaseSchema):
     pass
 
 
-# from app.schemas.user import UserRead
-from pydantic import BaseModel
-
-
-class TgChannelMember(BaseModel):
+class TgChannelMember(BaseSchema):
     user_id: int
     role: str
     name: str
     photo_url: str | None = None
 
 
-class TgChannelRead(BaseModel):
+class TgChannelRead(BaseSchema):
     id: int
     photo_url: str | None = None
     name: str
@@ -31,9 +27,9 @@ class TgChannelRead(BaseModel):
     workers: list[TgChannelMember]
 
 
-class PreviewTgChannel(BaseModel):
+class PreviewTgChannel(BaseSchema):
     id: int
     photo_url: str | None = None
     name: str
     username: str
-    subscribers: int
+    subscribers: int = 0
