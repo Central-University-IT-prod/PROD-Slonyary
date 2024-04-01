@@ -6,7 +6,7 @@ import bibaImg from '../../../assets/imgs/biba.jpg'
 
 const testData: TPostItem[] = [
 	{
-		channelAvatar: 'x',
+		channelsAvatar: ['x', bibaImg, bibaImg],
 		channelName: 'PROD',
 		date: '2024-03-31T10:05:03.255Z',
 		admin: 'K1rles',
@@ -17,7 +17,7 @@ const testData: TPostItem[] = [
 		category: 'pending'
 	},
 	{
-		channelAvatar: 'x',
+		channelsAvatar: ['x'],
 		channelName: 'DANO',
 		date: '2024-03-31T10:05:03.255Z',
 		admin: 'StreveSuksess',
@@ -35,7 +35,7 @@ const testData: TPostItem[] = [
 		category: 'published'
 	},
 	{
-		channelAvatar: 'x',
+		channelsAvatar: ['x'],
 		channelName: 'ВШЭ',
 		date: '2024-03-31T10:05:03.255Z',
 		admin: 'Jake Fish',
@@ -96,7 +96,7 @@ export const Posts: FC = () => {
 					Опубликованные
 				</Button>
 			</Stack>
-			<Grid maxWidth="sm" sx={{ mx: 'auto' }} rowSpacing={4} mt={1}>
+			<Grid maxWidth="sm" sx={{ mx: 'auto', pb: '20px' }} rowSpacing={4} mt={1}>
 				{testData
 					.filter((post) =>
 						category === 'all' ? true : post.category === category

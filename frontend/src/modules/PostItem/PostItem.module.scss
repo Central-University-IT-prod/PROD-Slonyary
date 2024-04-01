@@ -24,7 +24,7 @@
 .left {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 10px;
 }
 
 .avatar {
@@ -36,7 +36,6 @@
 .leftText {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
 
 	h4 {
 		font-size: 16px;
