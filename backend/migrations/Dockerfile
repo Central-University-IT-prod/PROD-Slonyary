@@ -13,4 +13,4 @@ COPY ./shared ./shared
 COPY ./alembic.ini ./alembic.ini
 COPY ./migrations ./migrations
 
-CMD ["alembic", "upgrade", "head"]
+CMD ["python", "-m", "migartions"]

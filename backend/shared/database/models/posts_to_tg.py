@@ -23,7 +23,7 @@ class PostsToTgChannels(AlchemyBaseModel):
     )
 
     post: Mapped["Post"] = relationship(
-        "User",
+        "Post",
         uselist=False,
         foreign_keys=post_id,
         lazy="joined",

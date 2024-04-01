@@ -8,6 +8,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
 
+from shared.database.models.users_to_vk import UsersToVkChannels
+
 if TYPE_CHECKING:
     from shared.database.models.users import User
 
@@ -31,8 +33,6 @@ class VkChannel(AlchemyBaseModel):
         lazy="joined",
     )
     users: Mapped[list["User"]] = relationship(
-        "User",
-        back_populates="vk_channels",
-        uselist=True,
+        secondary=UsersToVkChannels.__table__,
         lazy="selectin",
     )
