@@ -7,6 +7,7 @@ from app.crud import (
     CrudTgChannel,
     CrudUser,
     CrudUsersToTgChannels,
+    CrudUsersToVkChannels,
     CrudVkChannel,
 )
 from fastapi import Depends, Header, HTTPException, status
@@ -43,6 +44,10 @@ def crud_users_to_tg_channels(db: SessionDepends) -> CrudUsersToTgChannels:
     return CrudUsersToTgChannels(db)
 
 
+def crud_users_to_vk_channels(db: SessionDepends) -> CrudUsersToVkChannels:
+    return CrudUsersToVkChannels(db)
+
+
 CrudImageDepends = Annotated[CrudImage, Depends(crud_image)]
 CrudTgChannelDepends = Annotated[CrudTgChannel, Depends(crud_tg_channel)]
 CrudVkChannelDepends = Annotated[CrudVkChannel, Depends(crud_vk_channel)]
@@ -50,6 +55,9 @@ CrudPostDepends = Annotated[CrudPost, Depends(crud_post)]
 CrudUserDepends = Annotated[CrudUser, Depends(crud_user)]
 CrudUsersToTgChannelsDepends = Annotated[
     CrudUsersToTgChannels, Depends(crud_users_to_tg_channels)
+]
+CrudUsersToVkChannelsDepends = Annotated[
+    CrudUsersToVkChannels, Depends(crud_users_to_vk_channels)
 ]
 
 

@@ -1,13 +1,12 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from shared.core.enums import PostStatus
 from shared.database.models.base import AlchemyBaseModel
 from shared.database.models.posts_to_tg import PostsToTgChannels
 from shared.database.models.posts_to_vk import PostsToVkChannels
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from shared.database.models.images import Image

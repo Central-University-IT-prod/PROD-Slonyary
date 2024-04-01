@@ -35,6 +35,17 @@ class CrudBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
         await self.db.refresh(db_obj)
         return db_obj
 
+    async def create_many(self, objs_in: list[CreateSchemaType]) -> list[ModelType]:
+        db_objs = []
+        for obj_in in objs_in:
+            obj_in_data = jsonable_encoder(obj_in)
+            db_objs.append(self.Model(**obj_in_data))
+        self.db.add_all(db_objs)
+        await self.db.commit()
+        for db_obj in db_objs:
+            await self.db.refresh(db_obj)
+        return db_objs
+
     async def update(
         self,
         db_obj: ModelType,

@@ -111,10 +111,15 @@ services:
     container_name: prod-smm-bot
     restart: unless-stopped
     build:
-      context: ./backend
-      dockerfile: ./bot/Dockerfile
+      context: .
+      dockerfile: ./backend/bot/Dockerfile
     environment:
       - BOT_TOKEN=6582832120:AAEwArnyyDJj3j2S1Dv71QQvCRQ51dlXwPQ
+      - POSTGRES_SERVER=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=prod_smm
+      - POSTGRES_USER=prod_smm
+      - POSTGRES_PASSWORD=prod_smm
 
     depends_on:
       - database

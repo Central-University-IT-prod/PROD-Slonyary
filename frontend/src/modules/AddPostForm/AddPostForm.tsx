@@ -1,353 +1,355 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, {Dispatch, FC, SetStateAction, useCallback, useMemo, useState} from 'react'
 import {
-	CompositeDecorator,
-	ContentBlock,
-	ContentState,
-	DraftDecorator,
-	DraftEntityMutability,
-	DraftEntityType,
-	Editor,
-	EditorState,
-	RichUtils
+  CompositeDecorator,
+  ContentBlock,
+  ContentState,
+  DraftDecorator,
+  DraftEntityMutability,
+  DraftEntityType,
+  Editor,
+  EditorState,
+  RichUtils
 } from 'draft-js'
-import { stateToHTML } from 'draft-js-export-html'
-import { Button, CircularProgress, Grid, TextField } from '@mui/material'
+import {stateToHTML} from 'draft-js-export-html'
+import {Button, CircularProgress, Grid, TextField} from '@mui/material'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough'
 import LinkIcon from '@mui/icons-material/Link'
 import ImageIcon from '@mui/icons-material/Image'
-import './AddPostForm.css'
+import './AddPostForm.scss'
 import ImageTable from '../ImageTable/ImageTable'
-import { getSpellcheckingWords } from './API'
+import {getSpellcheckingWords} from './API'
 
-function AddPostForm() {
-	const maxLength = 9
-	type LinkProps = {
-		children: React.ReactNode
-		contentState: ContentState
-		entityKey: string
-	}
+type Props = {
+  showFunction: Dispatch<SetStateAction<boolean>>
+}
 
-	const Link: FC<LinkProps> = ({ contentState, entityKey, children }) => {
-		const { url } = contentState.getEntity(entityKey).getData()
+const AddPostForm: FC<Props> = (props) => {
+  const maxLength = 9
+  type LinkProps = {
+    children: React.ReactNode
+    contentState: ContentState
+    entityKey: string
+  }
 
-		const handlerClick = () => alert(`URL: ${url}`)
+  const Link: FC<LinkProps> = ({contentState, entityKey, children}) => {
+    const {url} = contentState.getEntity(entityKey).getData()
 
-		return (
-			<a href={url} onClick={handlerClick}>
-				{children}
-			</a>
-		)
-	}
+    const handlerClick = () => alert(`URL: ${url}`)
 
-	const decorator: DraftDecorator = {
-		strategy: findLinkEntities,
-		component: Link
-	}
+    return (
+      <a href={url} onClick={handlerClick}>
+        {children}
+      </a>
+    )
+  }
 
-	const dec = new CompositeDecorator([decorator])
-	const [editorState, setEditorState] = useState<EditorState>(() =>
-		EditorState.createEmpty(dec)
-	)
-	enum InlineStyle {
-		BOLD = 'BOLD',
-		ITALIC = 'ITALIC',
-		UNDERLINE = 'UNDERLINE',
-		STRIKE = 'STRIKETHROUGH'
-	}
+  const decorator: DraftDecorator = {
+    strategy: findLinkEntities,
+    component: Link
+  }
 
-	const handleKeyCommand = (command: string, editorState: EditorState) => {
-		const newState = RichUtils.handleKeyCommand(editorState, command)
-		if (newState) {
-			setEditorState(newState)
-			return 'handled'
-		}
-		return 'not-handled'
-	}
+  const dec = new CompositeDecorator([decorator])
+  const [editorState, setEditorState] = useState<EditorState>(() =>
+    EditorState.createEmpty(dec)
+  )
 
-	const onBoldClick = () => {
-		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.BOLD))
-	}
+  enum InlineStyle {
+    BOLD = 'BOLD',
+    ITALIC = 'ITALIC',
+    UNDERLINE = 'UNDERLINE',
+    STRIKE = 'STRIKETHROUGH'
+  }
 
-	const onItalicClick = () => {
-		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.ITALIC))
-	}
+  const handleKeyCommand = (command: string, editorState: EditorState) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command)
+    if (newState) {
+      setEditorState(newState)
+      return 'handled'
+    }
+    return 'not-handled'
+  }
 
-	const onUnderLineClick = () => {
-		setEditorState(
-			RichUtils.toggleInlineStyle(editorState, InlineStyle.UNDERLINE)
-		)
-	}
+  const onBoldClick = () => {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.BOLD))
+  }
 
-	const onStrikeClick = () => {
-		setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.STRIKE))
-	}
+  const onItalicClick = () => {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.ITALIC))
+  }
 
-	const getText = () => {
-		const contentState = editorState.getCurrentContent()
-		let html = stateToHTML(contentState)
-		const text = contentState.getPlainText()
-		console.log(html, text)
-	}
+  const onUnderLineClick = () => {
+    setEditorState(
+      RichUtils.toggleInlineStyle(editorState, InlineStyle.UNDERLINE)
+    )
+  }
 
-	const addEntity = useCallback(
-		(
-			entityType: DraftEntityType,
-			data: Record<string, string>,
-			mutability: DraftEntityMutability
-		) => {
-			setEditorState((currentState) => {
-				const contentState = currentState.getCurrentContent()
-				const contentStateWithEntity = contentState.createEntity(
-					entityType,
-					mutability,
-					data
-				)
-				const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
-				const newState = EditorState.set(currentState, {
-					currentContent: contentStateWithEntity
-				})
-				return RichUtils.toggleLink(
-					newState,
-					newState.getSelection(),
-					entityKey
-				)
-			})
-		},
-		[]
-	)
+  const onStrikeClick = () => {
+    setEditorState(RichUtils.toggleInlineStyle(editorState, InlineStyle.STRIKE))
+  }
 
-	const addLink = useCallback(
-		(url: string) => addEntity('link', { url }, 'MUTABLE'),
-		[addEntity]
-	)
+  const getText = () => {
+    const contentState = editorState.getCurrentContent()
+    let html = stateToHTML(contentState)
+    const text = contentState.getPlainText()
+    console.log(html, text)
+  }
 
-	const handlerAddLink = () => {
-		const url = prompt('URL:')
+  const addEntity = useCallback(
+    (
+      entityType: DraftEntityType,
+      data: Record<string, string>,
+      mutability: DraftEntityMutability
+    ) => {
+      setEditorState((currentState) => {
+        const contentState = currentState.getCurrentContent()
+        const contentStateWithEntity = contentState.createEntity(
+          entityType,
+          mutability,
+          data
+        )
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
+        const newState = EditorState.set(currentState, {
+          currentContent: contentStateWithEntity
+        })
+        return RichUtils.toggleLink(
+          newState,
+          newState.getSelection(),
+          entityKey
+        )
+      })
+    },
+    []
+  )
 
-		if (!url) return
-		addLink(url)
-	}
-	type TypeFileList = FileList | null
+  const addLink = useCallback(
+    (url: string) => addEntity('link', {url}, 'MUTABLE'),
+    [addEntity]
+  )
 
-	function findLinkEntities(
-		/* Блок в котором производилось последнее изменение */
-		contentBlock: ContentBlock,
-		/* Функция, которая должна быть вызвана с индексами фрагмента текста */
-		callback: (start: number, end: number) => void,
-		/* Текущая карта контента */
-		contentState: ContentState
-	): void {
-		/* Для каждого символа в блоке выполняем функцию фильтрации */
-		contentBlock.findEntityRanges((character) => {
-			/* Получаем ключ Entity */
-			const entityKey = character.getEntity()
-			/* Проверяем что Entity относится к типу Entity-ссылок */
-			return (
-				entityKey !== null &&
-				contentState.getEntity(entityKey).getType() === 'link'
-			)
-		}, callback)
-	}
+  const handlerAddLink = () => {
+    const url = prompt('URL:')
 
-	const [files, setFiles] = useState<File[]>([])
+    if (!url) return
+    addLink(url)
+  }
+  type TypeFileList = FileList | null
 
-	const onDragEnter = (e: any) => {
-		e.preventDefault()
-		e.stopPropagation()
-	}
+  function findLinkEntities(
+    contentBlock: ContentBlock,
+    callback: (start: number, end: number) => void,
+    contentState: ContentState
+  ): void {
+    contentBlock.findEntityRanges((character) => {
+      const entityKey = character.getEntity()
+      return (
+        entityKey !== null &&
+        contentState.getEntity(entityKey).getType() === 'link'
+      )
+    }, callback)
+  }
 
-	const filterFiles = (newFiles: TypeFileList): File[] => {
-		if (!newFiles) return []
+  const [files, setFiles] = useState<File[]>([])
 
-		const res: File[] = [...files]
-		for (let index = newFiles.length - 1; index >= 0; index--) {
-			const file = newFiles[index]
+  const onDragEnter = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
 
-			if (res.length === maxLength) break
+  const filterFiles = (newFiles: TypeFileList): File[] => {
+    if (!newFiles) return []
 
-			if ('image/jpeg,image/png'.split(',').includes(file.type)) {
-				res.push(file)
-			} else {
-				continue
-			}
-		}
-		return res
-	}
+    const res: File[] = [...files]
+    for (let index = newFiles.length - 1; index >= 0; index--) {
+      const file = newFiles[index]
 
-	const onDrop = (e: any) => {
-		e.preventDefault()
-		e.stopPropagation()
-		setFiles(filterFiles(e.dataTransfer.files))
-	}
+      if (res.length === maxLength) break
 
-	const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.preventDefault()
-		e.stopPropagation()
-		const input = document.querySelector(
-			'#upload-postImage'
-		) as HTMLInputElement
-		setFiles(filterFiles(input.files))
-	}
+      if ('image/jpeg,image/png'.split(',').includes(file.type)) {
+        res.push(file)
+      } else {
 
-	const deleteMedia = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number
-	) => {
-		e.preventDefault()
-		e.stopPropagation()
+      }
+    }
+    return res
+  }
 
-		const arrFiles = [...files]
-		arrFiles.splice(index, 1)
-		setFiles(arrFiles)
-	}
+  const onDrop = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setFiles(filterFiles(e.dataTransfer.files))
+  }
 
-	const [spellcheckingString, setSpellcheckingString] = useState<string>('')
-	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
-		useState<boolean>(false)
+  const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const input = document.querySelector(
+      '#upload-postImage'
+    ) as HTMLInputElement
+    setFiles(filterFiles(input.files))
+  }
 
-	const spellchecking = async () => {
-		setIsSpellcheckingLoading(true)
+  const deleteMedia = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault()
+    e.stopPropagation()
 
-		const contentState = editorState.getCurrentContent()
-		const html = stateToHTML(contentState)
-		const words = await getSpellcheckingWords(html)
+    const arrFiles = [...files]
+    arrFiles.splice(index, 1)
+    setFiles(arrFiles)
+  }
 
-		let text = html
-		let displacement = 0
+  const [spellcheckingString, setSpellcheckingString] = useState<string>('')
+  const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
+    useState<boolean>(false)
 
-		for (let index = 0; index < words.length; index++) {
-			const element = words[index]
-			const { pos, len, s } = element
-			const word = s[0].replace(/^,+/, '')
+  const spellchecking = async () => {
+    setIsSpellcheckingLoading(true)
 
-			const leftStr = text.slice(0, pos + displacement)
-			const rightStr = text.slice(pos + len + displacement)
+    const contentState = editorState.getCurrentContent()
+    const html = stateToHTML(contentState)
+    const words = await getSpellcheckingWords(html)
 
-			text = leftStr + word + rightStr
-			const newDisplacement = word.length - len
-			displacement += newDisplacement
-		}
+    let text = html
+    let displacement = 0
 
-		setSpellcheckingString(text)
-		setIsSpellcheckingLoading(false)
-	}
+    for (let index = 0; index < words.length; index++) {
+      const element = words[index]
+      const {pos, len, s} = element
+      const word = s[0].replace(/^,+/, '')
 
-	const spellcheckingBtnDisabled = useMemo(
-		() => editorState.getCurrentContent().getPlainText().trim().length < 2,
-		[editorState]
-	)
+      const leftStr = text.slice(0, pos + displacement)
+      const rightStr = text.slice(pos + len + displacement)
 
-	const onDragOver = (e: any) => e.preventDefault()
-	return (
-		<div className="AddPostForm">
-			<ImageTable deleteImage={deleteMedia} files={files} />
-			<label
-				className="fileInputLabel"
-				htmlFor="upload-postImage"
-				onDragEnter={onDragEnter}
-				onDrop={onDrop}
-				onDragOver={onDragOver}
-			>
-				<ImageIcon />
-				<h4>Добавить</h4>
-			</label>
-			<h2>Текст поста</h2>
-			<p>Выделите текст и нажмите на кнопку стиля или ссылки.</p>
-			<input
-				type="file"
-				maxLength={maxLength}
-				name="upload-postImage"
-				id="upload-postImage"
-				style={{ display: 'none' }}
-				onChange={changeInput}
-				multiple
-				hidden
-				accept="image/jpeg,image/png"
-			/>
-			<div className="AddPostForm-buttonGroup">
-				<button onClick={onBoldClick}>
-					<FormatBoldIcon />
-				</button>
-				<button onClick={onItalicClick}>
-					<FormatItalicIcon />
-				</button>
-				<button onClick={onUnderLineClick}>
-					<FormatUnderlinedIcon />
-				</button>
-				<button onClick={onStrikeClick}>
-					<FormatStrikethroughIcon />
-				</button>
-				<button onClick={handlerAddLink}>
-					<LinkIcon />
-				</button>
-			</div>
-			<div className="AddPost_input">
-				<Editor
-					editorState={editorState}
-					handleKeyCommand={handleKeyCommand}
-					onChange={setEditorState}
-				/>
-			</div>
-			<Grid container spacing="10px" sx={{ mt: '10px' }}>
-				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
-					<TextField
-						fullWidth
-						size="small"
-						type="date"
-						placeholder="Дата публикации"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
-					/>
-				</Grid>
-				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
-					<TextField
-						fullWidth
-						size="small"
-						placeholder="Время публикации"
-						type="time"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
-					/>
-				</Grid>
-			</Grid>
-			<div className="AddPostForm-btnsbox">
-				<Button
-					variant="contained"
-					onClick={spellchecking}
-					disabled={spellcheckingBtnDisabled}
-				>
-					Проверить орфографию
-				</Button>
-				<Button variant="contained" onClick={getText}>
-					Отправить
-				</Button>
-			</div>
-			{spellcheckingString.length ? (
-				<div className="AddPostForm-spellchecking-box">
-					{isSpellcheckingLoading ? (
-						<CircularProgress sx={{ margin: 'auto', display: 'block' }} />
-					) : (
-						<>
-							<h3>Отредактированный текст:</h3>
-							<div
-								className="AddPostForm-spellchecking"
-								dangerouslySetInnerHTML={{ __html: spellcheckingString }}
-							></div>
-						</>
-					)}
-				</div>
-			) : (
-				''
-			)}
-		</div>
-	)
+      text = leftStr + word + rightStr
+      const newDisplacement = word.length - len
+      displacement += newDisplacement
+    }
+
+    setSpellcheckingString(text)
+    setIsSpellcheckingLoading(false)
+  }
+
+  const spellcheckingBtnDisabled = useMemo(
+    () => editorState.getCurrentContent().getPlainText().trim().length < 2,
+    [editorState]
+  )
+
+  const onDragOver = (e: any) => e.preventDefault()
+  return (
+    <div className="AddPostForm">
+      <ImageTable deleteImage={deleteMedia} files={files}/>
+      <label
+        className="fileInputLabel"
+        htmlFor="upload-postImage"
+        onDragEnter={onDragEnter}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+      >
+        <ImageIcon/>
+        <h4>Добавить</h4>
+      </label>
+      <h2>Текст поста</h2>
+      <p>Выделите текст и нажмите на кнопку стиля или ссылки.</p>
+      <input
+        type="file"
+        maxLength={maxLength}
+        name="upload-postImage"
+        id="upload-postImage"
+        style={{display: 'none'}}
+        onChange={changeInput}
+        multiple
+        hidden
+        accept="image/jpeg,image/png"
+      />
+      <div className="AddPostForm-buttonGroup">
+        <button onClick={onBoldClick}>
+          <FormatBoldIcon/>
+        </button>
+        <button onClick={onItalicClick}>
+          <FormatItalicIcon/>
+        </button>
+        <button onClick={onUnderLineClick}>
+          <FormatUnderlinedIcon/>
+        </button>
+        <button onClick={onStrikeClick}>
+          <FormatStrikethroughIcon/>
+        </button>
+        <button onClick={handlerAddLink}>
+          <LinkIcon/>
+        </button>
+      </div>
+      <div className="AddPost_input">
+        <Editor
+          editorState={editorState}
+          handleKeyCommand={handleKeyCommand}
+          onChange={setEditorState}
+        />
+      </div>
+      <Grid container spacing="10px" sx={{mt: '10px'}}>
+        <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+          <TextField
+            fullWidth
+            size="small"
+            type="date"
+            placeholder="Дата публикации"
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end'
+            }}
+          />
+        </Grid>
+        <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Время публикации"
+            type="time"
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end'
+            }}
+          />
+        </Grid>
+      </Grid>
+      <div className="AddPostForm-btnsbox">
+        <Button
+          variant="contained"
+          onClick={spellchecking}
+          disabled={spellcheckingBtnDisabled}
+        >
+          Проверить орфографию
+        </Button>
+        <Button variant="contained" onClick={() => props.showFunction(true)}>
+          Показать превью
+        </Button>
+        <Button variant="contained" onClick={getText}>
+          Отправить
+        </Button>
+      </div>
+      {spellcheckingString.length ? (
+        <div className="AddPostForm-spellchecking-box">
+          {isSpellcheckingLoading ? (
+            <CircularProgress sx={{margin: 'auto', display: 'block'}}/>
+          ) : (
+            <>
+              <h3>Отредактированный текст:</h3>
+              <div
+                className="AddPostForm-spellchecking"
+                dangerouslySetInnerHTML={{__html: spellcheckingString}}
+              ></div>
+            </>
+          )}
+        </div>
+      ) : (
+        ''
+      )}
+    </div>
+  )
 }
 
 export default AddPostForm
