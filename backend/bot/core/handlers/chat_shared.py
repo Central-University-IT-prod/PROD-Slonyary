@@ -22,7 +22,9 @@ async def shared_handler(message: Message):
     chat_shared_id: int = message.chat_shared.chat_id
     channel = await get_channel_by_id(chat_shared_id)
 
-    await message.answer(text=f"[LOG]: {channel}")
+    if channel:
+
+        return
 
 
     try:
