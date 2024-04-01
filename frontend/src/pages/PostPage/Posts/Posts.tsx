@@ -1,8 +1,9 @@
 import { FC, useState } from 'react'
-import { Button, Grid, Stack } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import { PostItem } from '../../../modules/PostItem/PostItem.tsx'
 import { TPostItem } from '../../../models/PostsModels.ts'
 import bibaImg from '../../../assets/imgs/biba.jpg'
+import './Posts.scss'
 
 const testData: TPostItem[] = [
 	{
@@ -61,12 +62,7 @@ export const Posts: FC = () => {
 
 	return (
 		<>
-			<Stack
-				maxWidth="sm"
-				sx={{ mx: 'auto', mt: '15px' }}
-				spacing={1}
-				direction="row"
-			>
+			<div className="status-filter">
 				<Button
 					sx={{ borderRadius: 2 }}
 					onClick={() => setCategory('all')}
@@ -95,7 +91,7 @@ export const Posts: FC = () => {
 				>
 					Опубликованные
 				</Button>
-			</Stack>
+			</div>
 			<Grid maxWidth="sm" sx={{ mx: 'auto', pb: '20px' }} rowSpacing={4} mt={1}>
 				{testData
 					.filter((post) =>

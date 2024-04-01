@@ -1,0 +1,10 @@
+.status-filter {
+	display: flex;
+	gap: 10px;
+	max-width: 800px;
+	margin: auto;
+	flex-wrap: wrap;
+	& > * {
+		flex: 1 1 auto;
+	}
+}

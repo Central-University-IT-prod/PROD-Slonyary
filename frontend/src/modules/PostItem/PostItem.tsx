@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import bibaImg from '../../assets/imgs/biba.jpg'
 import s from './PostItem.module.scss'
 import { TPostItem } from '../../models/PostsModels.ts'
 import { Avatar, AvatarGroup, ImageList, ImageListItem } from '@mui/material'
@@ -37,7 +36,9 @@ export const PostItem: FC<{ data: TPostItem }> = ({ data }) => {
 					<div className={s.left}>
 						<AvatarGroup max={2}>
 							{channelsAvatar?.map((src, index) => (
-								<Avatar src={src} key={index} />
+								<Avatar src={src} key={index}>
+									CH
+								</Avatar>
 							))}
 						</AvatarGroup>
 						<div className={s.leftText}>
