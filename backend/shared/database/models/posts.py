@@ -1,10 +1,11 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from shared.database.models.base import AlchemyBaseModel
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from shared.core.enums import PostStatus
+from shared.database.models.base import AlchemyBaseModel
 from shared.database.models.posts_to_tg import PostsToTgChannels
 from shared.database.models.posts_to_vk import PostsToVkChannels
 
@@ -20,9 +21,8 @@ class Post(AlchemyBaseModel):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
-    title: Mapped[str] = mapped_column(String, nullable=False)
-    html_text: Mapped[str] = mapped_column(String, nullable=False)
-    plain_text: Mapped[str] = mapped_column(String, nullable=False)
+    html_text: Mapped[str] = mapped_column(String(4096), nullable=False)
+    plain_text: Mapped[str] = mapped_column(String(4096), nullable=False)
     publish_time: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=True)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False)
 
@@ -31,7 +31,11 @@ class Post(AlchemyBaseModel):
         default=datetime.datetime.now,
     )
 
-    status: Mapped[str] = mapped_column(String, nullable=False, default="draft")  # !!
+    status: Mapped[str] = mapped_column(
+        String(64),
+        nullable=False,
+        default=PostStatus.moderation,
+    )
 
     owner: Mapped["User"] = relationship(
         "User",

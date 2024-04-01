@@ -7,7 +7,6 @@ from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
-
 from shared.database.models.users_to_vk import UsersToVkChannels
 
 if TYPE_CHECKING:
@@ -20,8 +19,8 @@ class VkChannel(AlchemyBaseModel):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     channel_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
-    title: Mapped[str] = mapped_column(String, nullable=False)
-    access_token: Mapped[str] = mapped_column(String, nullable=False)
+    title: Mapped[str] = mapped_column(String(64), nullable=False)
+    access_token: Mapped[str] = mapped_column(String(512), nullable=False)
     added_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.now
     )

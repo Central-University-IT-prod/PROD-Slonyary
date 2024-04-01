@@ -27,11 +27,17 @@ services:
       context: ./backend
       dockerfile: ./migrations/Dockerfile
     environment:
-      POSTGRES_HOST: database
-      POSTGRES_HOST_PORT: 5432
-      POSTGRES_DB: prod_smm
-      POSTGRES_USER: prod_smm
-      POSTGRES_PASSWORD: prod_smm
+      - DOMAIN=localhost
+      - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
+      - POSTGRES_SERVER=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=prod_smm
+      - POSTGRES_USER=prod_smm
+      - POSTGRES_PASSWORD=prod_smm
+      - BOT_TOKEN=6582832120:AAEwArnyyDJj3j2S1Dv71QQvCRQ51dlXwPQ
+      - PROJECT_NAME=prodsmm
+      - FIRST_SUPERUSER=prodsmm
+      - FIRST_SUPERUSER_PASSWORD=prodsmm
     depends_on:
       database:
         condition: service_healthy
@@ -89,7 +95,7 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-      - "5173:5173"
+      - "80:80"
     stdin_open: true
     tty: true
 
