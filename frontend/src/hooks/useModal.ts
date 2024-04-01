@@ -10,7 +10,7 @@ const useModal = (modalType:string, wrapperSelector:string | null, data:any) => 
         modalType && !classList?.contains('modalActive') ? classList?.add('modalActive') : classList?.remove('modalActive')
     }
 
-    const closeOnClickWrapper = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const closeOnClickWrapper = (e:React.MouseEvent<any>) => {
         if (!wrapperSelector) return;
 
         const wrapper = document.querySelector(wrapperSelector)
