@@ -42,8 +42,3 @@ class TgChannel(AlchemyBaseModel):
         secondary=PostsToTgChannels.__table__,
         lazy="selectin",
     )
-    images: Mapped[list["Image"]] = relationship(
-        "Image",
-        back_populates="post",
-        lazy="selectin",
-    )
