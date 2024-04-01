@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
+    from shared.database.models.images import Image
     from shared.database.models.posts import Post
     from shared.database.models.users import User
 
@@ -39,5 +40,10 @@ class TgChannel(AlchemyBaseModel):
     posts: Mapped[list["Post"]] = relationship(
         "TgChannelPost",
         back_populates="tg_channels",
+        lazy="selectin",
+    )
+    images: Mapped[list["Image"]] = relationship(
+        "Image",
+        back_populates="post",
         lazy="selectin",
     )

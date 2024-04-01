@@ -1,7 +1,7 @@
 import hashlib
 import hmac
 
-from app.core.config import settings
+from shared.core.config import settings
 
 
 def verify_user_data(data_check_string: str, hash) -> bool:

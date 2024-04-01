@@ -1,7 +1,9 @@
 from typing import Annotated
 
+from fastapi import Depends, Header, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core import security
-from app.core.db import get_db_session
 from app.crud import (
     CrudImage,
     CrudPost,
@@ -10,9 +12,8 @@ from app.crud import (
     CrudUsersToTgChannels,
     CrudVkChannel,
 )
-from fastapi import Depends, Header, HTTPException, status
 from shared.database.models import User
-from sqlalchemy.ext.asyncio import AsyncSession
+from shared.database.session import get_db_session
 
 SessionDepends = Annotated[AsyncSession, Depends(get_db_session)]
 
