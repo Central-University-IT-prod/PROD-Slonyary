@@ -1,22 +1,22 @@
-from datetime import timedelta
-
-from fastapi import APIRouter, HTTPException, status
-from jose import jwt
+import datetime
+from datetime import timedelta, timezone
 
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import UserCreate, UserTelegramData
+from fastapi import APIRouter, HTTPException, status
+from jose import jwt
 
 router = APIRouter()
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
-    # if expires_delta:
-    #     expire = datetime.datetime.now(timezone.utc) + expires_delta
-    # else:
-    #     expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
-    # to_encode.update({"exp": str(expire)})
+    if expires_delta:
+        expire = datetime.datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": str(expire)})
     encoded_jwt = jwt.encode(
         to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256"
     )
@@ -50,7 +50,7 @@ async def auth_user(
 
     user_data_dict = user_telegram_data.model_dump()
     for key, value in sorted(user_data_dict.items()):  # Sort required!
-        if key != "hash":
+        if key != "hash" and value != None:
             data_check_list.append(f"{key}={value}")
 
     data_check_string = "\n".join(data_check_list)
@@ -75,7 +75,7 @@ async def auth_user(
             ),
         )
 
-    access_token_expires = timedelta(minutes=360)
+    access_token_expires = timedelta(minutes=180)
     access_token = create_access_token(
         data={"sub": str(user_telegram_data.id)}, expires_delta=access_token_expires
     )
