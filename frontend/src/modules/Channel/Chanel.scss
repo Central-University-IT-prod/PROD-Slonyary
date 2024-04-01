@@ -1,76 +1,84 @@
 .Chanel {
-	padding: 0px 15px;
+  &:not(&:last-child) &-box {
+    border-bottom: 1px solid #D9D9D9;
+  }
 
-	&:not(&:last-child) &-box {
-		border-bottom: 1px solid var(--alpha3);
-	}
-	&-box {
-		padding: 15px 0px;
-		display: flex;
-		gap: 15px;
-		align-items: center;
-	}
-	&-mainContant {
-		flex: 1 1 auto;
-		display: flex;
-		gap: 15px;
-		align-items: center;
-	}
+  &-box {
+    padding: 15px 0px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
 
-	&-image {
-		height: 45px;
-		width: 45px;
-		img {
-			width: inherit;
-			height: inherit;
-			border-radius: 50%;
-		}
-	}
-	&-textContent {
-		flex: 1 1 auto;
-		overflow: hidden;
-	}
-	.textContent-title {
-		min-width: 300px;
-		font-size: 22px;
-		font-weight: 600;
-	}
-	.info-subsribers {
-		font-size: 14px;
-		font-weight: 400;
-	}
+  &-mainContant {
+    flex: 1 1 auto;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
 
-	&-manageBtns {
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
+  &-image {
+    height: 50px;
+    width: 50px;
 
-		button {
-			padding: 5px 15px;
-			font-size: 14px;
-			font-weight: 400;
-			color: #fff;
-			border: none;
-			border-radius: 13px;
-			opacity: 0.8;
-			transition: opacity 0.2s linear;
-			&:hover {
-				opacity: 1;
-			}
-		}
-		.open-btn {
-			background-color: var(--green-color-2);
-		}
-	}
-	@media (max-width: 570px) {
-		& {
-			&-box {
-				display: block;
-			}
-			&-manageBtns {
-				flex-direction: row;
-				justify-content: flex-end;
-			}
-		}
-	}
+    img {
+      width: inherit;
+      height: inherit;
+      border-radius: 50%;
+    }
+  }
+
+  &-textContent {
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .textContent-title {
+    min-width: 300px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .info-subscribers {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  &-manageBtns {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    button {
+      padding: 5px 15px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      opacity: 0.8;
+      transition: opacity 0.2s linear;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .open-btn {
+      background-color: var(--green-color-2);
+    }
+  }
+
+  @media (max-width: 570px) {
+    & {
+      &-box {
+        display: block;
+      }
+
+      &-manageBtns {
+        flex-direction: row;
+        justify-content: flex-end;
+      }
+    }
+  }
 }

@@ -1,70 +1,86 @@
 .Chanel {
-  padding: 0px 15px;
+    padding: 0 15px;
 }
+
 .Chanel:not(.Chanel:last-child) .Chanel-box {
-  border-bottom: 1px solid var(--alpha3);
+    border-bottom: 1px solid var(--alpha3);
 }
+
 .Chanel-box {
-  padding: 15px 0px;
-  display: flex;
-  gap: 15px;
-  align-items: center;
+    padding: 15px 0px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
+
 .Chanel-mainContant {
-  flex: 1 1 auto;
-  display: flex;
-  gap: 15px;
-  align-items: center;
+    flex: 1 1 auto;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
+
 .Chanel-image {
-  height: 45px;
-  width: 45px;
+    height: 45px;
+    width: 45px;
 }
+
 .Chanel-image img {
-  width: inherit;
-  height: inherit;
-  border-radius: 50%;
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
 }
+
 .Chanel-textContent {
-  flex: 1 1 auto;
-  overflow: hidden;
+    flex: 1 1 auto;
+    overflow: hidden;
 }
+
 .Chanel .textContent-title {
-  min-width: 300px;
-  font-size: 22px;
-  font-weight: 600;
+    min-width: 300px;
+    font-size: 22px;
+    font-weight: 600;
 }
-.Chanel .info-subsribers {
-  font-size: 14px;
-  font-weight: 400;
+
+.Chanel .info-subscribers {
+    font-size: 14px;
+    font-weight: 400;
 }
+
 .Chanel-manageBtns {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
+
 .Chanel-manageBtns button {
-  padding: 5px 15px;
-  font-size: 14px;
-  font-weight: 400;
-  color: #fff;
-  border: none;
-  border-radius: 13px;
-  opacity: 0.8;
-  transition: opacity 0.2s linear;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    border: none;
+    border-radius: 13px;
+    opacity: 0.8;
+    transition: opacity 0.2s linear;
 }
+
 .Chanel-manageBtns button:hover {
-  opacity: 1;
+    opacity: 1;
 }
+
 .Chanel-manageBtns .open-btn {
-  background-color: var(--green-color-2);
+    background-color: var(--green-color-2);
 }
+
 @media (max-width: 570px) {
-  .Chanel-box {
-    display: block;
-  }
-  .Chanel-manageBtns {
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-}/*# sourceMappingURL=Chanel.css.map */
+    .Chanel-box {
+        display: block;
+    }
+
+    .Chanel-manageBtns {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
+/*# sourceMappingURL=Chanel.css.map */

@@ -1,5 +1,6 @@
 import biba from '../../assets/imgs/biba.jpg'
-import './Chanel.css'
+import './Chanel.scss'
+import {Button} from "@mui/material";
 
 type TypeChanel = {
   title: string
@@ -24,16 +25,13 @@ function Channel({chanelData}: IProps) {
             <img alt={'img'} src={biba}/>
           </div>
           <div className="Chanel-textContent">
-            <div className="textContent-title">
-              <h2>{title}</h2>
-            </div>
-            <div className="info-subsribers">
-              <h4>{subscribers} подписчика</h4>
-            </div>
+            <h2 className="textContent-title">{title}</h2>
+            <h4 className="info-subscribers">{subscribers} подписчика</h4>
           </div>
         </div>
         <div className="Chanel-manageBtns">
-          <button className="open-btn">Открыть</button>
+          <Button sx={{borderRadius: '20px'}} color="success"
+                  variant="contained">Открыть</Button>
         </div>
       </div>
     </div>
