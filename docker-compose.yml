@@ -109,3 +109,16 @@ services:
       - REDIS_PASSWORD=prod_smm
       - REDIS_PORT=6379
       - REDIS_DATABASES=2
+
+  bot:
+    container_name: prod-smm-bot
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./bot/Dockerfile
+    environment:
+      - BOT_TOKEN=6582832120:AAEwArnyyDJj3j2S1Dv71QQvCRQ51dlXwPQ
+
+    depends_on:
+      - database
+      - migrations
