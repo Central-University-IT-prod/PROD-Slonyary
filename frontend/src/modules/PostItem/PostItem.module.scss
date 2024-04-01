@@ -1,166 +1,166 @@
 .post {
-	border-radius: 20px;
-	box-shadow: 0 0 5px 2px #00000033;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
+  border-radius: 20px;
+  box-shadow: 0 0 5px 2px #00000033;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .postItemTextContant {
-	margin-top: 15px;
+  margin-top: 15px;
 }
 
 .postInner {
-	padding: 24px;
+  padding: 24px;
 }
 
 .postHeader {
-	display: flex;
-	justify-content: space-between;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #d9d9d9;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .left {
-	display: flex;
-	align-items: center;
-	gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .avatar {
-	width: 55px;
-	height: 55px;
-	border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
 }
 
 .leftText {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 
-	h4 {
-		font-size: 16px;
-		font-weight: 500;
-	}
+  h4 {
+    font-size: 16px;
+    font-weight: 500;
+  }
 
-	p {
-		color: #e49701;
-		font-size: 16px;
-		font-weight: 400;
-	}
+  p {
+    color: #e49701;
+    font-size: 16px;
+    font-weight: 400;
+  }
 }
 
 .right {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	justify-content: center;
-	gap: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
 }
 
 .publicised {
-	display: flex;
-	gap: 10px;
-	align-items: center;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 
-	div {
-		width: 16px;
-		height: 16px;
-		border-radius: 50%;
-	}
+  div {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
 
-	span {
-		font-size: 16px;
-		font-weight: 500;
-	}
+  span {
+    font-size: 16px;
+    font-weight: 500;
+  }
 
-	&.published {
-		div {
-			background-color: #7bf15d;
-		}
+  &.published {
+    div {
+      background-color: #7bf15d;
+    }
 
-		span {
-			color: #7bf15d;
-		}
-	}
+    span {
+      color: #7bf15d;
+    }
+  }
 
-	&.moderation {
-		div {
-			background-color: #5894ef;
-		}
+  &.moderation {
+    div {
+      background-color: #5894ef;
+    }
 
-		span {
-			color: #5894ef;
-		}
-	}
+    span {
+      color: #5894ef;
+    }
+  }
 
-	&.planned {
-		div {
-			background-color: #ffb13c;
-		}
+  &.pending {
+    div {
+      background-color: #ffb13c;
+    }
 
-		span {
-			color: #ffb13c;
-		}
-	}
+    span {
+      color: #ffb13c;
+    }
+  }
 }
 
 .adminName {
-	font-size: 16px;
-	color: #a146cf;
+  font-size: 16px;
+  color: #a146cf;
 }
 
 .postImage {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .postText {
-	margin-top: 16px;
-	font-size: 16px;
+  margin-top: 16px;
+  font-size: 16px;
 }
 
 .bottomButtons {
-	margin-top: auto;
-	display: flex;
-	align-content: stretch;
-	justify-self: flex-end;
+  margin-top: auto;
+  display: flex;
+  align-content: stretch;
+  justify-self: flex-end;
 
-	button {
-		height: 60px;
-		width: 100%;
-		color: #000;
-		font-size: 16px;
-		font-weight: 400;
-		cursor: pointer;
-		transition: all 0.3s;
-		opacity: 0.8;
+  button {
+    height: 60px;
+    width: 100%;
+    color: #000;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0.8;
 
-		&:hover {
-			opacity: 1;
-		}
-	}
+    &:hover {
+      opacity: 1;
+    }
+  }
 
-	.leftButton {
-		border-radius: 0 0 0 20px;
-	}
+  .leftButton {
+    border-radius: 0 0 0 20px;
+  }
 
-	.rightButton {
-		border-radius: 0 0 20px 0;
-	}
+  .rightButton {
+    border-radius: 0 0 20px 0;
+  }
 
-	.red {
-		background-color: #f15d5d;
-	}
+  .red {
+    background-color: #f15d5d;
+  }
 
-	.grey {
-		background-color: #e6e6e6;
-	}
+  .grey {
+    background-color: #e6e6e6;
+  }
 
-	.green {
-		background-color: #7bf15d;
-	}
+  .green {
+    background-color: #7bf15d;
+  }
 
-	.orange {
-		background-color: #ffb13c;
-	}
+  .orange {
+    background-color: #ffb13c;
+  }
 }

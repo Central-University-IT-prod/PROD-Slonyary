@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage.tsx'
 import PostPage from './pages/PostPage/PostPage.tsx'
 import {TelegramAuth} from './pages/TelegramAuth/TelegramAuth.tsx'
 import {ChannelPage} from './pages/ChannelPage/ChannelPage.tsx'
+import AddPostPage from "./pages/AddPostPage/AddPostPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: paths.TELEGRAMAUTH,
         element: <TelegramAuth/>
+      },
+      {
+        path: paths.ADD_POST,
+        element: <AddPostPage/>
       },
       {
         path: paths.REGISTRATION,

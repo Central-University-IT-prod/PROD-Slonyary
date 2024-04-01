@@ -3,7 +3,8 @@ enum paths {
   TELEGRAMAUTH = 'telegramauth',
   HOME = 'home',
   POSTS = 'posts',
-  CHANNELS = "channels"
+  CHANNELS = "channels",
+  ADD_POST = "addpost",
 }
 
 const NavigatePath = (path: string): string => `/${path}`
