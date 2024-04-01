@@ -9,6 +9,9 @@ router = APIRouter()
 async def get_posts(user: CurrentUserDep, db: SessionDepends) -> list[PreviewPost]:
     pass
 
+@router.post("/create", status_code=200)
+async def create_post(user: CurrentUserDep):
+    pass
 
 @router.get("/{id}", status_code=200)
 async def get_post(

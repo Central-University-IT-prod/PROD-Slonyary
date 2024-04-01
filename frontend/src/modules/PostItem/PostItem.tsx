@@ -41,16 +41,25 @@ export const PostItem: FC<TPostItem> = (props) => {
 				</div>
 				{!!props.postImages?.length && (
 					<ImageList
-						sx={{ width: '100%', borderRadius: '40px', marginTop: '10px' }}
+						sx={{
+							width: '100%',
+							borderRadius: '40px',
+							marginTop: '10px',
+							maxWidth: '100%'
+						}}
 						cols={props.postImages.length > 3 ? 3 : props.postImages.length}
 					>
 						<MediaProvider mediaCount={props.postImages?.length}>
 							{props.postImages.map((src, i) => (
-								<ImageListItem key={i}>
-									<MediaView index={i} key={i} src={src}>
-										<img className={s.postImage} src={src} loading="lazy" />
-									</MediaView>
-								</ImageListItem>
+								<MediaView index={i} key={i} src={src}>
+									<ImageListItem key={i}>
+										<img
+											className={`${s.postImage} loaderImg`}
+											src={src}
+											loading="lazy"
+										/>
+									</ImageListItem>
+								</MediaView>
 							))}
 						</MediaProvider>
 					</ImageList>

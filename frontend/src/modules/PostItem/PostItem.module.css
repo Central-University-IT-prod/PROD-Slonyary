@@ -1,6 +1,6 @@
 .post {
   border-radius: 40px;
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 10px;
-  border-bottom: 1px solid #D9D9D9;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .left {
@@ -39,7 +39,7 @@
   font-weight: 500;
 }
 .leftText p {
-  color: #E49701;
+  color: #e49701;
   font-size: 16px;
   font-weight: 400;
 }
@@ -67,27 +67,27 @@
   font-weight: 500;
 }
 .publicised.published div {
-  background-color: #7BF15D;
+  background-color: #7bf15d;
 }
 .publicised.published span {
-  color: #7BF15D;
+  color: #7bf15d;
 }
 .publicised.moderation div {
-  background-color: #5894EF;
+  background-color: #5894ef;
 }
 .publicised.moderation span {
-  color: #5894EF;
+  color: #5894ef;
 }
 .publicised.planned div {
-  background-color: #FFB13C;
+  background-color: #ffb13c;
 }
 .publicised.planned span {
-  color: #FFB13C;
+  color: #ffb13c;
 }
 
 .adminName {
   font-size: 16px;
-  color: #A146CF;
+  color: #a146cf;
 }
 
 .postImages {
@@ -128,16 +128,14 @@
   border-radius: 0 0 40px 0;
 }
 .bottomButtons .red {
-  background-color: #F15D5D;
+  background-color: #f15d5d;
 }
 .bottomButtons .grey {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
 }
 .bottomButtons .green {
-  background-color: #7BF15D;
+  background-color: #7bf15d;
 }
 .bottomButtons .orange {
-  background-color: #FFB13C;
-}
-
-/*# sourceMappingURL=PostItem.module.css.map */
+  background-color: #ffb13c;
+}/*# sourceMappingURL=PostItem.module.css.map */

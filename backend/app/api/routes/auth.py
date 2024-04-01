@@ -1,9 +1,25 @@
+import datetime
+from datetime import timedelta, timezone
+
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import UserCreate, UserTelegramData
 from fastapi import APIRouter, HTTPException, status
+from jose import JWTError, jwt
+from shared.core.config import settings
 
 router = APIRouter()
+
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    # if expires_delta:
+    #     expire = datetime.datetime.now(timezone.utc) + expires_delta
+    # else:
+    #     expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
+    # to_encode.update({"exp": str(expire)})
+    encoded_jwt = jwt.encode(to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256")
+    return encoded_jwt
 
 
 @router.post("/", status_code=200)
@@ -22,7 +38,7 @@ async def auth_user(
         user_crud:
 
     Returns:
-        {"status": "ok"}
+        {"token": "jwt"}
 
     Errors:
         400 - проблемы валидации pyndatic
@@ -58,4 +74,8 @@ async def auth_user(
             ),
         )
 
-    return {"data_check_string": data_check_string}
+    access_token_expires = timedelta(minutes=360)
+    access_token = create_access_token(
+        data={"sub": str(user_telegram_data.id)}, expires_delta=access_token_expires
+    )
+    return {"token": access_token}
