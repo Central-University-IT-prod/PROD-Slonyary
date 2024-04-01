@@ -8,6 +8,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
 
+from shared.database.models.users_to_tg import UsersToTgChannels
+from shared.database.models.posts_to_tg import PostsToTgChannels
+
 if TYPE_CHECKING:
     from shared.database.models.posts import Post
     from shared.database.models.users import User
@@ -28,16 +31,13 @@ class TgChannel(AlchemyBaseModel):
 
     owner: Mapped["User"] = relationship(
         "User",
-        back_populates="owned_tg_channels",
         foreign_keys=owner_id,
     )
     users: Mapped[list["User"]] = relationship(
-        "UserTgChannel",
-        back_populates="tg_channels",
+        secondary=UsersToTgChannels.__table__,
         lazy="selectin",
     )
     posts: Mapped[list["Post"]] = relationship(
-        "TgChannelPost",
-        back_populates="tg_channels",
+        secondary=PostsToTgChannels.__table__,
         lazy="selectin",
     )

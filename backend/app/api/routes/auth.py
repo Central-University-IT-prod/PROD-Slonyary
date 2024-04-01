@@ -37,7 +37,6 @@ async def auth_user(
             data_check_list.append(f"{key}={value}")
 
     data_check_string = "\n".join(data_check_list)
-    print(data_check_string)
     is_valid = security.verify_user_data(data_check_string, user_telegram_data_hash)
 
     if not is_valid:
@@ -46,6 +45,7 @@ async def auth_user(
             detail="Данные неверны",
         )
 
+    print("before_crud")
     is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.
