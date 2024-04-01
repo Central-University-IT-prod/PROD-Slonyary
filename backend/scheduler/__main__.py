@@ -12,7 +12,7 @@ from shared.database.session import db_session_manager
 
 async def main() -> None:
     bot = Bot(
-        token=settings.bot.token,
+        token=settings.BOT_TOKEN,
         parse_mode=ParseMode.HTML,
         disable_web_page_preview=True,
     )
