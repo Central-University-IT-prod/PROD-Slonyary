@@ -48,7 +48,7 @@ export const PostItem: FC<TPostItem> = (props) => {
 							{props.postImages.map((src, i) => (
 								<ImageListItem key={i}>
 									<MediaView index={i} key={i} src={src}>
-										<img src={src} loading="lazy" />
+										<img className={s.postImage} src={src} loading="lazy" />
 									</MediaView>
 								</ImageListItem>
 							))}

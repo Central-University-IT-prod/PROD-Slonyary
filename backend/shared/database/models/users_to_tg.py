@@ -22,14 +22,12 @@ class UsersToTgChannels(AlchemyBaseModel):
 
     user: Mapped["User"] = relationship(
         "User",
-        back_populates="tg_channels",
         uselist=False,
         foreign_keys=user_id,
         lazy="joined",
     )
     channel: Mapped["TgChannel"] = relationship(
         "TgChannel",
-        back_populates="users",
         uselist=False,
         foreign_keys=channel_id,
         lazy="joined",
