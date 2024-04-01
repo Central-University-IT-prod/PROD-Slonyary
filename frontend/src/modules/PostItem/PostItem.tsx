@@ -2,12 +2,20 @@ import { FC } from 'react'
 import bibaImg from '../../assets/imgs/biba.jpg'
 import s from './PostItem.module.scss'
 import { TPostItem } from '../../models/PostsModels.ts'
-import { ImageList, ImageListItem } from '@mui/material'
+import { Avatar, AvatarGroup, ImageList, ImageListItem } from '@mui/material'
 import { MediaProvider } from '../MediaProvider/MediaProvider.tsx'
 import MediaView from '../../Ui/MediaView/MediaView.tsx'
 
 export const PostItem: FC<{ data: TPostItem }> = ({ data }) => {
-	const { admin, category, channelName, date, htmlText, postImages } = data
+	const {
+		admin,
+		category,
+		channelName,
+		date,
+		htmlText,
+		postImages,
+		channelsAvatar
+	} = data
 
 	const mainEditor = true
 	let rightText
@@ -27,7 +35,11 @@ export const PostItem: FC<{ data: TPostItem }> = ({ data }) => {
 			<div className={s.postInner}>
 				<div className={s.postHeader}>
 					<div className={s.left}>
-						<img src={bibaImg} alt="Аватарка канала" className={s.avatar} />
+						<AvatarGroup max={2}>
+							{channelsAvatar?.map((src, index) => (
+								<Avatar src={src} key={index} />
+							))}
+						</AvatarGroup>
 						<div className={s.leftText}>
 							<h4>{channelName}</h4>
 							<p>{new Date(date).toDateString()}</p>

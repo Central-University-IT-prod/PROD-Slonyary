@@ -1,5 +1,5 @@
 export type TPostItem = {
-  channelAvatar: string,
+  channelsAvatar?: string[],
   channelName: string,
   date: string,
   admin: string,

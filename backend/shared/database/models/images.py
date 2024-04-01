@@ -11,4 +11,4 @@ class Image(AlchemyBaseModel):
     base64: Mapped[str] = mapped_column(String, nullable=False)
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"), nullable=False)
 
-    post = relationship("Post", back_populates="images", uselist=False, lazy="joined")
+    post = relationship("Post", back_populates="images", lazy="joined")

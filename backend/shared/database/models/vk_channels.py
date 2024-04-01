@@ -7,9 +7,9 @@ from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
-from shared.database.models.users_to_vk import UsersToVkChannels
 
 if TYPE_CHECKING:
+    from shared.database.models.posts import Post
     from shared.database.models.users import User
 
 
@@ -27,11 +27,18 @@ class VkChannel(AlchemyBaseModel):
 
     owner: Mapped["User"] = relationship(
         "User",
-        uselist=False,
         foreign_keys=owner_id,
         lazy="joined",
     )
     users: Mapped[list["User"]] = relationship(
-        secondary=UsersToVkChannels.__table__,
+        "User",
+        back_populates="vk_channels",
+        secondary="users_to_vk_channels",
+        lazy="selectin",
+    )
+    posts: Mapped[list["Post"]] = relationship(
+        "Post",
+        secondary="posts_to_vk_channels",
+        back_populates="vk_channels",
         lazy="selectin",
     )

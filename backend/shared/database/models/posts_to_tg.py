@@ -1,13 +1,7 @@
-from typing import TYPE_CHECKING
-
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.database.models.base import AlchemyBaseModel
-
-if TYPE_CHECKING:
-    from shared.database.models.posts import Post
-    from shared.database.models.tg_channels import TgChannel
 
 
 class PostsToTgChannels(AlchemyBaseModel):
@@ -20,17 +14,4 @@ class PostsToTgChannels(AlchemyBaseModel):
     channel_id: Mapped[int] = mapped_column(
         ForeignKey("tg_channels.id", ondelete="cascade"),
         primary_key=True,
-    )
-
-    post: Mapped["Post"] = relationship(
-        "Post",
-        uselist=False,
-        foreign_keys=post_id,
-        lazy="joined",
-    )
-    channel: Mapped["TgChannel"] = relationship(
-        "TgChannel",
-        uselist=False,
-        foreign_keys=channel_id,
-        lazy="joined",
     )
