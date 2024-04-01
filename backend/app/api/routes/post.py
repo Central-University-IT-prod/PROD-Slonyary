@@ -15,6 +15,7 @@ from app.schemas import (
     PostIn,
     PostsToTgChannelsCreate,
     PostsToVkChannelsCreate,
+    PostUpdate,
     PreviewPost,
 )
 
@@ -26,7 +27,7 @@ async def get_posts(user: CurrentUserDep, db: SessionDepends) -> list[PreviewPos
     pass
 
 
-@router.post("/create", status_code=200)
+@router.post("/", status_code=200)
 async def create_post(
     user: CurrentUserDep,
     post_in: PostIn,
@@ -117,3 +118,35 @@ async def get_post(
         is_owner=post.owner.id == user.id,
         photos=post.images,
     )
+
+
+@router.delete("/{id}", status_code=202)
+async def delete_post(crud_post: CrudPostDepends, user: CurrentUserDep, id: int):
+    """Delete post by id."""
+    post = await crud_post.get(id)
+
+    if not post:
+        return {"status": "ok"}
+
+    if not post.owner_id == user.id:
+        return HTTPException(403, "Нет доступа")
+
+    await crud_post.delete(id)
+    return {"status": "ok"}
+
+
+@router.patch("/{id}", status_code=200)
+async def update_post(
+    crud_post: CrudPostDepends, user: CurrentUserDep, id: int, post_update: PostUpdate
+):
+    """Updating post."""
+    post = await crud_post.get(id)
+
+    if not post:
+        return HTTPException(404, "Не найдено")
+
+    if not crud_post.is_user_access(user, post):
+        return HTTPException(403, "Нет доступа")
+
+    await crud_post.update(post, post_update)
+    return {"status": "ok"}

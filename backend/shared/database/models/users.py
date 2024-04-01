@@ -1,10 +1,9 @@
 import datetime
 from typing import TYPE_CHECKING
 
+from shared.database.models.base import AlchemyBaseModel
 from sqlalchemy import BigInteger, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
     from shared.database.models.posts import Post

@@ -1,9 +1,16 @@
-import {FC} from 'react'
+import {FC, useEffect} from 'react'
 import Channel from '../../modules/Channel/Channel.tsx'
 import {Button} from "@mui/material";
 import s from './ChannelPage.module.scss'
+import {channelsAPI} from "../../store/services/ChannelService.ts";
 
 export const ChannelPage: FC = () => {
+  const {data} = channelsAPI.useGetChannelsQuery(null)
+
+  useEffect(() => {
+    console.log(data)
+  }, [data]);
+
   return (
     <section>
       <div className={s.buttons}>

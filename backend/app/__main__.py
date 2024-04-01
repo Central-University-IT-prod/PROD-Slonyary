@@ -1,11 +1,10 @@
 # import sentry_sdk
 import uvicorn
+from app.api.main import api_router
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
-from starlette.middleware.cors import CORSMiddleware
-
-from app.api.main import api_router
 from shared.core.config import settings
+from starlette.middleware.cors import CORSMiddleware
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
