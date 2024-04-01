@@ -73,7 +73,7 @@ async def get_current_user(
             raise HTTPException(401, detail="Wrong credentials")
     except JWTError:
         raise HTTPException(401, detail="Wrong credentials")
-    user = await user_crud.get_by_telegram_id(user_id)
+    user = await user_crud.get(user_id)
     if user is None:
         raise HTTPException(401, detail="Wrong credentials")
     return user

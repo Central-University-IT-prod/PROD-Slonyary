@@ -45,3 +45,17 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         return roles and (
             UserChannelRole.owner in roles or UserChannelRole.moderator in roles
         )
+
+    async def update(self, post: Post, post_update: PostUpdate) -> Post:
+        """Updating post data."""
+        if post_update.publish_time:
+            post.publish_time = post_update.publish_time
+        if post_update.html_text:
+            post.html_text = post_update.html_text
+        if post_update.plain_text:
+            post.plain_text = post_update.plain_text
+
+        self.db.add(post)
+        await self.db.commit()
+        await self.db.refresh(post)
+        return post

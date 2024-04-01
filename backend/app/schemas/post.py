@@ -5,7 +5,9 @@ from app.schemas.image import ImageCreate
 
 
 class PostUpdate(BaseSchema):
-    pass
+    html_text: str | None = None
+    plain_text: str | None = None
+    publish_time: datetime | None = None
 
 
 class Channel(BaseSchema):
