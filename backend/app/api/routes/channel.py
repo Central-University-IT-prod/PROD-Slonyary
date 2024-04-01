@@ -36,11 +36,5 @@ async def get_tg_channel(
     crud_tg_channel: CrudTgChannelDepends,
     crud_user_to_tg_channel: CrudUsersToTgChannelsDepends,
 ) -> list[TgChannelRead]:
-    tg_channel = crud_tg_channel.get(id)
-    if not tg_channel:
-        raise HTTPException(status_code=404, detail="Channel not found")
-
-    if crud_user_to_tg_channel.is_user_access(user, tg_channel):
-        return tg_channel
-    else:
-        raise HTTPException(401, detail="Not enough access")
+    """Pass"""
+    pass
