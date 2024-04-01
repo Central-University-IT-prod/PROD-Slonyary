@@ -5,7 +5,6 @@ from sqlalchemy import BigInteger, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
-
 from shared.database.models.users_to_tg import UsersToTgChannels
 from shared.database.models.users_to_vk import UsersToVkChannels
 
@@ -20,8 +19,8 @@ class User(AlchemyBaseModel):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
-    username: Mapped[int] = mapped_column(String, nullable=True)
-    name: Mapped[str] = mapped_column(String)
+    username: Mapped[int] = mapped_column(String(64), nullable=True)
+    name: Mapped[str] = mapped_column(String(256), nullable=True)
     registered_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.now
     )

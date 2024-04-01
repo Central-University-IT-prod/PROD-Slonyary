@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from app.schemas.base import BaseSchema
 
 
