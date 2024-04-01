@@ -11,7 +11,7 @@ class UserTelegramData(BaseSchema):
 
 
 class UserCreate(BaseSchema):
-    telegram_id: int
+    id: int
     username: str | None = None
     name: str
 
@@ -22,6 +22,5 @@ class UserUpdate(BaseSchema):
 
 class UserRead(BaseSchema):
     id: int
-    telegram_id: int
     username: str | None = None
     name: str

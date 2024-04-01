@@ -14,7 +14,7 @@ class CrudUser(CrudBase[User, UserCreate, UserRead, UserUpdate]):
         self,
         telegram_id: int,
     ) -> User | None:
-        query = sa.select(User).where(User.telegram_id == telegram_id)
+        query = sa.select(User).where(User.id == telegram_id)
         result = await self.db.scalar(query)
         return result
 

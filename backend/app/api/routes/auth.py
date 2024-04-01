@@ -1,12 +1,11 @@
-import datetime
-from datetime import timedelta, timezone
+from datetime import timedelta
+
+from fastapi import APIRouter, HTTPException, status
+from jose import jwt
 
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import UserCreate, UserTelegramData
-from fastapi import APIRouter, HTTPException, status
-from jose import JWTError, jwt
-from shared.core.config import settings
 
 router = APIRouter()
 
@@ -18,7 +17,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     # else:
     #     expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
     # to_encode.update({"exp": str(expire)})
-    encoded_jwt = jwt.encode(to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256")
+    encoded_jwt = jwt.encode(
+        to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256"
+    )
     return encoded_jwt
 
 
@@ -68,7 +69,7 @@ async def auth_user(
     if not is_user:
         await user_crud.create(
             UserCreate(
-                telegram_id=user_telegram_data.id,
+                id=user_telegram_data.id,
                 username=user_telegram_data.username,
                 name=user_telegram_data.first_name,
             ),

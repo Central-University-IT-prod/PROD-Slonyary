@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, DateTime, Integer, String
+from sqlalchemy import BigInteger, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
@@ -15,8 +15,12 @@ if TYPE_CHECKING:
 class User(AlchemyBaseModel):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
+    id: Mapped[int] = mapped_column(
+        BigInteger,
+        nullable=False,
+        unique=True,
+        primary_key=True,
+    )
     username: Mapped[int] = mapped_column(String(64), nullable=True)
     name: Mapped[str] = mapped_column(String(256), nullable=True)
     photo_url: Mapped[str] = mapped_column(String, nullable=True)
