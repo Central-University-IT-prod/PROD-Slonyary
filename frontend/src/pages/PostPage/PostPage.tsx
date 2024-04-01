@@ -1,8 +1,11 @@
-import { Posts } from './Posts/Posts.tsx'
+import {Posts} from './Posts/Posts.tsx'
+import {postsAPI} from "../../store/services/PostsService.ts";
 
 
 function PostPage() {
-	return <Posts />
+  const {data} = postsAPI.useFetchAllPostsQuery(null)
+  console.log(data)
+  return <Posts/>
 }
 
 export default PostPage
