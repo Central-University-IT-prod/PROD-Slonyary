@@ -6,6 +6,7 @@ class UserTelegramData(BaseSchema):
     username: str | None = None
     auth_date: int
     first_name: str
+    last_name: str
     hash: str
     photo_url: str | None
 
