@@ -10,7 +10,6 @@ COPY ./requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
 
 COPY ./shared ./shared
-COPY ./alembic.ini ./alembic.ini
 COPY ./migrations ./migrations
 
-CMD ["alembic", "upgrade", "head"]
+CMD ["python", "-m", "migrations"]

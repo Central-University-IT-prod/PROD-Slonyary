@@ -1,15 +1,13 @@
-from fastapi import APIRouter, HTTPException, status
-
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import UserCreate, UserTelegramData
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter()
 
 
 @router.post("/", status_code=200)
 async def auth_user(
-    user_telegram_data_hash: str,
     user_telegram_data: UserTelegramData,
     user_crud: CrudUserDepends,
 ) -> dict:
@@ -20,7 +18,6 @@ async def auth_user(
     Переданные данные в json конвертируются в строку с добавлением \n.
 
     Parameters:
-        user_telegram_data_hash: str - хэш для проверки.
         user_telegram_data: UserTelegramData - данные пользователя от телеграм-аккаунта.
         user_crud:
 
@@ -48,6 +45,7 @@ async def auth_user(
             detail="Данные неверны",
         )
 
+    print("before_crud")
     is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from shared.database.models.vk_channels import VkChannel
 
 
-class UserToVkChannels(AlchemyBaseModel):
+class UsersToVkChannels(AlchemyBaseModel):
     __tablename__ = "users_to_vk_channels"
 
     user_id: Mapped[int] = mapped_column(
@@ -22,14 +22,12 @@ class UserToVkChannels(AlchemyBaseModel):
 
     user: Mapped["User"] = relationship(
         "User",
-        back_populates="vk_channels",
         uselist=False,
         foreign_keys=user_id,
         lazy="joined",
     )
     channel: Mapped["VkChannel"] = relationship(
         "VkChannel",
-        back_populates="users",
         uselist=False,
         foreign_keys=channel_id,
         lazy="joined",

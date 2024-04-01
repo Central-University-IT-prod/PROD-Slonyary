@@ -1,7 +1,6 @@
-from fastapi import APIRouter
-
 from app.api.deps import CurrentUserDep, SessionDepends
 from app.schemas import PreviewPost, TgChannelRead
+from fastapi import APIRouter
 
 router = APIRouter()
 

@@ -46,7 +46,7 @@ export const Posts: FC = () => {
 
   return (
     <>
-      <Stack spacing={1} direction='row'>
+      <Stack maxWidth='sm' sx={{mx: 'auto'}} spacing={1} direction='row'>
         <Button
           sx={{borderRadius: 2}}
           onClick={() => setCategory('all')}
@@ -76,10 +76,10 @@ export const Posts: FC = () => {
           Опубликованные
         </Button>
       </Stack>
-      <Grid container rowSpacing={4} mt={1} spacing={2}>
+      <Grid maxWidth='sm' sx={{mx: 'auto'}} rowSpacing={4} mt={1}>
         {testData
           .filter(post => category === 'all' ? true : post.category === category)
-          .map((post, index) => <Grid item xs={12} sm={6} key={index}><PostItem {...post} /></Grid>)}
+          .map((post, index) => <Grid mt={2} item xs={12} key={index}><PostItem {...post} /></Grid>)}
       </Grid>
     </>
   )

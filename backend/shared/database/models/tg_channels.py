@@ -8,7 +8,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
 
+from shared.database.models.users_to_tg import UsersToTgChannels
+from shared.database.models.posts_to_tg import PostsToTgChannels
+
 if TYPE_CHECKING:
+    from shared.database.models.images import Image
     from shared.database.models.posts import Post
     from shared.database.models.users import User
 
@@ -20,23 +24,21 @@ class TgChannel(AlchemyBaseModel):
     channel_id: Mapped[int] = mapped_column(BigInteger, unique=True, nullable=False)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
     username: Mapped[str] = mapped_column(String, unique=True, nullable=True)
-    title: Mapped[str] = mapped_column(String, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    photo_url: Mapped[str] = mapped_column(String, nullable=True)
     added_at: Mapped[datetime.datetime] = Column(
         DateTime, default=datetime.datetime.now
     )
 
     owner: Mapped["User"] = relationship(
         "User",
-        back_populates="owned_tg_channels",
         foreign_keys=owner_id,
     )
     users: Mapped[list["User"]] = relationship(
-        "UserTgChannel",
-        back_populates="tg_channels",
+        secondary=UsersToTgChannels.__table__,
         lazy="selectin",
     )
     posts: Mapped[list["Post"]] = relationship(
-        "TgChannelPost",
-        back_populates="tg_channels",
+        secondary=PostsToTgChannels.__table__,
         lazy="selectin",
     )

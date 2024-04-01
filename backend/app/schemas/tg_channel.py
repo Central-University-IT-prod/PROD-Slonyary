@@ -32,4 +32,4 @@ class PreviewTgChannel(BaseSchema):
     photo_url: str | None = None
     name: str
     username: str
-    subscribers: int
+    subscribers: int = 0
