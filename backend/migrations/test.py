@@ -14,12 +14,12 @@ async def test() -> None:
 
     async with db_session_manager() as session:
         k1rles = User(
-            telegram_id=11111,
+            id=11111,
             username="K11111rLes",
             name="Кирилл",
         )
         jakefish = User(
-            telegram_id=22222,
+            id=22222,
             username="jakeFish22222",
             name="Инсаф",
         )
