@@ -96,8 +96,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "8089:80"
-    environment:
-      - DOMAIN=${API_DOMAIN:-localhost}
     stdin_open: true
     tty: true
 
