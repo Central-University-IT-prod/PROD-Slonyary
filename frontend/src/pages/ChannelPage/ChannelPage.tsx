@@ -27,51 +27,12 @@ export const ChannelPage: FC = () => {
 			</div>
 			<div>
 				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
-					}}
-				/>
-				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
-					}}
-				/>
-				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
-					}}
-				/>
-				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
-					}}
-				/>
-				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
-					}}
-				/>
-				<Channel
-					chanelData={{
-						title: 'dima is cool',
-						category: 'vk',
-						name: '@dima',
-						subscribers: 134
+					title="Name channel"
+					subscribers={233}
+					avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4UeEjjERyEVTOIaXIKHlj7snPZAKulH5-z1Kau1lsw&s"
+					posts={{
+						pending: 24,
+						moderation: 23
 					}}
 				/>
 			</div>

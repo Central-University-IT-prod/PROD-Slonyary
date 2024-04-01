@@ -1,15 +1,16 @@
-from datetime import timedelta, timezone, datetime
+from datetime import datetime, timedelta, timezone
 
-from app.api.deps import CrudUserDepends
-from app.core import security
-from app.schemas import UserCreate, UserTelegramData
 from fastapi import APIRouter, HTTPException, status
 from jose import jwt
 
-router = APIRouter()
+from app.api.deps import CrudUserDepends
+from app.core import security
+from app.schemas import JwtToken, UserCreate, UserTelegramData
+
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -26,7 +27,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 async def auth_user(
     user_telegram_data: UserTelegramData,
     user_crud: CrudUserDepends,
-) -> dict:
+) -> JwtToken:
     """
     Регистрация пользователя в системе.
     Для регистрация отправляются данные о его тг аккаунте и хэш для проверки валидности.
@@ -49,7 +50,7 @@ async def auth_user(
 
     user_data_dict = user_telegram_data.model_dump()
     for key, value in sorted(user_data_dict.items()):  # Sort required!
-        if key != "hash" and value != None:
+        if key != "hash" and value is not None:
             data_check_list.append(f"{key}={value}")
 
     data_check_string = "\n".join(data_check_list)
@@ -77,4 +78,4 @@ async def auth_user(
     access_token = create_access_token(
         data={"sub": str(user_telegram_data.id)}, expires_delta=access_token_expires
     )
-    return {"token": access_token}
+    return JwtToken(token=access_token)
