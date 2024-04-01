@@ -8,6 +8,7 @@ from .tg_channel import (
     TgChannelUpdate,
 )
 from .user import UserCreate, UserRead, UserTelegramData, UserUpdate
+from .users_to_tg_channels import UsersToTgChannelsCreate
 from .vk_channel import VkChannelCreate, VkChannelRead, VkChannelUpdate
 
 __all__ = (

@@ -1,12 +1,18 @@
 from typing import Annotated
 
-from fastapi import Depends, Header, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core import security
 from app.core.db import get_db_session
-from app.crud import CrudImage, CrudPost, CrudTgChannel, CrudUser, CrudVkChannel
+from app.crud import (
+    CrudImage,
+    CrudPost,
+    CrudTgChannel,
+    CrudUser,
+    CrudUsersToTgChannels,
+    CrudVkChannel,
+)
+from fastapi import Depends, Header, HTTPException, status
 from shared.database.models import User
+from sqlalchemy.ext.asyncio import AsyncSession
 
 SessionDepends = Annotated[AsyncSession, Depends(get_db_session)]
 
@@ -31,11 +37,18 @@ def crud_post(db: SessionDepends) -> CrudPost:
     return CrudPost(db)
 
 
+def crud_users_to_tg_channels(db: SessionDepends) -> CrudUsersToTgChannels:
+    return CrudUsersToTgChannels(db)
+
+
 CrudImageDepends = Annotated[CrudImage, Depends(crud_image)]
 CrudTgChannelDepends = Annotated[CrudTgChannel, Depends(crud_tg_channel)]
 CrudVkChannelDepends = Annotated[CrudVkChannel, Depends(crud_vk_channel)]
 CrudPostDepends = Annotated[CrudPost, Depends(crud_post)]
 CrudUserDepends = Annotated[CrudUser, Depends(crud_user)]
+CrudUsersToTgChannelsDepends = Annotated[
+    CrudUsersToTgChannels, Depends(crud_users_to_tg_channels)
+]
 
 
 async def get_current_user(
