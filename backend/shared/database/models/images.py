@@ -1,10 +1,10 @@
 from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from shared.database.models.base import AlchemyBaseModel
 
 
-class Image(Base):
+class Image(AlchemyBaseModel):
     __tablename__ = "images"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

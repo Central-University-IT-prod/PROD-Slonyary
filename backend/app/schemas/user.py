@@ -6,8 +6,10 @@ from app.schemas.base import BaseSchema
 class UserTelegramData(BaseSchema):
     id: int
     username: str | None = None
-    auth_date: datetime
+    auth_date: int
     first_name: str
+    hash: str
+    photo_url: str | None
 
 
 class UserCreate(BaseSchema):

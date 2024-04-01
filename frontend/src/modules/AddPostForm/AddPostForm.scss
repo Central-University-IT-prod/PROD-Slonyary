@@ -8,6 +8,11 @@
 	padding: 10px 5px;
 }
 .AddPostForm {
+	h2 {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--main-elements-color);
+	}
 	&-buttonGroup {
 		display: flex;
 		gap: 5px;
@@ -47,6 +52,28 @@
 
 		&:hover {
 			background-color: rgba($color: #5578e3, $alpha: 0.5);
+		}
+	}
+	&-btnsbox {
+		justify-content: flex-end;
+		display: flex;
+		gap: 15px;
+		margin-top: 15px;
+	}
+
+	&-spellchecking {
+		padding: 10px 15px;
+		background-color: rgba($color: #5578e3, $alpha: 0.4);
+		border-radius: 5px;
+		color: #000;
+	}
+	&-spellchecking-box {
+		margin-top: 10px;
+
+		h3 {
+			font-size: 16px;
+			font-weight: 600;
+			margin-bottom: 10px;
 		}
 	}
 }

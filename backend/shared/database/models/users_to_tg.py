@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
-    from app.models.tg_channels import TgChannel
-    from app.models.users import User
+    from shared.database.models.tg_channels import TgChannel
+    from shared.database.models.users import User
 
 
-class UsersToTgChannels(Base):
+class UsersToTgChannels(AlchemyBaseModel):
     __tablename__ = "users_to_tg_channels"
 
     user_id: Mapped[int] = mapped_column(

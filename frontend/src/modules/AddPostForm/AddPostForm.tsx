@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import {
 	CompositeDecorator,
 	ContentBlock,
@@ -11,7 +11,7 @@ import {
 	RichUtils
 } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { Button, Grid, TextField } from '@mui/material'
+import { Button, CircularProgress, Grid, TextField } from '@mui/material'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
@@ -20,6 +20,7 @@ import LinkIcon from '@mui/icons-material/Link'
 import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.css'
 import ImageTable from '../ImageTable/ImageTable'
+import { getSpellcheckingWords } from './API'
 
 function AddPostForm() {
 	const maxLength = 9
@@ -203,6 +204,42 @@ function AddPostForm() {
 		setFiles(arrFiles)
 	}
 
+	const [spellcheckingString, setSpellcheckingString] = useState<string>('')
+	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
+		useState<boolean>(false)
+
+	const spellchecking = async () => {
+		setIsSpellcheckingLoading(true)
+
+		const contentState = editorState.getCurrentContent()
+		const html = stateToHTML(contentState)
+		const words = await getSpellcheckingWords(html)
+
+		let text = html
+		let displacement = 0
+
+		for (let index = 0; index < words.length; index++) {
+			const element = words[index]
+			const { pos, len, s } = element
+			const word = s[0].replace(/^,+/, '')
+
+			const leftStr = text.slice(0, pos + displacement)
+			const rightStr = text.slice(pos + len + displacement)
+
+			text = leftStr + word + rightStr
+			const newDisplacement = word.length - len
+			displacement += newDisplacement
+		}
+
+		setSpellcheckingString(text)
+		setIsSpellcheckingLoading(false)
+	}
+
+	const spellcheckingBtnDisabled = useMemo(
+		() => editorState.getCurrentContent().getPlainText().trim().length < 2,
+		[editorState]
+	)
+
 	const onDragOver = (e: any) => e.preventDefault()
 	return (
 		<div className="AddPostForm">
@@ -280,18 +317,35 @@ function AddPostForm() {
 					/>
 				</Grid>
 			</Grid>
-			<Button
-				variant="contained"
-				sx={{
-					mt: '15px',
-					ml: 'auto',
-					display: 'block',
-					fontWeight: 600
-				}}
-				onClick={getText}
-			>
-				Отправить
-			</Button>
+			<div className="AddPostForm-btnsbox">
+				<Button
+					variant="contained"
+					onClick={spellchecking}
+					disabled={spellcheckingBtnDisabled}
+				>
+					Проверить орфографию
+				</Button>
+				<Button variant="contained" onClick={getText}>
+					Отправить
+				</Button>
+			</div>
+			{spellcheckingString.length ? (
+				<div className="AddPostForm-spellchecking-box">
+					{isSpellcheckingLoading ? (
+						<CircularProgress sx={{ margin: 'auto', display: 'block' }} />
+					) : (
+						<>
+							<h3>Отредактированный текст:</h3>
+							<div
+								className="AddPostForm-spellchecking"
+								dangerouslySetInnerHTML={{ __html: spellcheckingString }}
+							></div>
+						</>
+					)}
+				</div>
+			) : (
+				''
+			)}
 		</div>
 	)
 }

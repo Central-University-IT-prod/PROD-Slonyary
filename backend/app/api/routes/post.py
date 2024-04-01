@@ -1,7 +1,6 @@
-from fastapi import APIRouter
-
 from app.api.deps import CurrentUserDep, SessionDepends
 from app.schemas import PreviewPost, TgChannelRead
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -12,5 +11,7 @@ async def get_posts(user: CurrentUserDep, db: SessionDepends) -> list[PreviewPos
 
 
 @router.get("/{id}", status_code=200)
-async def get_post(user: CurrentUserDep, db: SessionDepends, id: int) -> list[TgChannelRead]:
+async def get_post(
+    user: CurrentUserDep, db: SessionDepends, id: int
+) -> list[TgChannelRead]:
     pass

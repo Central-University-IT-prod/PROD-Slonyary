@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CrudBase
-from app.models import VkChannel
 from app.schemas import VkChannelCreate, VkChannelRead, VkChannelUpdate
+from shared.database.models import VkChannel
 
 
 class CrudVkChannel(
