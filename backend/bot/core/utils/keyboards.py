@@ -1,4 +1,11 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, KeyboardButtonRequestChat, ChatAdministratorRights
+from aiogram.filters.callback_data import CallbackData
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, KeyboardButtonRequestChat, ChatAdministratorRights, \
+    InlineKeyboardMarkup, InlineKeyboardButton
+
+
+class SimpleCallback(CallbackData, prefix="btn"):
+    action: str
+
 
 reply_keyboard = ReplyKeyboardMarkup(
     keyboard=[
@@ -9,4 +16,16 @@ reply_keyboard = ReplyKeyboardMarkup(
     ],
     is_persistent=True,
     resize_keyboard=True
+)
+
+ready_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Готово", callback_data="btn:ready")]
+    ]
+)
+
+return_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="Вернуться на сайт", url="http://prod.zzentqgpt.ru/channels")]
+    ]
 )

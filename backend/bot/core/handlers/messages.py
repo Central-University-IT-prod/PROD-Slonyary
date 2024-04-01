@@ -6,6 +6,4 @@ async def message_handler(message: Message):
     Обработка сообщений
     """
 
-    print(message)
-
-    await message.answer('test')
+    await message.answer(text="⚡️ Напишите */start*", parse_mode="Markdown")

@@ -58,3 +58,21 @@ services:
       context: ./frontend
     ports:
       - 5173:5173
+
+
+  redis:
+    image: redis:7.2.1
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=redis-password
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=2
+
+volumes:
+  redis_data:
+
+
+
