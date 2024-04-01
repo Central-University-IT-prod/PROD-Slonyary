@@ -2,7 +2,8 @@ from app.schemas.base import BaseSchema
 
 
 class ImageCreate(BaseSchema):
-    pass
+    post_id: int
+    base64: str
 
 
 class ImageUpdate(BaseSchema):

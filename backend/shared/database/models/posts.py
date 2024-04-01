@@ -1,12 +1,11 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from shared.core.enums import PostStatus
-from shared.database.models.base import AlchemyBaseModel
-from shared.database.models.posts_to_tg import PostsToTgChannels
-from shared.database.models.posts_to_vk import PostsToVkChannels
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from shared.core.enums import PostStatus
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
     from shared.database.models.images import Image
@@ -39,15 +38,18 @@ class Post(AlchemyBaseModel):
     owner: Mapped["User"] = relationship(
         "User",
         back_populates="created_posts",
-        uselist=False,
         lazy="joined",
     )
     tg_channels: Mapped[list["TgChannel"]] = relationship(
-        secondary=PostsToTgChannels.__table__,
+        "TgChannel",
+        secondary="posts_to_tg_channels",
+        back_populates="posts",
         lazy="selectin",
     )
     vk_channels: Mapped[list["VkChannel"]] = relationship(
-        secondary=PostsToVkChannels.__table__,
+        "VkChannel",
+        secondary="posts_to_vk_channels",
+        back_populates="posts",
         lazy="selectin",
     )
     images: Mapped[list["Image"]] = relationship(

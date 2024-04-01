@@ -9,7 +9,7 @@ from core.utils.messages import BotText
 from core.utils.keyboards import ready_keyboard
 from core.utils.keyboards import return_keyboard
 
-from core.services.database import get_channel_by_id
+from core.services.database import get_channel_by_id, add_channel
 
 bot: Bot = Bot(TOKEN)
 
@@ -23,9 +23,7 @@ async def shared_handler(message: Message):
     channel = await get_channel_by_id(chat_shared_id)
 
     if channel:
-
         return
-
 
     try:
         chat_info = await bot.get_chat(chat_id=chat_shared_id)
@@ -51,5 +49,9 @@ async def shared_handler(message: Message):
 
     await message.answer(text=BotText.added_channel, parse_mode="HTML", reply_markup=return_keyboard)
 
-    print(chat_info)
+    await add_channel(channel_id=chat_shared_id,
+                      owner_id=message.from_user.id,
+                      title=chat_info.title,
+                      photo_url=None,
+                      username=chat_info.username)
     # todo: Добавление канала в базу данных, а также проверка на наличие канала в ней. (можно сделать фильтр)
