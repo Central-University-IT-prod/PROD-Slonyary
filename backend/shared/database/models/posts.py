@@ -4,17 +4,16 @@ from typing import TYPE_CHECKING
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
-from app.models.images import Image
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
-    from app.models.images import Image
-    from app.models.tg_channels import TgChannel
-    from app.models.users import User
-    from app.models.vk_channels import VkChannel
+    from shared.database.models.images import Image
+    from shared.database.models.tg_channels import TgChannel
+    from shared.database.models.users import User
+    from shared.database.models.vk_channels import VkChannel
 
 
-class Post(Base):
+class Post(AlchemyBaseModel):
     __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

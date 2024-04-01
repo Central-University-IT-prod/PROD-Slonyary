@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
+from app.api.deps import CrudUserDepends
 from app.core import security
-from app.crud import CrudUserDepends
 from app.schemas import UserCreate, UserTelegramData
 
 router = APIRouter()

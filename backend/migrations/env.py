@@ -4,6 +4,8 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from shared.database.models.base import AlchemyBaseModel
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -15,9 +17,12 @@ if config.config_file_name is not None:
 
 # Setting sqlalchemy.url from settings.
 
-import dotenv
+try:
+    from dotenv import load_dotenv
 
-dotenv.load_dotenv()
+    load_dotenv()
+except ImportError:
+    load_dotenv = None
 
 
 def get_url():
@@ -26,7 +31,7 @@ def get_url():
     server = os.getenv("POSTGRES_SERVER", "db")
     port = os.getenv("POSTGRES_PORT", "5432")
     db = os.getenv("POSTGRES_DB", "app")
-    return f"postgresql+psycopg://{user}:{password}@{server}:{port}/{db}"
+    return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
 
 
 config.set_main_option("sqlalchemy.url", get_url())
@@ -34,9 +39,8 @@ config.set_main_option("sqlalchemy.url", get_url())
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymode
-from app.core.db import Base
 
-target_metadata = Base.metadata
+target_metadata = AlchemyBaseModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

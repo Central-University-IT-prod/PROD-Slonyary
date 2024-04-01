@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CrudBase
-from app.models import TgChannel
 from app.schemas import TgChannelCreate, TgChannelRead, TgChannelUpdate
+from shared.database.models import TgChannel
 
 
 class CrudTgChannel(

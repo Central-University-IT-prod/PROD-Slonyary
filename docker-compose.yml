@@ -1,64 +1,73 @@
-version: "3.0"
+version: "3.9"
 
 services:
-  db:
-    image: postgres:12
-    restart: always
-    env_file:
-      - .env
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=changethis
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=app
-      - POSTGRES_PORT=5432
+
+  database:
+    image: postgres:16.2-alpine3.19
+    container_name: prod-smm-database
+    restart: unless-stopped
+    volumes:
+      - "/var/prod/smm/db:/var/lib/postgresql/data"
     ports:
-      - 5432:5432
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: prod_smm
+      POSTGRES_USER: prod_smm
+      POSTGRES_PASSWORD: prod_smm
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U prod_smm -d prod_smm" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   migrations:
     build:
-      context: .
-      dockerfile: migrations.dockerfile
+      context: ./backend
+      dockerfile: ./migrations/Dockerfile
     environment:
-      - DOMAIN=localhost
-      - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
-      - POSTGRES_SERVER=db
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=changethis
+      POSTGRES_HOST: database
+      POSTGRES_HOST_PORT: 5432
+      POSTGRES_DB: prod_smm
+      POSTGRES_USER: prod_smm
+      POSTGRES_PASSWORD: prod_smm
     depends_on:
-      - db
+      database:
+        condition: service_healthy
 
-  backend:
-    restart: always
-    depends_on:
-      - db
-      - migrations
-    env_file:
-      - .env
-    environment:
-      - DOMAIN=localhost
-      - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
-      - POSTGRES_SERVER=db
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=changethis
-
+  api:
+    container_name: prod-smm-api
+    restart: unless-stopped
     build:
       context: ./backend
-    
+      dockerfile: ./app/Dockerfile
     ports:
-      - 8080:8080
+      - "8090:8090"
+    environment:
+      - DOMAIN=localhost
+      - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
+      - POSTGRES_SERVER=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=app
+      - POSTGRES_USER=prod_smm
+      - POSTGRES_PASSWORD=prod_smm
+      - BOT_TOKEN=bottokeninsertpls
+      - PROJECT_NAME=prodsmm
+      - FIRST_SUPERUSER=prodsmm
+      - FIRST_SUPERUSER_PASSWORD=prodsmm
+    depends_on:
+      - database
+      - migrations
 
-  frontend:  
-    restart: always
+  frontend:
+    container_name: prod-smm-frontend
+    restart: unless-stopped
     build:
       context: ./frontend
+      dockerfile: ./Dockerfile
     ports:
-      - 5173:5173
-
+      - "5173:5173"
 
   redis:
     image: redis:7.2.1
@@ -67,12 +76,10 @@ services:
     volumes:
       - redis_data:/data
     environment:
-      - REDIS_PASSWORD=redis-password
+      - REDIS_PASSWORD=prod_smm
       - REDIS_PORT=6379
       - REDIS_DATABASES=2
 
 volumes:
   redis_data:
-
-
-
+  redis_data:

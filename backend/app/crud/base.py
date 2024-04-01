@@ -4,10 +4,10 @@ import sqlalchemy
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db import Base
 from app.schemas.base import BaseSchema
+from shared.database.models.base import AlchemyBaseModel
 
-ModelType = TypeVar("ModelType", bound=Base)
+ModelType = TypeVar("ModelType", bound=AlchemyBaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseSchema)
 # TODO: update schema support.
 ReadSchemaType = TypeVar("ReadSchemaType", bound=BaseSchema)
