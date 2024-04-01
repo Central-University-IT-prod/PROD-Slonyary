@@ -99,7 +99,7 @@ const AddPostForm: FC = () => {
 		let html = stateToHTML(contentState)
 		const text = contentState.getPlainText()
 
-		let publish_time
+		let publish_time: string | null
 
 		if (!date) {
 			publish_time = null
@@ -114,7 +114,7 @@ const AddPostForm: FC = () => {
 				+minut
 			).toISOString()
 		}
-
+		console.log(publish_time)
 		const formData = new FormData()
 		for (let index = 0; index < files.length; index++) {
 			const element = files[index]
@@ -269,9 +269,7 @@ const AddPostForm: FC = () => {
 	)
 
 	const { data: channels } = channelsAPI.useGetChannelsQuery(null)
-	const [targetChannels, settargetChannels] = useState<
-		{ type: string; id: number }[]
-	>([])
+	const [targetChannels] = useState<{ type: string; id: number }[]>([])
 	const setChannel = (
 		e: React.ChangeEvent<HTMLInputElement>,
 		channelId: number
