@@ -4,9 +4,11 @@ import { Outlet } from 'react-router-dom'
 import { ThemeProvider, createTheme, Container } from '@mui/material'
 import useAppSelector from './hooks/useAppSelector'
 import { Navbar } from './modules/Navbar/Navbar.tsx'
+import MediaSlider from './modules/MediaSlider/MediaSlider.tsx'
 
 function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
+	const { type, data } = useAppSelector((state) => state.modal)
 
 	const theme = useMemo(
 		() =>
@@ -36,6 +38,7 @@ function App() {
 					data-theme={themeMode}
 				>
 					<Outlet />
+					{type === 'MEDIA-SLIDER-MODAL' && <MediaSlider data={data} />}
 				</Container>
 			</ThemeProvider>
 		</div>

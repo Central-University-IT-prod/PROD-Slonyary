@@ -35,3 +35,6 @@ main {
 [theme='dark'] input::-webkit-calendar-picker-indicator {
 	filter: invert(1);
 }
+.loaderImg {
+	background-color: var(--grey-color-1);
+}

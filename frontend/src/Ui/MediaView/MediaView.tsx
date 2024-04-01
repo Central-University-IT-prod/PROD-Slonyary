@@ -16,7 +16,10 @@ type TContext = {
 const MediaView = memo(({ children, src, index }: IProps) => {
 	const { media, addMedia, openSlider } = useMediaContext() as TContext
 
-	const onClick = () => openSlider(index)
+	const onClick = () => {
+		console.log('dsd')
+		openSlider(index)
+	}
 	useEffect(() => {
 		if (media[index]?.src !== src) {
 			addMedia({
@@ -29,14 +32,13 @@ const MediaView = memo(({ children, src, index }: IProps) => {
 	const childNode = useMemo(
 		() =>
 			React.Children.map(children, (child) => {
-				if (React.isValidElement(child) && child.type === 'img') {
+				if (React.isValidElement(child)) {
 					return React.cloneElement(child, { onClick } as any)
 				}
-				return child
 			}),
 		[openSlider]
 	)
-
+	console.log(childNode)
 	return <>{childNode}</>
 })
 
