@@ -21,6 +21,7 @@ import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.scss'
 import ImageTable from '../ImageTable/ImageTable'
 import { getSpellcheckingWords } from './API'
+import useModal from '../../hooks/useModal'
 
 const AddPostForm: FC = () => {
 	const maxLength = 9
@@ -202,6 +203,8 @@ const AddPostForm: FC = () => {
 	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
 		useState<boolean>(false)
 
+	const { setModal } = useModal('TELEGRAM-PREVIEW', null, {})
+
 	const spellchecking = async () => {
 		setIsSpellcheckingLoading(true)
 
@@ -319,7 +322,16 @@ const AddPostForm: FC = () => {
 				>
 					Проверить орфографию
 				</Button>
-				<Button variant="contained" onClick={() => console.log('clk')}>
+				<Button
+					variant="contained"
+					disabled={spellcheckingBtnDisabled}
+					onClick={() =>
+						setModal({
+							htmlText: stateToHTML(editorState.getCurrentContent()),
+							images: files
+						})
+					}
+				>
 					Показать превью
 				</Button>
 				<Button variant="contained" onClick={getText}>
