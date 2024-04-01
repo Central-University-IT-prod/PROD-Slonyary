@@ -23,8 +23,28 @@ router = APIRouter()
 
 
 @router.get("/", status_code=200)
-async def get_posts(user: CurrentUserDep, db: SessionDepends) -> list[PreviewPost]:
-    pass
+async def get_posts(user: CurrentUserDep, db: SessionDepends, crud_post: CrudPostDepends) -> list[PreviewPost]:
+    posts = crud_post.get_user_posts(user)
+    result = []
+
+    for post in posts:
+        channel_avatars = []
+        for tg_channel in post.tg_channels:
+            channel_avatars.append(tg_channel.photo_url)
+
+        result.append(PreviewPost(
+            id=post.id,
+            status=post.status,
+            channel_avatars=channel_avatars,
+            publish_time=post.publish_time,
+            owner_name=post.owner.name,
+            html_text=post.html_text,
+            plain_text=post.plain_text,
+            is_owner=post.owner.id == user.id,
+            photos=post.images,
+        ))
+    
+    return result
 
 
 @router.post("/", status_code=200)

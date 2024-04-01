@@ -1,10 +1,9 @@
 import sqlalchemy as sa
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.crud.base import CrudBase
 from app.schemas import PostCreate, PostRead, PostUpdate
 from shared.core.enums import UserChannelRole
 from shared.database.models import Post, User, UsersToTgChannels
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
@@ -59,3 +58,10 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         await self.db.commit()
         await self.db.refresh(post)
         return post
+
+    async def get_user_posts(self, user: User) -> list[Post]:
+        """Получение постов пользователя."""
+        posts = []
+        for tg_channel in user.tg_channels:
+            posts.extend(tg_channel.posts)
+        return posts

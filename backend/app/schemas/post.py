@@ -18,7 +18,7 @@ class Channel(BaseSchema):
 class PostIn(BaseSchema):
     html_text: str | None
     plain_text: str | None
-    publish_time: datetime
+    publish_time: datetime | None
     channels: list[Channel]
     images: list[ImageCreate]
 
@@ -35,7 +35,7 @@ class PreviewPost(BaseSchema):
     id: int = 0
     status: str
     channel_avatars: list[str]
-    publish_time: datetime
+    publish_time: datetime | None = None
     owner_name: str
     photos: list[str]
     html_text: str | None = None
