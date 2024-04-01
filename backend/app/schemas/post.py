@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from app.schemas.base import BaseSchema
+from app.schemas.image import ImageCreate
 
 
 class PostUpdate(BaseSchema):
@@ -17,6 +18,7 @@ class PostIn(BaseSchema):
     plain_text: str | None
     publish_time: datetime
     channels: list[Channel]
+    images: list[ImageCreate]
 
 
 class PostCreate(BaseSchema):
@@ -31,7 +33,6 @@ class PreviewPost(BaseSchema):
     id: int = 0
     status: str
     channel_avatars: list[str]
-    channel_name: str
     publish_time: datetime
     owner_name: str
     photos: list[str]
