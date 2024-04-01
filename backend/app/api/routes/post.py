@@ -1,5 +1,8 @@
-from app.api.deps import CurrentUserDep
-from app.crud import CrudTgChannelDepends, CrudUserToTgChannelDepends
+from app.api.deps import (
+    CrudTgChannelDepends,
+    CrudUsersToTgChannelsDepends,
+    CurrentUserDep,
+)
 from app.schemas import PreviewTgChannel, TgChannelRead
 from fastapi import APIRouter, HTTPException
 
@@ -9,7 +12,7 @@ router = APIRouter()
 @router.get("/tg", status_code=200)
 async def get_tg_channels(
     user: CurrentUserDep,
-    crud_user_to_tg_channel: CrudUserToTgChannelDepends,
+    crud_user_to_tg_channel: CrudUsersToTgChannelsDepends,
 ) -> list[PreviewTgChannel]:
     return crud_user_to_tg_channel.get_tg_channels(user)
 
@@ -19,7 +22,7 @@ async def get_tg_channel(
     id: int,
     user: CurrentUserDep,
     crud_tg_channel: CrudTgChannelDepends,
-    crud_user_to_tg_channel: CrudUserToTgChannelDepends,
+    crud_user_to_tg_channel: CrudUsersToTgChannelsDepends,
 ) -> list[TgChannelRead]:
     tg_channel = crud_tg_channel.get(id)
     if not tg_channel:
