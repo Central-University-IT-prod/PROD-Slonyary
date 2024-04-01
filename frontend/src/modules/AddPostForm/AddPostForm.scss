@@ -86,4 +86,18 @@
 			margin-bottom: 10px;
 		}
 	}
+	.chanelsToPost {
+		&-item {
+			border-radius: var(--alpha3);
+			padding: 10px 15px;
+			border-radius: 10px;
+			display: flex;
+			gap: 10px;
+
+			h3 {
+				display: block;
+				margin-left: auto;
+			}
+		}
+	}
 }

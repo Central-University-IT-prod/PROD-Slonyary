@@ -23,8 +23,7 @@ export const postsAPI = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
-      headers.set('authorization', `Btoken:${localStorage.getItem('accessToken')}`)
-    }
+      headers.set('token', localStorage.getItem('accessToken') as string)    }
   }),
   tagTypes: ['Posts'],
   endpoints: (build) => ({

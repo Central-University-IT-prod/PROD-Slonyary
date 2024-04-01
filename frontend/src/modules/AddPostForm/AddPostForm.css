@@ -74,4 +74,15 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 10px;
+}
+.AddPostForm .chanelsToPost-item {
+  border-radius: var(--alpha3);
+  padding: 10px 15px;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+}
+.AddPostForm .chanelsToPost-item h3 {
+  display: block;
+  margin-left: auto;
 }/*# sourceMappingURL=AddPostForm.css.map */

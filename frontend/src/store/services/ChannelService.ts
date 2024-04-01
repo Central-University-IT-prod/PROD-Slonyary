@@ -5,7 +5,7 @@ export const channelsAPI = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
-      headers.set('token', `${localStorage.getItem('accessToken')}`)
+      headers.set('token', localStorage.getItem('accessToken') as string)
     }
   }),
   tagTypes: ['Channel'],

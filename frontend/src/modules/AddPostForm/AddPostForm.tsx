@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import React, { FC, useCallback, useMemo, useState } from 'react'
 import {
 	CompositeDecorator,
@@ -279,6 +281,10 @@ const AddPostForm: FC = () => {
 		newList.push({ type: 'tg', id: channelId })
 	}
 
+	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setDate(e.target.value)
+	const timeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setTime(e.target.value)
 	const onDragOver = (e: any) => e.preventDefault()
 	return (
 		<div className="AddPostForm">
@@ -336,23 +342,19 @@ const AddPostForm: FC = () => {
 						fullWidth
 						size="small"
 						type="date"
+						value={date}
+						onChange={dateChange}
 						placeholder="Дата публикации"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
 					/>
 				</Grid>
 				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
 					<TextField
 						fullWidth
 						size="small"
+						value={time}
+						onChange={timeChange}
 						placeholder="Время публикации"
 						type="time"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
 					/>
 				</Grid>
 			</Grid>
