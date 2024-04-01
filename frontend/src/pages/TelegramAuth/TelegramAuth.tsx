@@ -22,11 +22,12 @@ export const TelegramAuth: FC = () => {
 	}
 
 	return (
-		<>
+		<div className="TelegramAuth">
+			<h4>Зарегистрируйтесь через телеграмм:</h4>
 			<TelegramLoginButton
 				dataOnauth={handleTelegramResponse}
 				botName="StackSMM_Bot"
 			/>
-		</>
+		</div>
 	)
 }
