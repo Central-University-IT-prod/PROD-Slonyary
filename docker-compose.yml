@@ -60,27 +60,46 @@ services:
       - database
       - migrations
 
-  # frontend:
-  #   container_name: prod-smm-frontend
-  #   restart: unless-stopped
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - "5173:5173"
-  #   stdin_open: true
-  #   tty: true
+  scheduler:
+    container_name: prod-smm-scheduler
+    restart: unless-stopped
+    build:
+      context: ./scheduler
+      dockerfile: ./Dockerfile
+    environment:
+      - DOMAIN=localhost
+      - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
+      - POSTGRES_SERVER=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=prod_smm
+      - POSTGRES_USER=prod_smm
+      - POSTGRES_PASSWORD=prod_smm
+      - BOT_TOKEN=6582832120:AAEwArnyyDJj3j2S1Dv71QQvCRQ51dlXwPQ
+      - PROJECT_NAME=prodsmm
+      - FIRST_SUPERUSER=prodsmm
+      - FIRST_SUPERUSER_PASSWORD=prodsmm
+    depends_on:
+      - database
+      - migrations
+
+  frontend:
+    container_name: prod-smm-frontend
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
 
   redis:
     image: redis:7.2.1
     ports:
       - "6370:6379"
     volumes:
-      - redis_data:/data
+      - /var/prod/smm/redis:/data
     environment:
       - REDIS_PASSWORD=prod_smm
       - REDIS_PORT=6379
       - REDIS_DATABASES=2
-
-volumes:
-  redis_data:

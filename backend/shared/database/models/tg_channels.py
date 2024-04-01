@@ -12,6 +12,7 @@ from shared.database.models.users_to_tg import UsersToTgChannels
 from shared.database.models.posts_to_tg import PostsToTgChannels
 
 if TYPE_CHECKING:
+    from shared.database.models.images import Image
     from shared.database.models.posts import Post
     from shared.database.models.users import User
 
@@ -39,5 +40,10 @@ class TgChannel(AlchemyBaseModel):
     )
     posts: Mapped[list["Post"]] = relationship(
         secondary=PostsToTgChannels.__table__,
+        lazy="selectin",
+    )
+    images: Mapped[list["Image"]] = relationship(
+        "Image",
+        back_populates="post",
         lazy="selectin",
     )
