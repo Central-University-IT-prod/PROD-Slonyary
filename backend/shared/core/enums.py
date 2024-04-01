@@ -23,3 +23,8 @@ class UserChannelRole(StrEnum):
     owner = "owner"
     moderator = "moderator"
     editor = "editor"
+
+
+class ChannelType(StrEnum):
+    vk = "vk"
+    tg = "tg"
