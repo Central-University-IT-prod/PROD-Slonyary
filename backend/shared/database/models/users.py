@@ -21,6 +21,7 @@ class User(AlchemyBaseModel):
     telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
     username: Mapped[int] = mapped_column(String(64), nullable=True)
     name: Mapped[str] = mapped_column(String(256), nullable=True)
+    photo_url: Mapped[str] = mapped_column(String, nullable=True)
     registered_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.now
     )
