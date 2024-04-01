@@ -5,8 +5,6 @@ from sqlalchemy import BigInteger, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
-from shared.database.models.users_to_tg import UsersToTgChannels
-from shared.database.models.users_to_vk import UsersToVkChannels
 
 if TYPE_CHECKING:
     from shared.database.models.posts import Post
@@ -28,14 +26,17 @@ class User(AlchemyBaseModel):
     created_posts: Mapped[list["Post"]] = relationship(
         "Post",
         back_populates="owner",
-        uselist=True,
         lazy="selectin",
     )
     tg_channels: Mapped[list["TgChannel"]] = relationship(
-        secondary=UsersToTgChannels.__table__,
+        "TgChannel",
+        secondary="users_to_tg_channels",
+        back_populates="users",
         lazy="selectin",
     )
     vk_channels: Mapped[list["VkChannel"]] = relationship(
-        secondary=UsersToVkChannels.__table__,
+        "VkChannel",
+        secondary="users_to_vk_channels",
+        back_populates="users",
         lazy="selectin",
     )

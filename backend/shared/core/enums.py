@@ -17,3 +17,9 @@ class PostStatus(StrEnum):
     moderation = "moderation"
     pending = "pending"
     published = "published"
+
+
+class UserChannelRole(StrEnum):
+    owner = "owner"
+    pending = "pending"
+    published = "published"
