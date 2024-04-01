@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 
-class UsersToTgChannelsCreate(BaseModel):
+class UsersToVkChannelsCreate(BaseModel):
     user_id: int
     channel_id: int

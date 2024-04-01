@@ -38,14 +38,10 @@ function App() {
 		<div className="App">
 			<ThemeProvider theme={theme}>
 				<Navbar />
-				<Container
-					maxWidth={'lg'}
-					sx={{ marginTop: '20px', pb: '15px' }}
-					data-theme={themeMode}
-				>
+				<div className="container">
 					<Outlet />
 					{type === 'MEDIA-SLIDER-MODAL' && <MediaSlider data={data} />}
-				</Container>
+				</div>
 			</ThemeProvider>
 		</div>
 	)

@@ -38,3 +38,6 @@ main {
 .loaderImg {
 	background-color: var(--grey-color-1);
 }
+body.modalActive {
+	overflow-y: hidden;
+}

@@ -4,16 +4,15 @@ import { NavLink } from 'react-router-dom'
 import { NavigatePath, paths } from '../../routes.ts'
 import bibaImg from '../../assets/imgs/biba.jpg'
 import siteLogoImg from '../../assets/imgs/siteLogo.png'
-import { Container } from '@mui/material'
 
 export const Navbar: FC = () => {
 	return (
-		<nav className={s.navBar}>
-			<Container maxWidth={'lg'} sx={{ padding: '15px 20px 15px 15px' }}>
+		<header className={s.navBar}>
+			<div className="container">
 				<div className={s.inner}>
 					<div className={s.left}>
 						<img src={siteLogoImg} alt="" className={s.logo} />
-						<div className={s.links}>
+						<nav className={s.links}>
 							<NavLink
 								className={({ isActive }) =>
 									isActive ? `${s.link} ${s.active}` : s.link
@@ -38,14 +37,14 @@ export const Navbar: FC = () => {
 							>
 								Мои посты
 							</NavLink>
-						</div>
+						</nav>
 					</div>
 					<div className={s.right}>
 						<img src={bibaImg} alt="" className={s.userLogo} />
 						<span className={s.userName}>User</span>
 					</div>
 				</div>
-			</Container>
-		</nav>
+			</div>
+		</header>
 	)
 }
