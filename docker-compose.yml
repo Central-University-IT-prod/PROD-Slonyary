@@ -27,7 +27,7 @@ services:
       context: ./backend
       dockerfile: ./migrations/Dockerfile
     environment:
-      - DOMAIN=localhost
+      - DOMAIN=${API_DOMAIN:-localhost}
       - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
       - POSTGRES_SERVER=database
       - POSTGRES_PORT=5432
@@ -51,7 +51,7 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - DOMAIN=localhost
+      - DOMAIN=${API_DOMAIN:-localhost}
       - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
       - POSTGRES_SERVER=database
       - POSTGRES_PORT=5432
@@ -70,10 +70,10 @@ services:
     container_name: prod-smm-scheduler
     restart: unless-stopped
     build:
-      context: ./scheduler
-      dockerfile: ./Dockerfile
+      context: ./backend
+      dockerfile: ./scheduler/Dockerfile
     environment:
-      - DOMAIN=localhost
+      - DOMAIN=${API_DOMAIN:-localhost}
       - BACKEND_CORS_ORIGINS="http://localhost,http://localhost:5173,https://localhost,https://localhost:5173,http://localhost.tiangolo.com"
       - POSTGRES_SERVER=database
       - POSTGRES_PORT=5432
@@ -95,7 +95,9 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-      - "80:80"
+      - "8089:80"
+    environment:
+      - DOMAIN=${API_DOMAIN:-localhost}
     stdin_open: true
     tty: true
 
