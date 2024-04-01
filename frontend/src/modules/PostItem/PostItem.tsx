@@ -6,10 +6,12 @@ import { ImageList, ImageListItem } from '@mui/material'
 import { MediaProvider } from '../MediaProvider/MediaProvider.tsx'
 import MediaView from '../../Ui/MediaView/MediaView.tsx'
 
-export const PostItem: FC<TPostItem> = (props) => {
+export const PostItem: FC<{ data: TPostItem }> = ({ data }) => {
+	const { admin, category, channelName, date, htmlText, postImages } = data
+
 	const mainEditor = true
 	let rightText
-	switch (props.category) {
+	switch (category) {
 		case 'pending':
 			rightText = 'Не опубликован'
 			break
@@ -27,30 +29,30 @@ export const PostItem: FC<TPostItem> = (props) => {
 					<div className={s.left}>
 						<img src={bibaImg} alt="Аватарка канала" className={s.avatar} />
 						<div className={s.leftText}>
-							<h4>{props.channelName}</h4>
-							<p>{new Date(props.date).toDateString()}</p>
+							<h4>{channelName}</h4>
+							<p>{new Date(date).toDateString()}</p>
 						</div>
 					</div>
 					<div className={s.right}>
-						<div className={`${s.publicised} ${s[props.category]}`}>
+						<div className={`${s.publicised} ${s[category]}`}>
 							<div></div>
 							<span>{rightText}</span>
 						</div>
-						<p className={s.adminName}>{props.admin}</p>
+						<p className={s.adminName}>{admin}</p>
 					</div>
 				</div>
-				{!!props.postImages?.length && (
+				{!!postImages?.length && (
 					<ImageList
 						sx={{
 							width: '100%',
-							borderRadius: '40px',
+							borderRadius: '20px',
 							marginTop: '10px',
 							maxWidth: '100%'
 						}}
-						cols={props.postImages.length > 3 ? 3 : props.postImages.length}
+						cols={postImages.length > 3 ? 3 : postImages.length}
 					>
-						<MediaProvider mediaCount={props.postImages?.length}>
-							{props.postImages.map((src, i) => (
+						<MediaProvider mediaCount={postImages?.length}>
+							{postImages.map((src, i) => (
 								<MediaView index={i} key={i} src={src}>
 									<ImageListItem key={i}>
 										<img
@@ -64,13 +66,9 @@ export const PostItem: FC<TPostItem> = (props) => {
 						</MediaProvider>
 					</ImageList>
 				)}
-				{props.htmlText ? (
-					props.htmlText
-				) : (
-					<p className={s.postText}>{props.plainText}</p>
-				)}
+				<div className={s.postItemTextContant}>{htmlText}</div>
 			</div>
-			{props.category === 'pending' && (
+			{category === 'pending' && (
 				<div className={s.bottomButtons}>
 					<button className={`${s.leftButton} ${s.grey}`}>Изменить</button>
 					<button className={`${s.rightButton} ${s.orange}`}>
@@ -78,7 +76,7 @@ export const PostItem: FC<TPostItem> = (props) => {
 					</button>
 				</div>
 			)}
-			{props.category === 'moderation' && mainEditor && (
+			{category === 'moderation' && mainEditor && (
 				<div className={s.bottomButtons}>
 					<button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
 					<button className={`${s.middleButton} ${s.grey}`}>Изменить</button>

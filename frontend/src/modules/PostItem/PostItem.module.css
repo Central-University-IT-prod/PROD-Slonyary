@@ -1,9 +1,13 @@
 .post {
-  border-radius: 40px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.postItemTextContant {
+  margin-top: 15px;
 }
 
 .postInner {
@@ -20,12 +24,12 @@
 .left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
 }
 
@@ -90,11 +94,8 @@
   color: #a146cf;
 }
 
-.postImages {
-  margin-top: 16px;
-  background-color: #808080;
-  border-radius: 40px;
-  height: 200px;
+.postImage {
+  cursor: pointer;
 }
 
 .postText {
@@ -122,10 +123,10 @@
   opacity: 1;
 }
 .bottomButtons .leftButton {
-  border-radius: 0 0 0 40px;
+  border-radius: 0 0 0 20px;
 }
 .bottomButtons .rightButton {
-  border-radius: 0 0 40px 0;
+  border-radius: 0 0 20px 0;
 }
 .bottomButtons .red {
   background-color: #f15d5d;
