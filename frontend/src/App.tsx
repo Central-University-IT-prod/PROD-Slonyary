@@ -31,7 +31,7 @@ function App() {
 	}, [themeMode])
 
 	useEffect(() => {
-		axios.get(`${BACKEND_HOST}/ping`)
+		axios.get(`http://${BACKEND_HOST}/ping`)
 	}, [])
 
 	return (
