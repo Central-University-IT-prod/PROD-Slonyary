@@ -12,7 +12,7 @@ async def publish_tg_post(post: Post, bot: Bot) -> None:
     set_caption_to_media_group(post.html_text, media_group)
 
     for channel in cast(list[TgChannel], post.tg_channels):
-        await bot.send_media_group(chat_id=channel.channel_id, media=media_group)
+        await bot.send_media_group(chat_id=channel.id, media=media_group)
 
 
 async def images_to_file_id_media(post: Post, bot: Bot) -> list[InputMediaPhoto]:

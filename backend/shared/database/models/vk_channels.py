@@ -3,7 +3,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.database.models.base import AlchemyBaseModel
@@ -16,8 +16,7 @@ if TYPE_CHECKING:
 class VkChannel(AlchemyBaseModel):
     __tablename__ = "vk_channels"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    channel_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
+    id: Mapped[int] = mapped_column(BigInteger, unique=True, primary_key=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
     title: Mapped[str] = mapped_column(String(64), nullable=False)
     access_token: Mapped[str] = mapped_column(String(512), nullable=False)

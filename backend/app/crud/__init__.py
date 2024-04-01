@@ -13,4 +13,5 @@ __all__ = (
     "CrudUser",
     "CrudVkChannel",
     "CrudUsersToTgChannels",
+    "CrudUsersToVkChannels",
 )

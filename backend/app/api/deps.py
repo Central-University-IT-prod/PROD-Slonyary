@@ -1,6 +1,9 @@
 from typing import Annotated
 
-from app.core import security
+from fastapi import Depends, Header, HTTPException
+from jose import JWTError, jwt
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.crud import (
     CrudImage,
     CrudPost,
@@ -10,12 +13,8 @@ from app.crud import (
     CrudUsersToVkChannels,
     CrudVkChannel,
 )
-from fastapi import Depends, Header, HTTPException, status
-from jose import JWTError, jwt
-from shared.core.config import settings
 from shared.database.models import User
 from shared.database.session import get_db_session
-from sqlalchemy.ext.asyncio import AsyncSession
 
 SessionDepends = Annotated[AsyncSession, Depends(get_db_session)]
 
@@ -91,4 +90,6 @@ __all__ = (
     "CrudPostDepends",
     "CrudUserDepends",
     "CurrentUserDep",
+    "CrudUsersToTgChannelsDepends",
+    "CrudUsersToVkChannelsDepends",
 )
