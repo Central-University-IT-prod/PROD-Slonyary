@@ -45,7 +45,7 @@ export const PostItem: FC<TPostItem> = (props) => {
             >
               {props.postImages.map((imgUrl, index) => (
                 <ImageListItem key={index}>
-                  <img src={imgUrl} alt='Картинка'/>
+                  <img className={s.postImage} src={imgUrl} alt='Картинка'/>
                 </ImageListItem>
               ))}
             </ImageList>
@@ -59,7 +59,8 @@ export const PostItem: FC<TPostItem> = (props) => {
       {
         props.category === 'pending' &&
           <div className={s.bottomButtons}>
-              <button className={`${s.leftButton} ${s.grey}`}>Изменить</button>
+              <button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
+              <button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
               <button className={`${s.rightButton} ${s.orange}`}>Опубликовать</button>
           </div>
       }
