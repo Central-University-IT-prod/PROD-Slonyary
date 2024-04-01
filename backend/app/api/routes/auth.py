@@ -1,12 +1,10 @@
-import datetime
-from datetime import timedelta, timezone
-
-from fastapi import APIRouter, HTTPException, status
-from jose import jwt
+from datetime import timedelta, timezone, datetime
 
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import UserCreate, UserTelegramData
+from fastapi import APIRouter, HTTPException, status
+from jose import jwt
 
 router = APIRouter()
 
@@ -14,10 +12,10 @@ router = APIRouter()
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.datetime.now(timezone.utc) + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": str(expire)})
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256"
     )
@@ -51,7 +49,7 @@ async def auth_user(
 
     user_data_dict = user_telegram_data.model_dump()
     for key, value in sorted(user_data_dict.items()):  # Sort required!
-        if key != "hash" and value is not None:
+        if key != "hash" and value != None:
             data_check_list.append(f"{key}={value}")
 
     data_check_string = "\n".join(data_check_list)
@@ -63,7 +61,6 @@ async def auth_user(
             detail="Данные неверны",
         )
 
-    # print("before_crud")
     is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.

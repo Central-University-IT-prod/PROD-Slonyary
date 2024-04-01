@@ -1,8 +1,5 @@
+from datetime import datetime
 from typing import Annotated
-
-from fastapi import Depends, Header, HTTPException
-from jose import JWTError, jwt
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import (
     CrudImage,
@@ -13,8 +10,11 @@ from app.crud import (
     CrudUsersToVkChannels,
     CrudVkChannel,
 )
+from fastapi import Depends, Header, HTTPException
+from jose import JWTError, jwt
 from shared.database.models import User
 from shared.database.session import get_db_session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 SessionDepends = Annotated[AsyncSession, Depends(get_db_session)]
 
