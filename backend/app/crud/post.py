@@ -1,17 +1,8 @@
-import sqlalchemy as sa
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.crud.base import CrudBase
 from app.schemas import PostCreate, PostRead, PostUpdate
-from shared.database.models import (
-    Post,
-    PostsToTgChannels,
-    PostsToVkChannels,
-    TgChannel,
-    User,
-    UsersToTgChannels,
-    UsersToVkChannels,
-    VkChannel,
-)
-from sqlalchemy.ext.asyncio import AsyncSession
+from shared.database.models import Post, User
 
 
 class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
@@ -34,9 +25,7 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
 
     async def is_user_access(self, user: User, post: Post) -> bool:
         """Check if user has access to post."""
-        print(user.tg_channels)
         for post_tg_channel in post.tg_channels:
-            print(post_tg_channel.id)
             if post_tg_channel in user.tg_channels:
                 return True
 

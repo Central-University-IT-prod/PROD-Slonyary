@@ -1,3 +1,5 @@
+from fastapi import APIRouter, HTTPException
+
 from app.api.deps import (
     CrudImageDepends,
     CrudPostDepends,
@@ -14,10 +16,7 @@ from app.schemas import (
     PostsToTgChannelsCreate,
     PostsToVkChannelsCreate,
     PreviewPost,
-    TgChannelRead,
 )
-from fastapi import APIRouter, HTTPException
-from shared.database.models import PostsToTgChannels, PostsToVkChannels
 
 router = APIRouter()
 
@@ -65,7 +64,7 @@ async def create_post(
                 return HTTPException(403, detail="Нет доступа")
 
             bulk_tg_posts.append(
-                PostsToTgChannelsCreate(psot_id=post.id, channel_id=channel.id)
+                PostsToTgChannelsCreate(post_id=post.id, channel_id=channel.id)
             )
 
         elif channel.type == "vk":

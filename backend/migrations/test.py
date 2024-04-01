@@ -28,14 +28,14 @@ async def test() -> None:
         await session.commit()
 
         channel = TgChannel(
-            channel_id=1234567890,
+            id=1234567890,
             owner_id=k1rles.id,
             username="testChannel",
             title="testChannel",
             photo_url="https://url.com",
         )
         s_channel = TgChannel(
-            channel_id=987654321,
+            id=987654321,
             owner_id=jakefish.id,
             username="sChannel",
             title="sChannel",

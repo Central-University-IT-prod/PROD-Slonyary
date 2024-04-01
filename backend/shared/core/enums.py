@@ -21,5 +21,5 @@ class PostStatus(StrEnum):
 
 class UserChannelRole(StrEnum):
     owner = "owner"
-    pending = "pending"
-    published = "published"
+    moderator = "moderator"
+    editor = "editor"

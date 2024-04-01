@@ -4,6 +4,7 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import Message
 
+from core.handlers.logger import Logger
 from core.settings.config import TOKEN
 from core.utils.messages import BotText
 from core.utils.keyboards import ready_keyboard
@@ -11,6 +12,7 @@ from core.utils.keyboards import return_keyboard
 
 from core.services.database import get_channel_by_id, add_channel
 
+log = Logger()
 bot: Bot = Bot(TOKEN)
 
 
@@ -49,9 +51,15 @@ async def shared_handler(message: Message):
 
     await message.answer(text=BotText.added_channel, parse_mode="HTML", reply_markup=return_keyboard)
 
+    username = chat_info.username
+
+    if not username:
+        username = await bot.create_chat_invite_link(chat_id=chat_shared_id, name="Служебная ссылка")
+
     await add_channel(channel_id=chat_shared_id,
                       owner_id=message.from_user.id,
                       title=chat_info.title,
                       photo_url=None,
                       username=chat_info.username)
+    await log.message(text=f"Канал {chat_info.title} добавлен")
     # todo: Добавление канала в базу данных, а также проверка на наличие канала в ней. (можно сделать фильтр)
