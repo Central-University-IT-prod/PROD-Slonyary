@@ -7,13 +7,29 @@ class PostUpdate(BaseSchema):
     pass
 
 
+class Channel(BaseSchema):
+    id: int
+    type: str
+
+
+class PostIn(BaseSchema):
+    html_text: str | None
+    plain_text: str | None
+    publish_time: datetime
+    channels: list[Channel]
+
+
 class PostCreate(BaseSchema):
-    pass
+    html_text: str | None
+    plain_text: str | None
+    publish_time: datetime
+    owner_id: int
+    status: str
 
 
 class PreviewPost(BaseSchema):
     id: int = 0
-    satus: str
+    status: str
     channel_avatars: list[str]
     channel_name: str
     publish_time: datetime
