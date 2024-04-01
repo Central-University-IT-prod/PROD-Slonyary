@@ -81,10 +81,10 @@
 .publicised.moderation span {
   color: #5894ef;
 }
-.publicised.planned div {
+.publicised.pending div {
   background-color: #ffb13c;
 }
-.publicised.planned span {
+.publicised.pending span {
   color: #ffb13c;
 }
 

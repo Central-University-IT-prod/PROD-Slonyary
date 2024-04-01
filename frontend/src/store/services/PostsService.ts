@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {BACKEND_HOST} from "../../constants.ts";
+import { TPostItem } from '../../models/PostsModels.ts';
 
 
 export const postsAPI = createApi({
