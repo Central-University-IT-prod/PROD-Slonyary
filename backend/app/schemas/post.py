@@ -1,7 +1,18 @@
+from app.schemas.base import BaseSchema
+
+
+class PostUpdate(BaseSchema):
+    pass
+
+
+class PostCreate(BaseSchema):
+    pass
+
+
 from datetime import datetime
 
-# from app.schemas.user import UserOut
-from pydantic import BaseModel, Field
+# from app.schemas.user import UserRead
+from pydantic import BaseModel
 
 
 class PreviewPost(BaseModel):
@@ -19,13 +30,15 @@ class PreviewPost(BaseModel):
     shared: int = 0
     is_owner: bool
 
-class ChannelOut(BaseModel):
+
+class ChannelRead(BaseModel):
     id: int
     name: str
     avatar: str
     url: str
     type: str
 
-class PostOut(PreviewPost):
+
+class PostRead(PreviewPost):
     owner_avatar: str
-    publish_channels: list[ChannelOut]
+    publish_channels: list[ChannelRead]

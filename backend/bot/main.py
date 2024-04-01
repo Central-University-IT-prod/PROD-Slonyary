@@ -1,12 +1,11 @@
 import asyncio
+
 from aiogram import Bot, Dispatcher, Router
-
-from core.middlewares.main import Middleware
-from core.settings.config import TOKEN
-
-from core.handlers import common
-from core.settings.commands import set_commands
 from core.filters import ChatTypeFilter
+from core.handlers import common
+from core.middlewares.main import Middleware
+from core.settings.commands import set_commands
+from core.settings.config import TOKEN
 
 # Базовые компоненты
 bot: Bot = Bot(TOKEN)

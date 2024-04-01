@@ -1,26 +1,26 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from app.schemas.base import BaseSchema
 
 
-class UserTelegramData(BaseModel):
+class UserTelegramData(BaseSchema):
     id: int
     username: str | None = None
     auth_date: datetime
     first_name: str
 
 
-class UserCreate(BaseModel):
+class UserCreate(BaseSchema):
     telegram_id: int
     username: str | None = None
     name: str
 
 
-class UserUpdate(BaseModel):
+class UserUpdate(BaseSchema):
     pass
 
 
-class UserOut(BaseModel):
+class UserRead(BaseSchema):
     id: int
     telegram_id: int
     username: str | None = None

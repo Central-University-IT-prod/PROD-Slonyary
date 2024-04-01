@@ -1,10 +1,17 @@
-from typing import Any
+import contextlib
+from typing import Any, AsyncIterator, Callable
+
+from sqlalchemy import MetaData, NullPool
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy.orm.exc import DetachedInstanceError
 
 from app.core.config import settings
-from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
-from sqlalchemy.orm.exc import DetachedInstanceError
 
 
 class Base(DeclarativeBase):
@@ -50,10 +57,44 @@ class Base(DeclarativeBase):
         return f"<{self.__class__.__name__} {id(self)}>"
 
 
-engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
-SessionLocal = async_sessionmaker(
-    autocommit=False, autoflush=False, bind=engine, future=True
-)
+def async_session_factory(
+    **engine_params: Any,
+) -> tuple[
+    Callable[[], AsyncIterator[AsyncSession]],
+    Callable[[], contextlib.AbstractAsyncContextManager[AsyncSession]],
+    AsyncEngine,
+]:
+    async_engine_default_params = {"poolclass": NullPool}
+    async_engine_default_params.update(engine_params)
+
+    url = str(settings.sqlalachemy_database_uri)
+    async_engine = create_async_engine(url, **async_engine_default_params)
+    session_factory = async_sessionmaker(
+        bind=async_engine,
+        autoflush=False,
+        future=True,
+        expire_on_commit=False,
+    )
+
+    async def get_async_session() -> AsyncIterator[AsyncSession]:
+        session = session_factory()
+        try:
+            yield session
+        except Exception as e:
+            await session.rollback()
+            raise e
+        finally:
+            await session.commit()
+            await session.close()
+
+    return (
+        get_async_session,
+        contextlib.asynccontextmanager(get_async_session),
+        async_engine,
+    )
+
+
+get_db_session, db_session_manager, db_engine = async_session_factory()
 
 
 # make sure all SQLModel models are imported (app.models) before initializing DB
@@ -70,7 +111,6 @@ def init_db(session: Session) -> None:
     # from app.core.engine import engine
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
-    from app.models import User
-    from app.schemas import UserCreate
+    pass
 
     # TODO: superuser registration
