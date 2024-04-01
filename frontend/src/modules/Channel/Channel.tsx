@@ -1,46 +1,55 @@
-import biba from '../../assets/imgs/biba.jpg'
-import './Chanel.scss'
-import { Button } from '@mui/material'
+import s from './Channel.module.scss'
+import {FC, useState} from "react";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {Button} from "@mui/material";
 
-type TypeChanel = {
-	title: string
-	name: string
-	subscribers: number
-	category: string
-	//img: string
+type Props = {
+  title: string
+  subscribers: number
+  avatar: string
+  posts: {
+    pending: number
+    moderation: number
+  }
 }
 
-interface IProps {
-	chanelData: TypeChanel
-}
+const Channel: FC<Props> = (props) => {
+  const [showPopup, setShowPopup] = useState<boolean>(false)
 
-function Channel({ chanelData }: IProps) {
-	const { title, subscribers } = chanelData
-
-	return (
-		<div className="Chanel">
-			<div className="Chanel-box">
-				<div className="Chanel-mainContant">
-					<div className="Chanel-image">
-						<img alt={'img'} src={biba} />
-					</div>
-					<div className="Chanel-textContent">
-						<h2 className="textContent-title">{title}</h2>
-						<h4 className="info-subscribers">{subscribers} подписчика</h4>
-					</div>
-				</div>
-				<div className="Chanel-manageBtns">
-					<Button
-						sx={{ borderRadius: '20px' }}
-						className="open-btn"
-						variant="contained"
-					>
-						Открыть
-					</Button>
-				</div>
-			</div>
-		</div>
-	)
+  return (
+    <article className={s.main}>
+      <div className={s.avatarContainer}>
+        <img src={props.avatar} alt="" className={s.avatar}/>
+      </div>
+      <div className={s.aboutChannel}>
+        <h5 className={s.title}>{props.title}</h5>
+        <p className={s.subscribers}>{props.subscribers} Подписчика</p>
+      </div>
+      <div className={s.posts}>
+        <h5 className={s.postTitle}>Посты</h5>
+        <div className={s.postStatus}>
+          <div className={s.pending}></div>
+          <p>Ожидают отправки: {props.posts.pending}</p>
+        </div>
+        <div className={s.postStatus}>
+          <div className={s.moderation}></div>
+          <p>На модерации: {props.posts.moderation}</p>
+        </div>
+      </div>
+      <div className={s.actions}>
+        <button onClick={() => setShowPopup(show => !show)}>
+          <MoreHorizIcon sx={{fontSize: 50}} color='primary'/>
+        </button>
+        {
+          showPopup &&
+            <div className={s.popup}>
+                <Button variant='contained'>Открыть</Button>
+                <Button variant='contained'>Удалить</Button>
+            </div>
+        }
+      </div>
+    </article>
+  )
 }
 
 export default Channel
