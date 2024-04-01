@@ -8,7 +8,6 @@ router = APIRouter()
 
 @router.post("/", status_code=200)
 async def auth_user(
-    user_telegram_data_hash: str,
     user_telegram_data: UserTelegramData,
     user_crud: CrudUserDepends,
 ) -> dict:
@@ -19,7 +18,6 @@ async def auth_user(
     Переданные данные в json конвертируются в строку с добавлением \n.
 
     Parameters:
-        user_telegram_data_hash: str - хэш для проверки.
         user_telegram_data: UserTelegramData - данные пользователя от телеграм-аккаунта.
         user_crud:
 
@@ -39,9 +37,10 @@ async def auth_user(
             data_check_list.append(f"{key}={value}")
 
     data_check_string = "\n".join(data_check_list)
+    print(data_check_string)
     is_valid = security.verify_user_data(data_check_string, user_telegram_data_hash)
 
-    if not is_valid and hash != "test_hash_ultra":
+    if not is_valid:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Данные неверны",
