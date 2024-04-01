@@ -1,10 +1,6 @@
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import Depends, Header, HTTPException
-from jose import JWTError, jwt
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.crud import (
     CrudImage,
     CrudPost,
