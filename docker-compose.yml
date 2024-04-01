@@ -68,6 +68,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "5173:5173"
+    stdin_open: true
+    tty: true
 
   redis:
     image: redis:7.2.1
@@ -81,5 +83,4 @@ services:
       - REDIS_DATABASES=2
 
 volumes:
-  redis_data:
   redis_data:
