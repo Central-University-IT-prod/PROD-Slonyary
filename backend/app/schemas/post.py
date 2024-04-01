@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.schemas.base import BaseSchema
 
 
@@ -9,13 +11,7 @@ class PostCreate(BaseSchema):
     pass
 
 
-from datetime import datetime
-
-# from app.schemas.user import UserRead
-from pydantic import BaseModel
-
-
-class PreviewPost(BaseModel):
+class PreviewPost(BaseSchema):
     id: int = 0
     satus: str
     channel_avatars: list[str]
@@ -31,7 +27,7 @@ class PreviewPost(BaseModel):
     is_owner: bool
 
 
-class ChannelRead(BaseModel):
+class ChannelRead(BaseSchema):
     id: int
     name: str
     avatar: str

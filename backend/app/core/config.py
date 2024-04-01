@@ -42,9 +42,9 @@ class Settings(BaseSettings):
             return f"http://{self.DOMAIN}"
         return f"https://{self.DOMAIN}"
 
-    BACKEND_CORS_ORIGINS: Annotated[
-        list[AnyUrl] | str, BeforeValidator(parse_cors)
-    ] = []
+    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = (
+        []
+    )
 
     # Bot settings.
     BOT_TOKEN: str
@@ -61,7 +61,7 @@ class Settings(BaseSettings):
     @property
     def sqlalachemy_database_uri(self) -> PostgresDsn:
         return MultiHostUrl.build(
-            scheme="postgresql+psycopg",
+            scheme="postgresql+asyncpg",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_SERVER,

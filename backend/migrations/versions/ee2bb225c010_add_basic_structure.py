@@ -1,10 +1,11 @@
 """Add basic structure
 
 Revision ID: ee2bb225c010
-Revises: 
+Revises:
 Create Date: 2024-03-31 20:00:56.914854
 
 """
+
 from typing import Sequence, Union
 
 import sqlalchemy as sa
