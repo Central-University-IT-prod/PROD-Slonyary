@@ -33,3 +33,4 @@ class PreviewTgChannel(BaseSchema):
     name: str
     username: str
     subscribers: int = 0
+    type: str

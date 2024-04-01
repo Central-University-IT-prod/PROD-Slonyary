@@ -1,8 +1,5 @@
 from typing import Annotated
 
-from fastapi import Depends, Header, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core import security
 from app.crud import (
     CrudImage,
@@ -12,8 +9,12 @@ from app.crud import (
     CrudUsersToTgChannels,
     CrudVkChannel,
 )
+from fastapi import Depends, Header, HTTPException, status
+from jose import JWTError, jwt
+from shared.core.config import settings
 from shared.database.models import User
 from shared.database.session import get_db_session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 SessionDepends = Annotated[AsyncSession, Depends(get_db_session)]
 
@@ -53,20 +54,22 @@ CrudUsersToTgChannelsDepends = Annotated[
 
 
 async def get_current_user(
-    hash: Annotated[str, Header()],
-    data_check_string: Annotated[str, Header()],
+    token: Annotated[str, Header()],
     user_crud: CrudUserDepends,
 ) -> User:
-    if security.verify_user_data(data_check_string, hash):
-        for row in data_check_string.split("\n"):
-            key, value = row.split("=")
-            if key == "id":
-                return await user_crud.get_by_telegram_id(int(value))
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Данные неверны",
+    try:
+        payload = jwt.decode(
+            token, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithms=["HS256"]
         )
+        user_id: int = int(payload.get("sub"))
+        if user_id is None:
+            raise HTTPException(401, detail="Wrong credentials")
+    except JWTError:
+        raise HTTPException(401, detail="Wrong credentials")
+    user = await user_crud.get_by_telegram_id(user_id)
+    if user is None:
+        raise HTTPException(401, detail="Wrong credentials")
+    return user
 
 
 CurrentUserDep = Annotated[User, Depends(get_current_user)]
