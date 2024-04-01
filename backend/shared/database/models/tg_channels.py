@@ -20,7 +20,8 @@ class TgChannel(AlchemyBaseModel):
     channel_id: Mapped[int] = mapped_column(BigInteger, unique=True, nullable=False)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
     username: Mapped[str] = mapped_column(String, unique=True, nullable=True)
-    title: Mapped[str] = mapped_column(String, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    photo_url: Mapped[str] = mapped_column(String, nullable=True)
     added_at: Mapped[datetime.datetime] = Column(
         DateTime, default=datetime.datetime.now
     )
