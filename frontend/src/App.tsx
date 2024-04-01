@@ -5,6 +5,8 @@ import { ThemeProvider, createTheme, Container } from '@mui/material'
 import useAppSelector from './hooks/useAppSelector'
 import { Navbar } from './modules/Navbar/Navbar.tsx'
 import MediaSlider from './modules/MediaSlider/MediaSlider.tsx'
+import axios from 'axios'
+import { BACKEND_HOST } from './constants.ts'
 
 function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
@@ -27,6 +29,10 @@ function App() {
 		const body = document.querySelector('body')
 		body?.setAttribute('theme', themeMode)
 	}, [themeMode])
+
+	useEffect(() => {
+		axios.get(`${BACKEND_HOST}/ping`)
+	}, [])
 
 	return (
 		<div className="App">
