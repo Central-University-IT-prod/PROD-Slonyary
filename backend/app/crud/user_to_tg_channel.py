@@ -17,16 +17,16 @@ class CrudUsersToTgChannels(
     def __init__(self, db: AsyncSession):
         super().__init__(db, UsersToTgChannels)
 
-    async def get_user_tg_channels(self, user: User) -> list[UsersToTgChannels]:
-        query = sa.select(UsersToTgChannels).where(UsersToTgChannels.user_id == user.id)
-        results = await self.db.scalars(query)
-        result_channels = [user_to_tg_channel.channel for user_to_tg_channel in results]
-        return result_channels
-
     async def is_user_access(self, user: User, tg_channel: TgChannel) -> bool:
+        return bool(await self.get_relation(user.id, tg_channel.id))
+
+    async def get_relation(
+        self,
+        tg_id: int,
+        channel_id: int,
+    ) -> UsersToTgChannels | None:
         query = sa.select(UsersToTgChannels).where(
-            UsersToTgChannels.user_id == user.id,
-            UsersToTgChannels.channel_id == tg_channel.id,
+            UsersToTgChannels.user_id == tg_id,
+            UsersToTgChannels.channel_id == channel_id,
         )
-        result = await self.db.scalar(query)
-        return bool(result)
+        return await self.db.scalar(query)
