@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.exceptions.handlers import exception_handlers
-from app.api.routes import auth, channels, images, links, moderation, ping, posts
+from app.api.routes import auth, channels, images, links, moderation, ping, posts, gpt_response
 
 api_router = APIRouter()
 
@@ -13,6 +13,7 @@ for router in (
     links.router,
     moderation.router,
     images.router,
+    gpt_response.router
 ):
     api_router.include_router(router)
 

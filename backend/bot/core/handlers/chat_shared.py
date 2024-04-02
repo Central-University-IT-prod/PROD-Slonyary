@@ -68,7 +68,7 @@ async def shared_handler(message: Message, session: AsyncSession):
 
     await message.answer(text=BotText.added_channel, parse_mode="HTML", reply_markup=return_keyboard)
 
-    username = chat_info.username
+    username = "@" + chat_info.username if chat_info.username else None
 
     if not username:
         username = await bot.create_chat_invite_link(chat_id=chat_shared_id, name="Служебная ссылка")
