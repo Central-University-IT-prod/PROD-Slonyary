@@ -33,4 +33,6 @@ class PreviewTgChannel(BaseSchema):
     name: str
     username: str
     subscribers: int = 0
+    on_moderation: int = 0
+    on_pending: int = 0
     type: str

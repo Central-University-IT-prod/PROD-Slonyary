@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {BACKEND_HOST} from "../../constants.ts";
 import {TPostItem} from '../../models/PostsModels.ts';
 
-interface IPostRequest {
+export interface IPostRequest {
   id: number,
   status: string,
   channel_avatars: [
@@ -23,7 +23,8 @@ export const postsAPI = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
-      headers.set('token', localStorage.getItem('accessToken') as string)    }
+      headers.set('token', localStorage.getItem('accessToken') as string)
+    }
   }),
   tagTypes: ['Posts'],
   endpoints: (build) => ({

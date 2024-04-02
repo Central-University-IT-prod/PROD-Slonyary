@@ -1,7 +1,7 @@
 import s from './Channel.module.scss'
 import {FC, useState} from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import {Button} from "@mui/material";
+import {Avatar, Button} from "@mui/material";
 import {Link} from "react-router-dom";
 import {channelInfoPath, NavigatePath} from "../../routes.ts";
 
@@ -16,13 +16,21 @@ type Props = {
   id: number
 }
 
+// <img src={{uri: `data:image/gif;base64,${this.state.base64File}`}} />
+
 const Channel: FC<Props> = (props) => {
   const [showPopup, setShowPopup] = useState<boolean>(false)
 
   return (
     <article className={s.main}>
       <div className={s.avatarContainer}>
-        <img src={props.avatar} alt="" className={s.avatar}/>
+        {props.avatar ?
+          <img src={`data:image/gif;base64, ${props.avatar}`} alt="" className={s.avatar}/>
+          :
+          <Avatar>
+            {props.title.slice(0, 2)}
+          </Avatar>
+        }
       </div>
       <div className={s.aboutChannel}>
         <h5 className={s.title}>{props.title}</h5>

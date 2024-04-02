@@ -11,6 +11,6 @@ class UploadPhoto(VkBaseMethod[UploadPhotoInput, UploadPhotoOutput]):
         self,
         params: UploadPhotoInput,
     ) -> VkApiResponse[UploadPhotoOutput]:
-        files = {"file": ("filename.jpg", params.photo)}
+        files = {"file": (params.filename, params.photo)}
         resp = await self.client.post(params.upload_url, files=files)
         return await self.check_response({"response": resp.json()})

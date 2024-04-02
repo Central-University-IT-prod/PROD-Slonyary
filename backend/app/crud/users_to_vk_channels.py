@@ -1,9 +1,8 @@
 import sqlalchemy as sa
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.crud.base import CrudBase
 from app.schemas import TgChannelRead, TgChannelUpdate, UsersToVkChannelsCreate
 from shared.database.models import User, UsersToVkChannels, VkChannel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class CrudUsersToVkChannels(
@@ -30,3 +29,17 @@ class CrudUsersToVkChannels(
         )
         result = await self.db.scalar(query)
         return bool(result)
+
+    async def delete_relation(
+        self,
+        tg_id: int,
+        channel_id: int,
+    ) -> UsersToVkChannels | None:
+        query = sa.select(UsersToVkChannels).where(
+            UsersToVkChannels.user_id == tg_id,
+            UsersToVkChannels.channel_id == channel_id,
+        )
+        result = await self.db.scalar(query)
+        await self.db.delete(result)
+        await self.db.commit()
+        return

@@ -6,7 +6,7 @@ from starlette import status
 from app.api.depends.link_post_to_channel import dislink_post_dep, link_post_dep
 from app.schemas import Result
 
-router = APIRouter(prefix="/posts/{post_id}")
+router = APIRouter(prefix="/posts/{post_id}", tags=["links"])
 
 
 @router.post("/link", status_code=status.HTTP_200_OK)

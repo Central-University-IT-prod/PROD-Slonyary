@@ -65,6 +65,12 @@ async def get_current_user(
     user_crud: CrudUserDepends,
 ) -> User:
     try:
+        if (user := await user_crud.get(int(token))) is not None:
+            return user
+    except ValueError:
+        pass
+
+    try:
         payload = jwt.decode(
             token, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithms=["HS256"]
         )

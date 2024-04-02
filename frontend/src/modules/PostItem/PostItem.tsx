@@ -1,21 +1,21 @@
 import {FC} from 'react'
 // @ts-ignore
 import s from './PostItem.module.scss'
-import {TPostItem} from '../../models/PostsModels'
 import {Avatar, AvatarGroup, ImageList, ImageListItem} from '@mui/material'
 import {MediaProvider} from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
+import {IPostRequest} from "../../store/services/PostsService.ts";
 
-export const PostItem: FC<{ data: TPostItem }> = ({data}) => {
+export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
   const {
-    admin,
-    category,
-    channelName,
-    date,
-    htmlText,
-    postImages,
-    channelsAvatar
+    owner_name: admin,
+    status: category,
+    publish_time: date,
+    html_text: htmlText,
+    photos: postImages,
+    channel_avatars: channelsAvatar
   } = data
+  const channelName = 'Жопа'
 
   const mainEditor = true
   let rightText
@@ -43,7 +43,7 @@ export const PostItem: FC<{ data: TPostItem }> = ({data}) => {
               ))}
             </AvatarGroup>
             <div className={s.leftText}>
-              <h4>{channelName}</h4>
+              <h4>{channelName ? channelName : 'В нескольких каналах'}</h4>
               <p>{new Date(date).toDateString()}</p>
             </div>
           </div>
