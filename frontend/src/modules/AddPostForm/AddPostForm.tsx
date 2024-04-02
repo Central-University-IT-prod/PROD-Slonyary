@@ -132,7 +132,7 @@ const AddPostForm: FC = () => {
 
 			publish_time = new Date(+year, +month - 1, +day, +hours, +minut)
 				.toISOString()
-				.replace(/Z^/, '')
+				.replace(/Z/, '')
 		}
 
 		const channels: any[] = []

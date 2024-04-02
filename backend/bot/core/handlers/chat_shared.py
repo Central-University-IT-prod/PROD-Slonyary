@@ -46,6 +46,7 @@ async def shared_handler(message: Message, session: AsyncSession):
     channel = await get_channel_by_id(chat_shared_id)
 
     if channel:
+        await message.answer(BotText.channel_already_added, parse_mode="HTML")
         return
 
     try:
