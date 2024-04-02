@@ -1,11 +1,14 @@
 import base64
+import contextlib
 from typing import cast
 
 import sqlalchemy as sa
 from aiogram import Bot
+from aiogram.exceptions import TelegramAPIError
 from aiogram.types import BufferedInputFile, InputMediaPhoto
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shared.core.enums import PostStatus
 from shared.database.models import Image, Post, PostsToTgChannels, TgChannel
 
 
@@ -61,3 +64,14 @@ async def link_post_message_id(
     )
     await session.execute(query)
     await session.flush()
+
+
+async def mark_post_as_published(post: Post, session: AsyncSession) -> None:
+    post.status = PostStatus.published
+    await session.commit()
+
+
+async def notify_owner_about_publish(post: Post, bot: Bot) -> None:
+    text = f"Пост №{post.id} опубликован!!!"
+    with contextlib.suppress(TelegramAPIError):  # чтоб не сломалося
+        await bot.send_message(chat_id=post.owner_id, text=text)

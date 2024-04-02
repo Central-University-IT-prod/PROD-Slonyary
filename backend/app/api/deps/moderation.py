@@ -1,11 +1,17 @@
 from typing import Annotated
 
-from app.api.depends.universal import get_post_with_privileged_access
-from app.api.deps import CrudPostDepends, SessionDepends
 from fastapi import Depends, HTTPException
+from starlette import status
+
+from app.api.deps import CrudPostDepends, SessionDepends, TgBotDepends
+from app.api.deps.universal import get_post_with_privileged_access
 from shared.core.enums import PostStatus
 from shared.database.models import Post
-from starlette import status
+from shared.utils.publish_tg_post import (
+    mark_post_as_published,
+    notify_owner_about_publish,
+    publish_tg_post,
+)
 
 
 async def accept_post_dep(
@@ -36,5 +42,20 @@ async def downgrade_post_dep(
 
     post.status = PostStatus.moderation
     await session.commit()
+
+    return post
+
+
+async def publish_post_dep(
+    session: SessionDepends,
+    bot: TgBotDepends,
+    post: Annotated[Post, Depends(get_post_with_privileged_access)],
+) -> Post:
+    if post.status == PostStatus.published:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+    await publish_tg_post(post, bot, session)
+    await mark_post_as_published(post, session)
+    await notify_owner_about_publish(post, bot)
 
     return post

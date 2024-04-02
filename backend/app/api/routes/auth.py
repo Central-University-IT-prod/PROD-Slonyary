@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, HTTPException, status
-from jose import jwt
-
 from app.api.deps import CrudUserDepends
 from app.core import security
 from app.schemas import JwtToken, UserCreate, UserTelegramData, UserUpdate
+from fastapi import APIRouter, HTTPException, status
+from jose import jwt
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -64,10 +63,7 @@ async def auth_user(
 
     user = await user_crud.get(id=user_telegram_data.id)
 
-    if user:
-        user_update = UserUpdate(photo_url=user_telegram_data.photo_url)
-        await user_crud.update(user, user_update)
-    else:
+    if not user:
         await user_crud.create(
             UserCreate(
                 id=user_telegram_data.id,

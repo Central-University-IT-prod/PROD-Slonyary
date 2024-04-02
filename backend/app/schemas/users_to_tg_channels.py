@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from app.schemas.base import BaseSchema
 
 
-class UsersToTgChannelsCreate(BaseModel):
+class UsersToTgChannelsCreate(BaseSchema):
     user_id: int
     channel_id: int

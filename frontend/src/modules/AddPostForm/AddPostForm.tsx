@@ -29,17 +29,26 @@ import LinkIcon from '@mui/icons-material/Link'
 import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.scss'
 import ImageTable from '../ImageTable/ImageTable'
-import { addMessages, getSpellcheckingWords } from './API'
+import { addImageToPost, addMessages, getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
-import { useNavigate } from 'react-router'
+import AndroidIcon from '@mui/icons-material/Android'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('00:00')
-	const navigate = useNavigate()
-	const [isSecond, setIsSecond] = useState(false)
 	const [ChannelsTarget, setChannelsTarget] = useState(false)
+
+	//let options = {
+	//	inlineStyles: {
+	//	  BOLD: {element: 'b'},
+	//	  ITALIC: {
+	//		element: 'i'
+	//	  },
+	//	  // Use a custom inline style. Default element is `span`.
+	//	  RED: {style: {color: '#900'}},
+	//	},
+	//  };
 
 	const maxLength = 9
 	type LinkProps = {
@@ -110,7 +119,6 @@ const AddPostForm: FC = () => {
 		const text = contentState.getPlainText()
 
 		let publish_time: string = ''
-		const images = []
 
 		if (date) {
 			const [year, month, day] = date.split('-')
@@ -124,31 +132,32 @@ const AddPostForm: FC = () => {
 				+minut
 			).toISOString()
 		}
-		const formData = new FormData()
-		for (let index = 0; index < files.length; index++) {
-			images.push(files[index])
-			formData.append('images', files[index])
-		}
 
 		const channels: any[] = []
 
 		document.querySelectorAll('.channelsCheckbox').forEach((i) => {
 			const input = i.querySelector('input')
-			const id = i.getAttribute('date-id')
+			const id = i.getAttribute('data-id')
+
 			if (input?.checked) {
 				channels.push({ id: Number(id), type: 'tg' })
 			}
 		})
 
 		const data = {
-			publish_time: publish_time,
+			publish_time: publish_time ? publish_time : null,
 			channels: channels,
 			plain_text: text,
 			html_text: html
 		}
 
-		const t = await addMessages(data, formData)
-		console.log(t)
+		const { id } = await addMessages(data)
+
+		for (let index = 0; index < files.length; index++) {
+			const form = new FormData()
+			form.append('file', files[index])
+			addImageToPost(id, form)
+		}
 	}
 
 	const addEntity = useCallback(
@@ -267,6 +276,7 @@ const AddPostForm: FC = () => {
 
 		const contentState = editorState.getCurrentContent()
 		const html = stateToHTML(contentState)
+		console.log(html)
 		const words = await getSpellcheckingWords(html)
 
 		let text = html
@@ -300,10 +310,6 @@ const AddPostForm: FC = () => {
 		() => spellcheckingBtnDisabled,
 		[spellcheckingBtnDisabled]
 	)
-	const continueBtnClick = () => {
-		navigate('#chanelsToPost')
-		setIsSecond(true)
-	}
 
 	const mainBtn = useMemo(
 		() => !ChannelsTarget || continueDisabled,
@@ -368,6 +374,9 @@ const AddPostForm: FC = () => {
 				<button onClick={handlerAddLink}>
 					<LinkIcon />
 				</button>
+				<button onClick={handlerAddLink}>
+					<AndroidIcon />
+				</button>
 			</div>
 			<div className="AddPost_input">
 				<Editor
@@ -418,13 +427,6 @@ const AddPostForm: FC = () => {
 				>
 					Показать превью
 				</Button>
-				<Button
-					variant="contained"
-					disabled={continueDisabled}
-					onClick={continueBtnClick}
-				>
-					Продолжить
-				</Button>
 			</div>
 			{spellcheckingString.length ? (
 				<div className="AddPostForm-spellchecking-box">
@@ -453,28 +455,27 @@ const AddPostForm: FC = () => {
 			</Button>
 			<div className="chanelsToPost" id="chanelsToPost">
 				<h2>Отметьте каналы в которые нужно послать пост</h2>
-				{isSecond &&
-					(!isLoading ? (
-						channels?.length > 0 ? (
-							channels?.map((channel: ChannelItem) => {
-								return (
-									<div className="chanelsToPost-item" key={channel.id}>
-										<Checkbox
-											data-id={channel.id}
-											className="channelsCheckbox"
-											onChange={toggleChannels}
-										/>
-										<Avatar src={channel.url}>{channel.name}</Avatar>
-										<h3>{channel.name}</h3>
-									</div>
-								)
-							})
-						) : (
-							<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
-						)
+				{!isLoading ? (
+					channels?.length > 0 ? (
+						channels?.map((channel: ChannelItem) => {
+							return (
+								<div className="chanelsToPost-item" key={channel.id}>
+									<Checkbox
+										data-id={channel.id}
+										className="channelsCheckbox"
+										onChange={toggleChannels}
+									/>
+									<Avatar src={channel.url}>{channel.name}</Avatar>
+									<h3>{channel.name}</h3>
+								</div>
+							)
+						})
 					) : (
-						<CircularProgress className="loader" />
-					))}
+						<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
+					)
+				) : (
+					<CircularProgress className="loader" />
+				)}
 			</div>
 		</div>
 	)

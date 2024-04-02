@@ -4,8 +4,8 @@ import sqlalchemy as sa
 from fastapi import Depends, HTTPException
 from starlette import status
 
-from app.api.depends.universal import get_post_with_privileged_access
 from app.api.deps import CrudTgChannelDepends, CrudVkChannelDepends, SessionDepends
+from app.api.deps.universal import get_post_with_privileged_access
 from app.crud import CrudTgChannel, CrudVkChannel
 from app.schemas import Channel
 from shared.core.enums import ChannelType
