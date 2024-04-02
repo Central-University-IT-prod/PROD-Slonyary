@@ -62,7 +62,7 @@ async def auth_user(
             detail="Данные неверны",
         )
 
-    is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
+    is_user = await user_crud.is_exists(id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.
     if not is_user:
