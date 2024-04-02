@@ -13,8 +13,8 @@ async def bot_removed(event: ErrorEvent):
     Обработка чата, которым поделились
     """
 
-    user_id = event.update.message.chat.id
-    channel_id = event.update.message.chat_shared.chat_id
+    # user_id = event.update.message.chat.id
+    # channel_id = event.update.message.chat_shared.chat_id
 
     try:
         msg = await event.update.message.answer("❌")
@@ -29,6 +29,9 @@ async def bot_removed(event: ErrorEvent):
         pass
 
     await event.update.message.answer(
-        text=BotText.bot_kicked.format(name=hbold(event.update.message.from_user.first_name)),
+        text=BotText.bot_kicked.format(
+            name=hbold(event.update.message.from_user.first_name)
+        ),
         parse_mode="HTML",
-        reply_markup=ready_keyboard)
+        reply_markup=ready_keyboard,
+    )

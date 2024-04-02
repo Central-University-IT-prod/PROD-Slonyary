@@ -8,13 +8,12 @@ from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.handlers.logger import TgLogger
+from core.services.database import add_channel, get_channel_by_id
 from core.services.functions import image_to_base64
 from core.settings.config import TOKEN
+from core.utils.keyboards import ready_keyboard, return_keyboard
 from core.utils.messages import BotText
-from core.utils.keyboards import ready_keyboard
-from core.utils.keyboards import return_keyboard
 
-from core.services.database import get_channel_by_id, add_channel
 
 tg_log = TgLogger()
 bot: Bot = Bot(TOKEN)
@@ -52,7 +51,7 @@ async def shared_handler(message: Message, session: AsyncSession):
     try:
         chat_info = await bot.get_chat(chat_id=chat_shared_id)
     except TelegramBadRequest:
-        msg = await message.answer('❌')
+        msg = await message.answer("❌")
         await asyncio.sleep(1)
 
         try:
@@ -60,10 +59,12 @@ async def shared_handler(message: Message, session: AsyncSession):
         except TelegramBadRequest:
             pass
 
-        await message.answer(text=BotText.bot_kicked, parse_mode="HTML", reply_markup=ready_keyboard)
+        await message.answer(
+            text=BotText.bot_kicked, parse_mode="HTML", reply_markup=ready_keyboard
+        )
         return
 
-    msg = await message.answer('🎉')
+    msg = await message.answer("🎉")
     await asyncio.sleep(1.7)
 
     try:
@@ -71,12 +72,16 @@ async def shared_handler(message: Message, session: AsyncSession):
     except TelegramBadRequest:
         pass
 
-    await message.answer(text=BotText.added_channel, parse_mode="HTML", reply_markup=return_keyboard)
+    await message.answer(
+        text=BotText.added_channel, parse_mode="HTML", reply_markup=return_keyboard
+    )
 
     username = "@" + chat_info.username if chat_info.username else None
 
     if not username:
-        username = await bot.create_chat_invite_link(chat_id=chat_shared_id, name="Служебная ссылка")
+        username = await bot.create_chat_invite_link(
+            chat_id=chat_shared_id, name="Служебная ссылка"
+        )
         username = username.invite_link
 
     try:
@@ -100,7 +105,9 @@ async def shared_handler(message: Message, session: AsyncSession):
         if photos.photos:
             photo = photos.photos[0][-1]
 
-            await bot.download(file=photo.file_id, destination=destination + file_name, seek=False)
+            await bot.download(
+                file=photo.file_id, destination=destination + file_name, seek=False
+            )
 
             image = await image_to_base64(destination + file_name)
     except Exception:
@@ -110,14 +117,15 @@ async def shared_handler(message: Message, session: AsyncSession):
 
     print(f"Канал {chat_info.title} добавлен")
 
-    await add_channel(session=session,
-                      channel_id=chat_info.id,
-                      owner_id=message.from_user.id,
-                      title=chat_info.title,
-                      subscribers=subscribers,
-                      description=chat_info.description,
-                      username=username,
-                      photo_base64=image)
+    await add_channel(
+        session=session,
+        channel_id=chat_info.id,
+        owner_id=message.from_user.id,
+        title=chat_info.title,
+        subscribers=subscribers,
+        description=chat_info.description,
+        username=username,
+        photo_base64=image,
+    )
 
     await tg_log.message(text=f"Канал {chat_info.title} добавлен")
-
