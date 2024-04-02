@@ -12,10 +12,20 @@ export const channelsAPI = createApi({
   endpoints: (build) => ({
     getChannels: build.query({
         query: () => ({url: `/channels/tg`}),
+        providesTags: ['Channel']
       }
     ),
     getChannelById: build.query({
       query: (id) => ({url: `/channels/tg/${id}`}),
-    })
+      providesTags: ['Channel']
+    }),
+    deleteChannel: build.mutation({
+        query: (data) => ({
+          url: `/channels/tg/${data}`,
+          method: 'DELETE',
+        }),
+        invalidatesTags: ['Channel']
+      }
+    )
   })
 })

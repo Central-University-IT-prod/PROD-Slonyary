@@ -1,9 +1,12 @@
 import s from './Channel.module.scss'
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Avatar, Button} from "@mui/material";
 import {Link} from "react-router-dom";
 import {channelInfoPath, NavigatePath} from "../../routes.ts";
+import {channelsAPI} from "../../store/services/ChannelService.ts";
+import {Loading} from "../Loading/Loading.tsx";
+import {Bounce, toast} from "react-toastify";
 
 type Props = {
   title: string
@@ -16,11 +19,31 @@ type Props = {
   id: number
 }
 
-// <img src={{uri: `data:image/gif;base64,${this.state.base64File}`}} />
+const warningNotify = (text: string) =>
+  toast.error(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    transition: Bounce
+  })
+
 
 const Channel: FC<Props> = (props) => {
   const [showPopup, setShowPopup] = useState<boolean>(false)
+  const [deleteChannel, {isLoading, error}] = channelsAPI.useDeleteChannelMutation()
 
+  useEffect(() => {
+    if (!isLoading && error !== undefined) {
+      warningNotify('Error ' + error?.status ?? '')
+    }
+  }, [error, isLoading])
+
+  if (isLoading) return <Loading/>
   return (
     <Link to={NavigatePath(channelInfoPath(props.id.toString()))} className={s.main}>
       <div className={s.avatarContainer}>
@@ -59,7 +82,7 @@ const Channel: FC<Props> = (props) => {
         {
           showPopup &&
             <div className={s.popup}>
-                <Button variant='contained'>Удалить</Button>
+                <Button onClick={() => deleteChannel(props.id)} variant='contained'>Удалить</Button>
             </div>
         }
       </div>
