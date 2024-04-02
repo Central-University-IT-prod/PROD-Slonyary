@@ -11,6 +11,7 @@ export const Posts: FC = () => {
   const {data: posts, isLoading} = postsAPI.useFetchAllPostsQuery(null)
 
   if (isLoading) return <Loading/>
+  if (!posts) return <p>ну пиздец</p>
   return (
     <>
       <div className="status-filter">
