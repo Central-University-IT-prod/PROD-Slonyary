@@ -25,7 +25,9 @@ const ChannelInfoPage = () => {
       <div className={s.infoContainer}>
         <div className={s.left}>
           {channel.photo_url ?
-            <img src={`data:image/gif;base64,${channel.photo_url}`} className={s.avatar} alt=""/>
+            <img
+              src={channel.photo_url.slice(0, 4) === 'http' ? channel.photo_url : `data:image/gif;base64, ${channel.photo_url}`}
+              className={s.avatar} alt=""/>
             :
             <Avatar>
               {channel.name.slice(0, 2)}
