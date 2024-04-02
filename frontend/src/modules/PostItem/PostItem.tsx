@@ -115,7 +115,9 @@ export const PostItem: FC<{
 							<h4>
 								{channels.length === 1
 									? channels[0].name
-									: 'В нескольких каналах'}
+									: channels.length > 1
+									? 'В нескольких каналах'
+									: 'Без каналов'}
 							</h4>
 							<p>
 								{new Intl.DateTimeFormat('ru', dateOptions).format(
