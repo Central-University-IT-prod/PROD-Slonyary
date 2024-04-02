@@ -1,11 +1,12 @@
 from typing import Annotated
 
-from app.api.depends.universal import get_post_with_privileged_access
-from app.api.deps import CrudPostDepends, SessionDepends
 from fastapi import Depends, HTTPException
+from starlette import status
+
+from app.api.deps import CrudPostDepends, SessionDepends
+from app.api.deps.universal import get_post_with_privileged_access
 from shared.core.enums import PostStatus
 from shared.database.models import Post
-from starlette import status
 
 
 async def accept_post_dep(

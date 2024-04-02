@@ -1,14 +1,11 @@
 from typing import Annotated
 
-from app.api.depends.moderation import (
-    accept_post_dep,
-    downgrade_post_dep,
-    reject_post_dep,
-)
-from app.schemas import Result
 from fastapi import APIRouter, Depends
-from shared.database.models import Post
 from starlette import status
+
+from app.api.deps.moderation import accept_post_dep, downgrade_post_dep, reject_post_dep
+from app.schemas import Result
+from shared.database.models import Post
 
 router = APIRouter(prefix="/posts/{post_id}", tags=["moderation"])
 

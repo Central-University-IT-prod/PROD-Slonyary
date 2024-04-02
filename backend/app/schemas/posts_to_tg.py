@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from app.schemas.base import BaseSchema
 
 
-class PostsToTgChannelsCreate(BaseModel):
+class PostsToTgChannelsCreate(BaseSchema):
     post_id: int
     channel_id: int
