@@ -26,7 +26,7 @@ export const TelegramAuth: FC = () => {
 
 	return (
 		<div className="TelegramAuth">
-			<h4>Зарегистрируйтесь через телеграмм:</h4>
+			<h4>Авторизация</h4>
 			<TelegramLoginButton
 				className="auth-btn"
 				dataOnauth={handleTelegramResponse}
