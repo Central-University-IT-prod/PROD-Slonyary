@@ -32,15 +32,23 @@ import ImageTable from '../ImageTable/ImageTable'
 import { addImageToPost, addMessages, getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
-import { useNavigate } from 'react-router'
 import AndroidIcon from '@mui/icons-material/Android'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('00:00')
-	const navigate = useNavigate()
-	const [isSecond, setIsSecond] = useState(false)
 	const [ChannelsTarget, setChannelsTarget] = useState(false)
+
+	//let options = {
+	//	inlineStyles: {
+	//	  BOLD: {element: 'b'},
+	//	  ITALIC: {
+	//		element: 'i'
+	//	  },
+	//	  // Use a custom inline style. Default element is `span`.
+	//	  RED: {style: {color: '#900'}},
+	//	},
+	//  };
 
 	const maxLength = 9
 	type LinkProps = {
@@ -268,6 +276,7 @@ const AddPostForm: FC = () => {
 
 		const contentState = editorState.getCurrentContent()
 		const html = stateToHTML(contentState)
+		console.log(html)
 		const words = await getSpellcheckingWords(html)
 
 		let text = html
@@ -301,10 +310,6 @@ const AddPostForm: FC = () => {
 		() => spellcheckingBtnDisabled,
 		[spellcheckingBtnDisabled]
 	)
-	const continueBtnClick = () => {
-		navigate('#chanelsToPost')
-		setIsSecond(true)
-	}
 
 	const mainBtn = useMemo(
 		() => !ChannelsTarget || continueDisabled,
@@ -422,13 +427,6 @@ const AddPostForm: FC = () => {
 				>
 					Показать превью
 				</Button>
-				<Button
-					variant="contained"
-					disabled={continueDisabled}
-					onClick={continueBtnClick}
-				>
-					Продолжить
-				</Button>
 			</div>
 			{spellcheckingString.length ? (
 				<div className="AddPostForm-spellchecking-box">
@@ -457,28 +455,27 @@ const AddPostForm: FC = () => {
 			</Button>
 			<div className="chanelsToPost" id="chanelsToPost">
 				<h2>Отметьте каналы в которые нужно послать пост</h2>
-				{isSecond &&
-					(!isLoading ? (
-						channels?.length > 0 ? (
-							channels?.map((channel: ChannelItem) => {
-								return (
-									<div className="chanelsToPost-item" key={channel.id}>
-										<Checkbox
-											data-id={channel.id}
-											className="channelsCheckbox"
-											onChange={toggleChannels}
-										/>
-										<Avatar src={channel.url}>{channel.name}</Avatar>
-										<h3>{channel.name}</h3>
-									</div>
-								)
-							})
-						) : (
-							<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
-						)
+				{!isLoading ? (
+					channels?.length > 0 ? (
+						channels?.map((channel: ChannelItem) => {
+							return (
+								<div className="chanelsToPost-item" key={channel.id}>
+									<Checkbox
+										data-id={channel.id}
+										className="channelsCheckbox"
+										onChange={toggleChannels}
+									/>
+									<Avatar src={channel.url}>{channel.name}</Avatar>
+									<h3>{channel.name}</h3>
+								</div>
+							)
+						})
 					) : (
-						<CircularProgress className="loader" />
-					))}
+						<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
+					)
+				) : (
+					<CircularProgress className="loader" />
+				)}
 			</div>
 		</div>
 	)

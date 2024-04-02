@@ -76,7 +76,7 @@ class Middleware(BaseMiddleware):
                     id=event.from_user.id,
                     username=event.from_user.username,
                     name=event.from_user.first_name,
-                    photo_url=image
+                    photo_base64=image
                 ).returning(User)
 
                 user = await session.execute(user)

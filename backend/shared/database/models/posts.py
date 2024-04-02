@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from shared.core.enums import PostStatus
@@ -22,13 +22,10 @@ class Post(AlchemyBaseModel):
     html_text: Mapped[str] = mapped_column(String(4096), nullable=False)
     plain_text: Mapped[str] = mapped_column(String(4096), nullable=False)
     publish_time: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=True)
-    is_published: Mapped[bool] = mapped_column(Boolean, default=False)
-
     added_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
         default=datetime.datetime.now,
     )
-
     status: Mapped[str] = mapped_column(
         String(64),
         nullable=False,

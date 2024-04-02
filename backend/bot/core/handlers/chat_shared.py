@@ -38,6 +38,11 @@ async def shared_handler(message: Message, session: AsyncSession):
     Обработка чата, которым поделились
     """
 
+    try:
+        await message.delete()
+    except TelegramBadRequest:
+        pass
+
     chat_shared_id: int = message.chat_shared.chat_id
     channel = await get_channel_by_id(chat_shared_id)
 
@@ -112,7 +117,7 @@ async def shared_handler(message: Message, session: AsyncSession):
                       subscribers=subscribers,
                       description=chat_info.description,
                       username=username,
-                      photo_url=image)
+                      photo_base64=image)
 
     await tg_log.message(text=f"Канал {chat_info.title} добавлен")
 

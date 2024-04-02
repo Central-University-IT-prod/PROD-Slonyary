@@ -29,7 +29,7 @@ class VkChannelRead(BaseSchema):
 
 class PreviewVkChannel(BaseSchema):
     id: int
-    photo_url: str | None = None
+    photo_base64: str | None = None
     name: str
     username: str
     subscribers: int = 0

@@ -4,19 +4,39 @@ import s from './PostItem.module.scss'
 import { Avatar, AvatarGroup, ImageList, ImageListItem } from '@mui/material'
 import { MediaProvider } from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
-import { IPostRequest } from '../../store/services/PostsService.ts'
+import { IPostRequest, postsAPI } from '../../store/services/PostsService.ts'
+import { Loading } from '../Loading/Loading.tsx'
+//import { Bounce, toast } from 'react-toastify'
 
-export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
+export const PostItem: FC<{
+	data: IPostRequest
+}> = ({ data }) => {
+	const [acceptPost, { isLoading: isLoadingAccept }] =
+		postsAPI.useAcceptPostMutation()
+	const [rejectPost, { isLoading: isLoadingReject }] =
+		postsAPI.useRejectPostMutation()
+	//toast('🦄 Wow so easy!', {
+	//	position: 'top-right',
+	//	autoClose: 5000,
+	//	hideProgressBar: false,
+	//	closeOnClick: true,
+	//	pauseOnHover: true,
+	//	draggable: true,
+	//	progress: undefined,
+	//	theme: 'light',
+	//	transition: Bounce
+	//})
+
 	const {
+		id,
 		owner_name: admin,
 		status: category,
 		publish_time: date,
 		html_text: htmlText,
 		photos: postImages,
-		channels
+		channels,
+		is_owner: isOwner
 	} = data
-
-	const mainEditor = true
 	let rightText
 	switch (category) {
 		case 'pending':
@@ -29,13 +49,22 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 			rightText = 'На модерации'
 	}
 
+	const dateOptions: Intl.DateTimeFormatOptions = {
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false
+	}
+
+	if (isLoadingAccept || isLoadingReject) return <Loading />
 	return (
 		<article className={s.post}>
 			<div className={s.postInner}>
 				<div className={s.postHeader}>
 					<div className={s.left}>
 						<AvatarGroup max={2}>
-							{channels?.map((channel, index) => (
+							{channels?.map((channel: any, index: number) => (
 								<Avatar src={channel.avatar} key={index}>
 									CH
 								</Avatar>
@@ -47,7 +76,11 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 									? channels[0].name
 									: 'В нескольких каналах'}
 							</h4>
-							<p>{new Date(date).toDateString()}</p>
+							<p>
+								{new Intl.DateTimeFormat('ru', dateOptions).format(
+									new Date(date)
+								)}
+							</p>
 						</div>
 					</div>
 					<div className={s.right}>
@@ -58,7 +91,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 						<p className={s.adminName}>{admin}</p>
 					</div>
 				</div>
-				{!!postImages?.length && (
+				{postImages.length !== 0 && (
 					<ImageList
 						sx={{
 							width: '100%',
@@ -69,12 +102,12 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 						cols={postImages.length > 3 ? 3 : postImages.length}
 					>
 						<MediaProvider mediaCount={postImages?.length}>
-							{postImages.map((src, i) => (
-								<MediaView index={i} key={i} src={src}>
+							{postImages.map((imageSrc, i) => (
+								<MediaView index={i} key={i} src={imageSrc.base64}>
 									<ImageListItem key={i}>
 										<img
 											className={`${s.postImage} loaderImg`}
-											src={src}
+											src={`data:image/gif;base64,${imageSrc.base64}`}
 											loading="lazy"
 										/>
 									</ImageListItem>
@@ -83,7 +116,10 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 						</MediaProvider>
 					</ImageList>
 				)}
-				<div className={s.postItemTextContant}>{htmlText}</div>
+				<div
+					dangerouslySetInnerHTML={{ __html: htmlText }}
+					className={s.postItemTextContant}
+				></div>
 			</div>
 			{category === 'pending' && (
 				<div className={s.bottomButtons}>
@@ -93,11 +129,25 @@ export const PostItem: FC<{ data: IPostRequest }> = ({ data }) => {
 					</button>
 				</div>
 			)}
-			{category === 'moderation' && mainEditor && (
+			{category === 'moderation' && isOwner && (
 				<div className={s.bottomButtons}>
-					<button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
+					<button
+						onClick={() => {
+							rejectPost(id)
+						}}
+						className={`${s.leftButton} ${s.red}`}
+					>
+						Отклонить
+					</button>
 					<button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
-					<button className={`${s.rightButton} ${s.green}`}>Принять</button>
+					<button
+						onClick={() => {
+							acceptPost(id)
+						}}
+						className={`${s.rightButton} ${s.green}`}
+					>
+						Принять
+					</button>
 				</div>
 			)}
 		</article>

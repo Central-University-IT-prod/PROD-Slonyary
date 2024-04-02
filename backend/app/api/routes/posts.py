@@ -5,9 +5,43 @@ from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
 from app.schemas import ImageRead, PostCreate, PostIn, PostUpdate, PreviewPost, Result
 from app.schemas.posts import PostChannel
 from shared.core.enums import ChannelType, PostStatus
-from shared.database.models import PostsToTgChannels, PostsToVkChannels
+from shared.database.models import Post, PostsToTgChannels, PostsToVkChannels, User
 
 router = APIRouter(prefix="/posts", tags=["posts"])
+
+
+async def get_post_preview(post: Post, user: User) -> PreviewPost:
+    channels = []
+    for tg_channel in post.tg_channels:
+        channels.append(
+            PostChannel(
+                id=tg_channel.id,
+                name=tg_channel.title,
+                subscribers=tg_channel.subscribers,
+                avatar=tg_channel.photo_base64,
+                type="tg",
+            )
+        )
+    for vk_channel in post.vk_channels:
+        channels.append(
+            PostChannel(
+                id=vk_channel.id,
+                name=vk_channel.title,
+                subscribers=0,
+                type="vk",
+            )
+        )
+    return PreviewPost(
+        id=post.id,
+        status=post.status,
+        channels=channels,
+        publish_time=post.publish_time,
+        owner_name=post.owner.name,
+        html_text=post.html_text,
+        plain_text=post.plain_text,
+        is_owner=post.owner.id == user.id,
+        photos=[ImageRead.model_validate(image) for image in post.images],
+    )
 
 
 @router.get("", status_code=status.HTTP_200_OK)
@@ -19,40 +53,8 @@ async def get_posts(
     result = []
 
     for post in posts:
-        channels = []
-        for tg_channel in post.tg_channels:
-            channels.append(
-                PostChannel(
-                    id=tg_channel.id,
-                    name=tg_channel.title,
-                    subscribers=tg_channel.subscribers,
-                    avatar=tg_channel.photo_url,
-                    type="tg",
-                )
-            )
-        for vk_channel in post.vk_channels:
-            channels.append(
-                PostChannel(
-                    id=vk_channel.id,
-                    name=vk_channel.title,
-                    subscribers=0,
-                    type="vk",
-                )
-            )
-
-        result.append(
-            PreviewPost(
-                id=post.id,
-                status=post.status,
-                channels=channels,
-                publish_time=post.publish_time,
-                owner_name=post.owner.name,
-                html_text=post.html_text,
-                plain_text=post.plain_text,
-                is_owner=post.owner.id == user.id,
-                photos=[ImageRead.model_validate(image) for image in post.images],
-            )
-        )
+        post_preview = await get_post_preview(post, user)
+        result.append(post_preview)
 
     return result
 
@@ -63,7 +65,7 @@ async def create_post(
     post_in: PostIn,
     crud_post: CrudPostDepends,
     db: SessionDepends,
-) -> Result:
+) -> PreviewPost:
     user_channels = [(c.id, ChannelType.tg) for c in user.tg_channels] + [
         (c.id, ChannelType.vk) for c in user.vk_channels
     ]
@@ -93,7 +95,7 @@ async def create_post(
 
     await db.commit()
 
-    return Result(status="ok")
+    return await get_post_preview(post, user)
 
 
 @router.get("/{id}", status_code=200)
@@ -110,21 +112,7 @@ async def get_post(
     if not await crud_post.is_user_access(user, post) and not post.owner_id == user.id:
         raise HTTPException(403, "Нет доступа")
 
-    channel_avatars = []
-    for tg_channel in post.tg_channels:
-        channel_avatars.append(tg_channel.photo_url)
-
-    return PreviewPost(
-        id=post.id,
-        status=post.status,
-        channel_avatars=channel_avatars,
-        publish_time=post.publish_time,
-        owner_name=post.owner.name,
-        html_text=post.html_text,
-        plain_text=post.plain_text,
-        is_owner=post.owner.id == user.id,
-        photos=post.images,
-    )
+    return await get_post_preview(post, user)
 
 
 @router.delete("/{id}", status_code=202)
