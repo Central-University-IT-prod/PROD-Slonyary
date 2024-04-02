@@ -76,21 +76,26 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         query = (
             sa.select(Post)
             .where(
-                Post.id.in_(
-                    sa.select(PostsToTgChannels.post_id).where(
-                        PostsToTgChannels.channel_id.in_(
-                            sa.select(TgChannel.id).where(
-                                sa.or_(
-                                    TgChannel.id.in_(
-                                        sa.select(UsersToTgChannels.channel_id).where(
-                                            UsersToTgChannels.user_id == user.id
-                                        )
-                                    ),
-                                    TgChannel.owner_id == user.id,
+                sa.or_(
+                    Post.id.in_(
+                        sa.select(PostsToTgChannels.post_id).where(
+                            PostsToTgChannels.channel_id.in_(
+                                sa.select(TgChannel.id).where(
+                                    sa.or_(
+                                        TgChannel.id.in_(
+                                            sa.select(
+                                                UsersToTgChannels.channel_id
+                                            ).where(
+                                                UsersToTgChannels.user_id == user.id
+                                            )
+                                        ),
+                                        TgChannel.owner_id == user.id,
+                                    )
                                 )
                             )
                         )
-                    )
+                    ),
+                    Post.owner_id == user.id,
                 )
             )
             .order_by(Post.publish_time.desc(), Post.id.desc())
