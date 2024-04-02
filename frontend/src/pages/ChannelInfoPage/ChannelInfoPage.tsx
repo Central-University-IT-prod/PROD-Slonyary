@@ -3,6 +3,7 @@ import {useParams} from "react-router";
 import {channelsAPI} from "../../store/services/ChannelService.ts";
 import {Loading} from "../../modules/Loading/Loading.tsx";
 import {Avatar, Button} from "@mui/material";
+import {Bounce, toast} from "react-toastify";
 
 const translateStatus = (status: string): string => {
   const russianWords = {
@@ -14,6 +15,32 @@ const translateStatus = (status: string): string => {
   // @ts-ignore
   return status in russianWords ? russianWords[status] : ''
 }
+
+const warningNotify = (text: string) =>
+  toast.error(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    transition: Bounce
+  })
+
+const successNotify = (text: string) =>
+  toast.success(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    transition: Bounce
+  })
 
 const ChannelInfoPage = () => {
   const params = useParams()
@@ -57,11 +84,23 @@ const ChannelInfoPage = () => {
                 ))
               }
               <div className={s.memberLinks}>
-                <a href={`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`}><Button sx={{width: '100%'}}
-                                                                                               variant='contained'>Добавить
-                  модератора</Button></a>
-                <a href={`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`}><Button sx={{width: '100%'}}
-                                                                                               variant='contained'>Добавить
+                <div onClick={() => {
+                  navigator.clipboard.writeText(`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`).then(function () {
+                    successNotify('Ссылка успешно скопирован в буфер обмена!');
+                  }, function (err) {
+                    warningNotify('Произошла ошибка при копировании текста: ', err);
+                  });
+                }}><Button sx={{width: '100%'}}
+                           variant='contained'>Добавить
+                  модератора</Button></div>
+                <a onClick={() => {
+                  navigator.clipboard.writeText(`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`).then(function () {
+                    successNotify('Ссылка успешно скопирован в буфер обмена!');
+                  }, function (err) {
+                    warningNotify('Произошла ошибка при копировании текста: ', err);
+                  });
+                }}><Button sx={{width: '100%'}}
+                           variant='contained'>Добавить
                   редактора</Button></a>
               </div>
             </div>
