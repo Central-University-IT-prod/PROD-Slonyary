@@ -23,7 +23,6 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
             html_text=obj_in.html_text,
             plain_text=obj_in.plain_text,
             publish_time=obj_in.publish_time,
-            is_published=False,
             status=obj_in.status,
         )
         self.db.add(db_obj)

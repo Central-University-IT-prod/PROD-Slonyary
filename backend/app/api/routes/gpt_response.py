@@ -4,6 +4,7 @@ import anthropic
 from fastapi import APIRouter
 from httpx import Proxy
 
+from app.api.deps import CurrentUserDep
 from shared.core.config import Settings
 
 router = APIRouter(prefix="/gpt_response", tags=["gpt"])
@@ -52,5 +53,5 @@ async def gpt_response(prompt: str) -> str:
 
 
 @router.get("", status_code=200)
-async def get_gpt_response(prompt: str):
+async def get_gpt_response(prompt: str, user: CurrentUserDep) -> str:
     return await gpt_response(prompt)
