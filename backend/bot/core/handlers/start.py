@@ -8,10 +8,10 @@ from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.services.database import get_user
+from core.services.database import get_user, user_in_channel
 from core.utils.keyboards import ready_keyboard
 from core.utils.messages import BotText
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, update
 from sqlalchemy.exc import IntegrityError
 
 from core.settings.config import TOKEN
@@ -63,11 +63,27 @@ async def start_handler(message: Message, command: CommandObject, user: User, se
             )
             return
 
-        query = insert(UsersToTgChannels).values(
-            user_id=message.from_user.id,
-            channel_id=channel.id,
-            role=role
-        ).returning(UsersToTgChannels.user_id)
+        user_channel_link = await user_in_channel(session, message.from_user.id, channel.id)
+
+        if user_channel_link:
+            if user_channel_link.role == role:
+                await message.answer(text=BotText.error.format(
+                    reason="Вы уже состоите в этом канале с этой ролью"), parse_mode="HTML"
+                )
+                return
+            else:
+                query = update(UsersToTgChannels).values(
+                    user_id=message.from_user.id,
+                    channel_id=channel.id,
+                    role=role
+                ).where(UsersToTgChannels.user_id == message.from_user.id,
+                        UsersToTgChannels.channel_id == channel.id).returning(UsersToTgChannels.user_id)
+        else:
+            query = insert(UsersToTgChannels).values(
+                user_id=message.from_user.id,
+                channel_id=channel.id,
+                role=role
+            ).returning(UsersToTgChannels.user_id)
 
         await session.execute(query)
 
@@ -85,11 +101,18 @@ async def start_handler(message: Message, command: CommandObject, user: User, se
             await message.answer(text=BotText.error.format(reason="Ошибка при получении owner.id"), parse_mode="HTML")
             return
 
-        await message.answer(text=BotText.added_to_channel.format(
-            channel_title=channel.title,
-            owner_name=owner_user.name,
-            role_name=role_name[role]
-        ), parse_mode="HTML")
+        if user_channel_link and user_channel_link.role != role:
+            await message.answer(text=BotText.edited_to_channel.format(
+                channel_title=channel.title,
+                owner_name=owner_user.name,
+                role_name=role_name[role]
+            ), parse_mode="HTML")
+        else:
+            await message.answer(text=BotText.added_to_channel.format(
+                channel_title=channel.title,
+                owner_name=owner_user.name,
+                role_name=role_name[role]
+            ), parse_mode="HTML")
 
         await tg_log.message(text=f"Создана связь")
         print(f"Создана связь")
