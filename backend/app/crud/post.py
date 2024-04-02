@@ -26,6 +26,9 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         return db_obj
 
     async def is_user_access(self, user: User, post: Post) -> bool:
+        if post.owner_id == user.id:
+            return True
+
         query = sa.select(UsersToTgChannels).where(
             UsersToTgChannels.user_id == user.id,
             UsersToTgChannels.channel_id.in_(
@@ -35,13 +38,15 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         return bool(await self.db.scalar(query))
 
     async def is_privileged_access(self, user_id: int, post: Post) -> bool:
+        if post.owner_id == user_id:
+            return True
+
         query = sa.select(UsersToTgChannels.role).where(
             UsersToTgChannels.user_id == user_id,
-            UsersToTgChannels.channel_id.in_(
-                [c.id for c in post.tg_channels] + [c.id for c in post.vk_channels]
-            ),
+            UsersToTgChannels.channel_id.in_([c.id for c in post.tg_channels]),
         )
         roles = await self.db.scalars(query)
+
         return roles and (
             UserChannelRole.owner in roles or UserChannelRole.moderator in roles
         )
