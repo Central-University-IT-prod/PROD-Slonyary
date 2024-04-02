@@ -104,10 +104,22 @@
 				font-size: 18px;
 			}
 		}
+		.noHaveChannels {
+			margin-top: 10px;
+			text-align: center;
+		}
+	}
+	.DraftEditor-root {
+		min-height: 50px;
 	}
 	.loader {
 		display: block;
 		margin: auto;
 		margin-top: 10px;
+	}
+	.main-btn {
+		margin: auto;
+		margin-top: 15px;
+		display: block;
 	}
 }

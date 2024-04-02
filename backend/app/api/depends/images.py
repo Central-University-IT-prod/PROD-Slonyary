@@ -1,16 +1,16 @@
+import base64
 from http.client import HTTPException
 from typing import Annotated, cast
 
-from fastapi import Depends
+from fastapi import Depends, UploadFile
 
 from app.api.depends.universal import get_post_with_any_access
 from app.api.deps import SessionDepends
-from app.schemas import ImageIn
 from shared.database.models import Image, Post
 
 
 async def create_image_dep(
-    image: ImageIn,
+    file: UploadFile,
     post: Annotated[Post, Depends(get_post_with_any_access)],
     db: SessionDepends,
 ) -> Image:
@@ -19,7 +19,8 @@ async def create_image_dep(
         await db.commit()
         raise HTTPException(409)
 
-    image_db = Image(post_id=post.id, base64=image.base64)
+    b64 = base64.b64encode(await file.read()).decode()
+    image_db = Image(post_id=post.id, filename=file.filename, base64=b64)
     db.add(image_db)
     await db.commit()
     return image_db

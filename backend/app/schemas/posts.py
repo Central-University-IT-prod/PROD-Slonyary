@@ -1,7 +1,7 @@
 from datetime import datetime
 
+from app.schemas import ImageRead
 from app.schemas.base import BaseSchema
-from app.schemas.image import ImageIn
 
 
 class Channel(BaseSchema):
@@ -26,26 +26,33 @@ class PostUpdate(BaseSchema):
 class PostIn(BaseSchema):
     html_text: str | None
     plain_text: str | None
-    publish_time: datetime | None
-    channels: list[Channel]
-    images: list[ImageIn]
+    publish_time: datetime | None = None
+    channels: list[Channel] | None = None
 
 
 class PostCreate(BaseSchema):
-    html_text: str | None
-    plain_text: str | None
-    publish_time: datetime
+    html_text: str | None = None
+    plain_text: str | None = None
+    publish_time: datetime | None = None
     owner_id: int
     status: str
 
 
+class PostChannel(BaseSchema):
+    id: int
+    name: str
+    subscribers: int
+    avatar: str | None = None
+    type: str
+
+
 class PreviewPost(BaseSchema):
-    id: int = 0
+    id: int
     status: str
-    channel_avatars: list[str]
+    channels: list[PostChannel]
     publish_time: datetime | None = None
     owner_name: str
-    photos: list[str]
+    photos: list[ImageRead]
     html_text: str | None = None
     plain_text: str | None = None
     views: int = 0

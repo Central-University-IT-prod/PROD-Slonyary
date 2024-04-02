@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.include import api_router
+from app.api.include import api_router, exception_handlers
 from shared.core.config import settings
 
 
@@ -14,6 +14,7 @@ def custom_generate_unique_id(route: APIRoute) -> str:
 app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id,
     root_path=settings.API_STR,
+    exception_handlers=exception_handlers,
 )
 
 app.add_middleware(

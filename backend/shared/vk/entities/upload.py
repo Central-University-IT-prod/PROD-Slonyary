@@ -5,6 +5,7 @@ from shared.vk.entities.base import VkMethodOutputParams
 
 class UploadPhotoInput(VkMethodOutputParams):
     upload_url: str
+    filename: str
     photo: BytesIO
 
 

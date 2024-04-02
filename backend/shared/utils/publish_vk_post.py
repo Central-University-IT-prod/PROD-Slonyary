@@ -34,6 +34,6 @@ async def upload_image(bot: VkBot, image: Image) -> Photo:
     img_data = image.base64.encode()
     content = base64.b64decode(img_data)
     bytes_io = BytesIO(content)
-    photo = await bot.upload_photo(bytes_io, upload_server)
+    photo = await bot.upload_photo(bytes_io, image.filename, upload_server)
     saved_photos = await bot.save_photo(photo)
     return saved_photos[0]

@@ -4,7 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.crud.base import CrudBase
 from app.schemas import PostCreate, PostRead, PostUpdate
 from shared.core.enums import UserChannelRole
-from shared.database.models import Post, User, UsersToTgChannels
+from shared.database.models import (
+    Post,
+    PostsToTgChannels,
+    TgChannel,
+    User,
+    UsersToTgChannels,
+)
 
 
 class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
@@ -26,6 +32,9 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         return db_obj
 
     async def is_user_access(self, user: User, post: Post) -> bool:
+        if post.owner_id == user.id:
+            return True
+
         query = sa.select(UsersToTgChannels).where(
             UsersToTgChannels.user_id == user.id,
             UsersToTgChannels.channel_id.in_(
@@ -35,13 +44,15 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         return bool(await self.db.scalar(query))
 
     async def is_privileged_access(self, user_id: int, post: Post) -> bool:
+        if post.owner_id == user_id:
+            return True
+
         query = sa.select(UsersToTgChannels.role).where(
             UsersToTgChannels.user_id == user_id,
-            UsersToTgChannels.channel_id.in_(
-                [c.id for c in post.tg_channels] + [c.id for c in post.vk_channels]
-            ),
+            UsersToTgChannels.channel_id.in_([c.id for c in post.tg_channels]),
         )
         roles = await self.db.scalars(query)
+
         return roles and (
             UserChannelRole.owner in roles or UserChannelRole.moderator in roles
         )
@@ -62,7 +73,27 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
 
     async def get_user_posts(self, user: User) -> list[Post]:
         """Получение постов пользователя."""
-        posts = []
-        for tg_channel in user.tg_channels:
-            posts.extend(tg_channel.posts)
+        query = (
+            sa.select(Post)
+            .where(
+                Post.id.in_(
+                    sa.select(PostsToTgChannels.post_id).where(
+                        PostsToTgChannels.channel_id.in_(
+                            sa.select(TgChannel.id).where(
+                                sa.or_(
+                                    TgChannel.id.in_(
+                                        sa.select(UsersToTgChannels.channel_id).where(
+                                            UsersToTgChannels.user_id == user.id
+                                        )
+                                    ),
+                                    TgChannel.owner_id == user.id,
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            .order_by(Post.publish_time.desc(), Post.id.desc())
+        )
+        posts = list(await self.db.scalars(query))
         return posts

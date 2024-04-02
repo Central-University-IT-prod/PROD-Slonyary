@@ -1,14 +1,8 @@
 import s from './ChannelInfoPage.module.scss'
-import bobaImg from '../../assets/imgs/biba.jpg'
 import {useParams} from "react-router";
 import {channelsAPI} from "../../store/services/ChannelService.ts";
 import {Loading} from "../../modules/Loading/Loading.tsx";
-
-const testData = {
-  name: 'Название канала',
-  link: 'хуйзалупа',
-  description: 'ыа флоа фыжвоат щфвыа фыщвтз фвызфыоазшфа фшывмзффл лыь фжывдла дфлвадфыл вадлфыв адлфыва длфвыа дфыва жфывлда фывла фывла ждлфвыао фывоа фывдоа фдылвао фыдлвжао фылова дфылова фыдлвоа дыфлвоа фдылвоа фылодва фылвоа фдывоал дфылвоа фдлвыоа дфловыа фдылвоа дфылвоа фдывлао '
-}
+import {Avatar} from "@mui/material";
 
 const translateStatus = (status: string): string => {
   const russianWords = {
@@ -24,18 +18,25 @@ const translateStatus = (status: string): string => {
 const ChannelInfoPage = () => {
   const params = useParams()
   const {data: channel, isLoading} = channelsAPI.useGetChannelByIdQuery(params.id)
-
-  if (!channel) return <p>ты еблан</p>
   if (isLoading) return <Loading/>
+  if (!channel) return <p>Канал не найден</p>
   return (
     <section className={s.main}>
       <div className={s.infoContainer}>
         <div className={s.left}>
-          <img src={bobaImg} className={s.avatar} alt=""/>
+          {channel.photo_url ?
+            <img src={`data:image/gif;base64,${channel.photo_url}`} className={s.avatar} alt=""/>
+            :
+            <Avatar>
+              {channel.name.slice(0, 2)}
+            </Avatar>
+          }
           <div className={s.infoText}>
-            <h3 className={s.channelTitle}>{testData.name}</h3>
-            <p className={s.channelLink}>@{testData.link}</p>
-            <p className={s.channelDescription}>{testData.description}</p>
+            <h3 className={s.channelTitle}>{channel.name}</h3>
+            <a href={`https://t.me/${channel.username}`}>
+              <p className={s.channelLink}>@{channel.username}</p>
+            </a>
+            <p className={s.channelDescription}>{channel.description ?? ''}</p>
           </div>
         </div>
         <div className={s.right}>
@@ -43,28 +44,12 @@ const ChannelInfoPage = () => {
             <h5 className={s.membersTitle}>Участники</h5>
             <div className={s.membersList}>
               {
-                [
-                  {
-                    name: 'JakeFish',
-                    id: 131322,
-                    status: 'owner'
-                  },
-                  {
-                    name: 'JakeFish',
-                    id: 131322,
-                    status: 'moderator'
-                  },
-                  {
-                    name: 'JakeFish',
-                    id: 131322,
-                    status: 'redactor'
-                  }
-                ].map((user, index) => (
+                channel.workers.map((user: any, index: number) => (
                   <div className={s.user}>
                     <span className={s.number}>{index + 1}.</span>
                     <div className={s.userText}>
                       <h5 className={s.userName}>{user.name}</h5>
-                      <p className={s.userStatus + ' ' + s[user.status]}>{translateStatus(user.status)}</p>
+                      <p className={s.userStatus + ' ' + s[user.role]}>{translateStatus(user.role)}</p>
                     </div>
                   </div>
                 ))
