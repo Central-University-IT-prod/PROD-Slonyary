@@ -5,7 +5,7 @@ from jose import jwt
 
 from app.api.deps import CrudUserDepends
 from app.core import security
-from app.schemas import JwtToken, UserCreate, UserTelegramData
+from app.schemas import JwtToken, UserCreate, UserTelegramData, UserUpdate
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -62,16 +62,18 @@ async def auth_user(
             detail="Данные неверны",
         )
 
-    is_user = await user_crud.is_exists(id=user_telegram_data.id)
+    user = await user_crud.get(id=user_telegram_data.id)
 
-    # Добавляем пользователя в базу, елси он авторизовывается впервые.
-    if not is_user:
+    if user:
+        user_update = UserUpdate(photo_url=user_telegram_data.photo_url)
+        await user_crud.update(user, user_update)
+    else:
         await user_crud.create(
             UserCreate(
                 id=user_telegram_data.id,
                 username=user_telegram_data.username,
                 name=user_telegram_data.first_name,
-                photo_url=user_telegram_data.photo_url
+                photo_url=user_telegram_data.photo_url,
             ),
         )
 
