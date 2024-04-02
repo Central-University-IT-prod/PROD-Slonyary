@@ -10,6 +10,8 @@ export const ChannelPage: FC = () => {
   const {data: channels, isLoading} = channelsAPI.useGetChannelsQuery(null)
 
   if (isLoading) return <Loading/>
+  if (!channels) return <div className='errorDiv'><p>У вас просроченный токен</p></div>
+  if (channels?.length === 0) return <div className='errorDiv'><p>У вас нет каналов</p></div>
   return (
     <section>
       <div className={s.buttons}>

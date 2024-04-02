@@ -18,6 +18,7 @@ export const Posts: FC = () => {
 
   if (isLoading) return <Loading/>
   if (!posts) return <div className='errorDiv'><p>У вас просроченный токен</p></div>
+  if (posts?.length === 0) return <div className='errorDiv'><p>У вас нет постов</p></div>
   return (
     <>
       <div className="status-filter">
