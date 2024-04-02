@@ -145,3 +145,42 @@ async def delete_channel(
 
     else:
         raise HTTPException(404)
+
+
+@router.delete("/{type}/{id}/{user_id}", status_code=200)
+async def delete_user_from_channel(
+    type: str,
+    id: int,
+    user_id: int,
+    user: CurrentUserDep,
+    crud_tg_channel: CrudTgChannelDepends,
+    crud_vk_channel: CrudVkChannelDepends,
+    crud_users_to_tg_channels: CrudUsersToTgChannelsDepends,
+    crud_users_to_vk_channels: CrudUsersToVkChannelsDepends,
+) -> Result:
+    if type == ChannelType.tg:
+        tg_channel = await crud_tg_channel.get(id)
+
+        if not tg_channel or tg_channel.owner_id != user.id:
+            raise HTTPException(404, detail="Не найдено")
+
+        if user_id == tg_channel.owner_id:
+            raise HTTPException(403, detail="Нельзя удалить самого себя")
+
+        await crud_users_to_tg_channels.delete_relation(user_id, id)
+        return Result(status="ok")
+
+    elif type == ChannelType.vk:
+        vk_channel = await crud_vk_channel.get(id)
+
+        if not vk_channel or vk_channel.owner_id != user.id:
+            raise HTTPException(404, detail="Не найдено")
+
+        if user_id == vk_channel.owner_id:
+            raise HTTPException(403, detail="Нельзя удалить самого себя")
+
+        await crud_users_to_vk_channels.delete_relation(user_id, id)
+        return Result(status="ok")
+
+    else:
+        raise HTTPException(404)
