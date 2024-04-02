@@ -54,4 +54,5 @@ class Post(AlchemyBaseModel):
         back_populates="post",
         uselist=True,
         lazy="selectin",
+        cascade="all,delete",
     )
