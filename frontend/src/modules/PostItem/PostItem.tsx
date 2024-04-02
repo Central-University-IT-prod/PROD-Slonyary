@@ -13,7 +13,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
     publish_time: date,
     html_text: htmlText,
     photos: postImages,
-    channel_avatars: channelsAvatar
+    channels: channels
   } = data
   const channelName = 'Жопа'
 
@@ -36,14 +36,14 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
         <div className={s.postHeader}>
           <div className={s.left}>
             <AvatarGroup max={2}>
-              {channelsAvatar?.map((src, index) => (
-                <Avatar src={src} key={index}>
+              {channels?.map((channel, index) => (
+                <Avatar src={channel.avatar} key={index}>
                   CH
                 </Avatar>
               ))}
             </AvatarGroup>
             <div className={s.leftText}>
-              <h4>{channelName ? channelName : 'В нескольких каналах'}</h4>
+              <h4>{channels.length === 1 ? channels[0].name : 'В нескольких каналах'}</h4>
               <p>{new Date(date).toDateString()}</p>
             </div>
           </div>

@@ -2,10 +2,17 @@ import {FC} from 'react'
 import s from './Navbar.module.scss'
 import {NavLink} from 'react-router-dom'
 import {NavigatePath, paths} from '../../routes.ts'
-import bibaImg from '../../assets/imgs/biba.jpg'
 import siteLogoImg from '../../assets/imgs/siteLogo.png'
+import useAppSelector from "../../hooks/useAppSelector.ts";
+import {useNavigate} from "react-router";
 
 export const Navbar: FC = () => {
+  const userData: {
+    first_name: string,
+    photo_url: string
+  } = useAppSelector(state => state.user)
+  const navigate = useNavigate()
+  if (!userData) navigate(paths.TELEGRAMAUTH)
   return (
     <header className={s.navBar}>
       <div className="container">
@@ -32,8 +39,8 @@ export const Navbar: FC = () => {
             </nav>
           </div>
           <div className={s.right}>
-            <img src={bibaImg} alt="" className={s.userLogo}/>
-            <span className={s.userName}>User</span>
+            <img src={userData.photo_url} alt="" className={s.userLogo}/>
+            <span className={s.userName}>{userData.first_name}</span>
           </div>
         </div>
       </div>
