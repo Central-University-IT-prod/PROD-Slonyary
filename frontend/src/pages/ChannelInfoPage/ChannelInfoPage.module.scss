@@ -69,13 +69,13 @@
 }
 
 .number {
-  font-size: 32px;
+  font-size: 40px;
   color: #d9d9d9;
   font-weight: 500;
 }
 
 .userName {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -92,5 +92,17 @@
 
   &.redactor {
     color: #5894EF;
+  }
+}
+
+.memberLinks {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  a {
+    width: 100%;
+    display: block;
   }
 }

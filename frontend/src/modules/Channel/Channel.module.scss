@@ -19,8 +19,8 @@
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -88,6 +88,7 @@
 }
 
 .actions {
+  z-index: 2;
   padding: 20px;
   width: 100%;
   max-width: 10%;
@@ -110,5 +111,5 @@
   flex-direction: column;
   gap: 10px;
   left: 10px;
-  bottom: -70px;
+  bottom: -30px;
 }

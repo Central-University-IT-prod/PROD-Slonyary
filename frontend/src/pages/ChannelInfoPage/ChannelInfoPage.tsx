@@ -2,7 +2,7 @@ import s from './ChannelInfoPage.module.scss'
 import {useParams} from "react-router";
 import {channelsAPI} from "../../store/services/ChannelService.ts";
 import {Loading} from "../../modules/Loading/Loading.tsx";
-import {Avatar} from "@mui/material";
+import {Avatar, Button} from "@mui/material";
 
 const translateStatus = (status: string): string => {
   const russianWords = {
@@ -35,8 +35,8 @@ const ChannelInfoPage = () => {
           }
           <div className={s.infoText}>
             <h3 className={s.channelTitle}>{channel.name}</h3>
-            <a href={`https://t.me/${channel.username}`}>
-              <p className={s.channelLink}>@{channel.username}</p>
+            <a href={`https://t.me/${channel.username.slice(1)}`}>
+              <p className={s.channelLink}>{channel.username}</p>
             </a>
             <p className={s.channelDescription}>{channel.description ?? ''}</p>
           </div>
@@ -56,6 +56,14 @@ const ChannelInfoPage = () => {
                   </div>
                 ))
               }
+              <div className={s.memberLinks}>
+                <a href={`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`}><Button sx={{width: '100%'}}
+                                                                                               variant='contained'>Добавить
+                  модератора</Button></a>
+                <a href={`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`}><Button sx={{width: '100%'}}
+                                                                                               variant='contained'>Добавить
+                  редактора</Button></a>
+              </div>
             </div>
           </div>
         </div>

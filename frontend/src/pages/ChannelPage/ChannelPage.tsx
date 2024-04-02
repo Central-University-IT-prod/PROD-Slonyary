@@ -15,7 +15,7 @@ export const ChannelPage: FC = () => {
       <div className={s.buttons}>
         <div className="categorieButton">
           <Button sx={{borderRadius: '20px'}} variant="contained">
-            Телеграм
+            Telegram
           </Button>
         </div>
         <a href="https://t.me/StackSMM_Bot?start=add_channel">
