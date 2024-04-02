@@ -28,9 +28,12 @@ async def get_user(session: AsyncSession, user_id: int) -> User:
     return user.scalar()
 
 
-async def user_in_channel(session: AsyncSession, user_id: int, channel_id: int) -> Optional[UsersToTgChannels]:
-    query = select(UsersToTgChannels).where(UsersToTgChannels.user_id == user_id,
-                                                    UsersToTgChannels.channel_id == channel_id)
+async def user_in_channel(
+    session: AsyncSession, user_id: int, channel_id: int
+) -> Optional[UsersToTgChannels]:
+    query = select(UsersToTgChannels).where(
+        UsersToTgChannels.user_id == user_id, UsersToTgChannels.channel_id == channel_id
+    )
     return await session.scalar(query)
 
 
@@ -51,7 +54,7 @@ async def add_channel(
         title=title,
         photo_base64=photo_base64,
         subscribers=subscribers,
-        description=description
+        description=description,
     )
     await session.execute(query)
 

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pydantic import Field
+
 from app.schemas import ImageRead
 from app.schemas.base import BaseSchema
 
@@ -27,7 +29,7 @@ class PostIn(BaseSchema):
     html_text: str | None
     plain_text: str | None
     publish_time: datetime | None = None
-    channels: list[Channel] | None = None
+    channels: list[Channel] = Field(default_factory=list)
 
 
 class PostCreate(BaseSchema):

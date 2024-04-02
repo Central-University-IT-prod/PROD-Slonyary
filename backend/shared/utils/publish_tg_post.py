@@ -1,5 +1,6 @@
 import base64
 import contextlib
+import logging
 from typing import cast
 
 import sqlalchemy as sa
@@ -16,11 +17,15 @@ async def publish_tg_post(post: Post, bot: Bot, session: AsyncSession) -> None:
     media_group = await images_to_file_id_media(post, bot)
     text = post.html_text.replace("<p>", "").replace("</p>", "")
     if media_group:
+        logging.info(f"Отправка поста #{post.id} с медиагруппой")
+
         set_caption_to_media_group(text, media_group)
         for channel in cast(list[TgChannel], post.tg_channels):
             msgs = await bot.send_media_group(chat_id=channel.id, media=media_group)
             await link_post_message_id(post.id, channel.id, msgs[0].message_id, session)
     else:
+        logging.info(f"Отправка поста #{post.id} без медиагруппы")
+
         for channel in cast(list[TgChannel], post.tg_channels):
             msg = await bot.send_message(chat_id=channel.id, text=text)
             await link_post_message_id(post.id, channel.id, msg.message_id, session)

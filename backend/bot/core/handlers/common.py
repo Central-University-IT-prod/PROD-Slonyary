@@ -1,15 +1,15 @@
 # Регистрация обработчиков
-from aiogram import Router, F
+from aiogram import F, Router
 from aiogram.filters import CommandStart
 
+from ..filters import BotKickedFilter
+from ..utils.keyboards import SimpleCallback
+from .bot_added import ready_handler
 from .bot_kicked import bot_removed
 from .chat_shared import shared_handler
 from .errors import error_handler
-from .start import start_handler
 from .messages import message_handler
-from .bot_added import ready_handler
-from ..filters import BotKickedFilter
-from ..utils.keyboards import SimpleCallback
+from .start import start_handler
 
 
 async def register_main_handlers(router: Router) -> None:
@@ -25,4 +25,6 @@ async def register_main_handlers(router: Router) -> None:
     router.error.register(bot_removed, BotKickedFilter())
     router.errors.register(error_handler)
 
-    router.callback_query.register(ready_handler, SimpleCallback.filter(F.action == "ready"))
+    router.callback_query.register(
+        ready_handler, SimpleCallback.filter(F.action == "ready")
+    )
