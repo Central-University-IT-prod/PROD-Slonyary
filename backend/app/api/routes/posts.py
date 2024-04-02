@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from starlette import status
 
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
-from app.schemas import PostCreate, PostIn, PostUpdate, PreviewPost, Result
+from app.schemas import ImageRead, PostCreate, PostIn, PostUpdate, PreviewPost, Result
 from app.schemas.posts import PostChannel
 from shared.core.enums import ChannelType, PostStatus
 from shared.database.models import PostsToTgChannels, PostsToVkChannels
@@ -50,7 +50,7 @@ async def get_posts(
                 html_text=post.html_text,
                 plain_text=post.plain_text,
                 is_owner=post.owner.id == user.id,
-                photos=post.images,
+                photos=[ImageRead.model_validate(image) for image in post.images],
             )
         )
 

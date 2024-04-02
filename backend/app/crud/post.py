@@ -4,7 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.crud.base import CrudBase
 from app.schemas import PostCreate, PostRead, PostUpdate
 from shared.core.enums import UserChannelRole
-from shared.database.models import Post, User, UsersToTgChannels
+from shared.database.models import (
+    Post,
+    PostsToTgChannels,
+    TgChannel,
+    User,
+    UsersToTgChannels,
+)
 
 
 class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
@@ -67,9 +73,27 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
 
     async def get_user_posts(self, user: User) -> list[Post]:
         """Получение постов пользователя."""
-        posts = []
-        for tg_channel in user.tg_channels:
-            print(tg_channel)
-            posts.extend(tg_channel.posts)
-        posts.sort(key=lambda p: p.id, reverse=True)
+        query = (
+            sa.select(Post)
+            .where(
+                Post.id.in_(
+                    sa.select(PostsToTgChannels.post_id).where(
+                        PostsToTgChannels.channel_id.in_(
+                            sa.select(TgChannel.id).where(
+                                sa.or_(
+                                    TgChannel.id.in_(
+                                        sa.select(UsersToTgChannels.channel_id).where(
+                                            UsersToTgChannels.user_id == user.id
+                                        )
+                                    ),
+                                    TgChannel.owner_id == user.id,
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+            .order_by(Post.id.desc())
+        )
+        posts = list(await self.db.scalars(query))
         return posts

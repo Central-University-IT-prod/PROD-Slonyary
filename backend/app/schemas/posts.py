@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.schemas import ImageRead
 from app.schemas.base import BaseSchema
 
 
@@ -51,7 +52,7 @@ class PreviewPost(BaseSchema):
     channels: list[PostChannel]
     publish_time: datetime | None = None
     owner_name: str
-    photos: list[str]
+    photos: list[ImageRead]
     html_text: str | None = None
     plain_text: str | None = None
     views: int = 0
