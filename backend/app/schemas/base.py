@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class BaseSchema(BaseModel):
@@ -8,3 +8,9 @@ class BaseSchema(BaseModel):
         extra="ignore",
         validate_assignment=True,
     )
+
+
+class BaseSchemaPublishTime(BaseSchema):
+    @field_validator("publish_time")
+    def validate_publish_time(cls, v: str | None) -> str:
+        return v.rstrip("Z") if v else None
