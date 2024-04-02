@@ -1,4 +1,4 @@
-from .image import ImageCreate, ImageRead, ImageUpdate
+from .image import ImageCreate, ImageIn, ImageRead
 from .jwt_token import JwtToken
 from .post import Channel, PostCreate, PostIn, PostRead, PostUpdate, PreviewPost
 from .posts_to_tg import PostsToTgChannelsCreate
@@ -23,6 +23,7 @@ from .vk_channel import (
 )
 
 __all__ = (
+    "ImageIn",
     "JwtToken",
     "PreviewVkChannel",
     "VkChannelMember",

@@ -3,14 +3,14 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 from starlette import status
 
-from app.api.depends.universal import get_post_with_access_check
+from app.api.depends.universal import get_post_with_privileged_access
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
 from shared.core.enums import PostStatus
 from shared.database.models import Post
 
 
 async def accept_post_dep(
-    post: Annotated[Post, Depends(get_post_with_access_check)],
+    post: Annotated[Post, Depends(get_post_with_privileged_access)],
     session: SessionDepends,
 ) -> Post:
     post.status = PostStatus.pending
@@ -24,7 +24,7 @@ async def downgrade_post_dep(
     session: SessionDepends,
     post_crud: CrudPostDepends,
 ) -> Post:
-    post = await get_post_with_access_check(post_id, user.id, post_crud)
+    post = await get_post_with_privileged_access(post_id, user.id, post_crud)
 
     if post.status == PostStatus.pending:
         post.status = PostStatus.moderation
