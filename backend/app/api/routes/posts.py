@@ -3,6 +3,7 @@ from starlette import status
 
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
 from app.schemas import PostCreate, PostIn, PostUpdate, PreviewPost, Result
+from app.schemas.posts import PostChannel
 from shared.core.enums import ChannelType, PostStatus
 from shared.database.models import PostsToTgChannels, PostsToVkChannels
 
@@ -18,15 +19,32 @@ async def get_posts(
     result = []
 
     for post in posts:
-        channel_avatars = []
+        channels = []
         for tg_channel in post.tg_channels:
-            channel_avatars.append(tg_channel.photo_url)
+            channels.append(
+                PostChannel(
+                    id=tg_channel.id,
+                    name=tg_channel.title,
+                    subscribers=tg_channel.subscribers,
+                    avatar=tg_channel.photo_url,
+                    type="tg",
+                )
+            )
+        for vk_channel in post.vk_channels:
+            channels.append(
+                PostChannel(
+                    id=vk_channel.id,
+                    name=vk_channel.title,
+                    subscribers=0,
+                    type="vk",
+                )
+            )
 
         result.append(
             PreviewPost(
                 id=post.id,
                 status=post.status,
-                channel_avatars=channel_avatars,
+                channels=channels,
                 publish_time=post.publish_time,
                 owner_name=post.owner.name,
                 html_text=post.html_text,

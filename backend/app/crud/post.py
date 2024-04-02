@@ -69,6 +69,7 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         """Получение постов пользователя."""
         posts = []
         for tg_channel in user.tg_channels:
+            print(tg_channel)
             posts.extend(tg_channel.posts)
         posts.sort(key=lambda p: p.id, reverse=True)
         return posts
