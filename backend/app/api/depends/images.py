@@ -34,11 +34,11 @@ async def get_all_images_dep(
 async def get_image_dep(
     image_id: int,
     post: Annotated[Post, Depends(get_post_with_any_access)],
-) -> Image | None:
+) -> Image:
     for image in cast(list[Image], post.images):
         if image.id == image_id:
             return image
-    return None
+    raise HTTPException(404)
 
 
 async def delete_image_dep(
