@@ -2,6 +2,7 @@ import asyncio
 import contextlib
 
 from aiogram import Bot
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from sqlalchemy.orm import close_all_sessions
 
@@ -13,8 +14,10 @@ from shared.database.session import db_session_manager
 async def main() -> None:
     bot = Bot(
         token=settings.BOT_TOKEN,
-        parse_mode=ParseMode.HTML,
-        disable_web_page_preview=True,
+        default=DefaultBotProperties(
+            parse_mode=ParseMode.HTML,
+            link_preview_is_disabled=True,
+        ),
     )
     async with bot.context(), db_session_manager() as session:
         try:
