@@ -11,6 +11,6 @@ class BaseSchema(BaseModel):
 
 
 class BaseSchemaPublishTime(BaseSchema):
-    @field_validator("publish_time")
+    @field_validator("publish_time", check_fields=False)
     def validate_publish_time(cls, v: str | None) -> str:
         return v.rstrip("Z") if v else None
