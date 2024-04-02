@@ -44,7 +44,6 @@ function App() {
 	}, [themeMode])
 
 	useEffect(() => {
-		axios.get(`http://${BACKEND_HOST}/ping`)
 		const data = localStorage.getItem('userData')
 		if (data) {
 			setUser(JSON.parse(data))
