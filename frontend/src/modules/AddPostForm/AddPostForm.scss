@@ -10,6 +10,7 @@
 }
 
 .AddPostForm {
+	padding-bottom: 50px;
 	h2 {
 		font-size: 18px;
 		font-weight: 600;
@@ -63,7 +64,7 @@
 	}
 
 	&-btnsbox {
-		justify-content: flex-end;
+		justify-content: center;
 		display: flex;
 		gap: 15px;
 		flex-wrap: wrap;
@@ -119,7 +120,7 @@
 	}
 	.main-btn {
 		margin: auto;
-		margin-top: 15px;
+		margin-top: 20px;
 		display: block;
 	}
 }

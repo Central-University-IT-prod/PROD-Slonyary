@@ -18,6 +18,8 @@ export const TelegramAuth: FC = () => {
 			console.log(res)
 			if (res) {
 				localStorage.setItem('accessToken', res.data.token)
+				localStorage.setItem('userData', response)
+				setUser(response)
 			}
 		}
 	}

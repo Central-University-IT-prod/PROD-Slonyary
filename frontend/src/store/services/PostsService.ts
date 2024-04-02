@@ -34,9 +34,9 @@ export const postsAPI = createApi({
     getPostInfo: build.query<TPostItem, any>({
       query: ({id}) => ({url: `/post/${id}`}),
     }),
-    createPost: build.mutation<TPostItem, any>({
+    createPost: build.mutation({
         query: (data) => ({
-          url: '/post/create',
+          url: '/posts',
           metod: 'POST',
           body: data
         })

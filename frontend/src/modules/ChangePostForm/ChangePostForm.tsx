@@ -13,35 +13,16 @@ import {
 	RichUtils
 } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import {
-	Avatar,
-	Button,
-	Checkbox,
-	CircularProgress,
-	Grid,
-	TextField
-} from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough'
 import LinkIcon from '@mui/icons-material/Link'
-import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.scss'
-import ImageTable from '../ImageTable/ImageTable'
-import { addMessages, getSpellcheckingWords } from './API'
-import useModal from '../../hooks/useModal'
-import { channelsAPI } from '../../store/services/ChannelService'
-import { useNavigate } from 'react-router'
+import { getSpellcheckingWords } from '../AddPostForm/API'
 
 const AddPostForm: FC = () => {
-	const [date, setDate] = useState('')
-	const [time, setTime] = useState('00:00')
-	const navigate = useNavigate()
-	const [isSecond, setIsSecond] = useState(false)
-	const [ChannelsTarget, setChannelsTarget] = useState(false)
-
-	const maxLength = 9
 	type LinkProps = {
 		children: React.ReactNode
 		contentState: ContentState
@@ -110,25 +91,6 @@ const AddPostForm: FC = () => {
 		const text = contentState.getPlainText()
 
 		let publish_time: string = ''
-		const images = []
-
-		if (date) {
-			const [year, month, day] = date.split('-')
-			const [hours, minut] = time.split(':')
-
-			publish_time = new Date(
-				+year,
-				+month - 1,
-				+day,
-				+hours,
-				+minut
-			).toISOString()
-		}
-		const formData = new FormData()
-		for (let index = 0; index < files.length; index++) {
-			images.push(files[index])
-			formData.append('images', files[index])
-		}
 
 		const channels: any[] = []
 
@@ -147,8 +109,7 @@ const AddPostForm: FC = () => {
 			html_text: html
 		}
 
-		const t = await addMessages(data, formData)
-		console.log(t)
+		//const t = await addMessages(data, formData)
 	}
 
 	const addEntity = useCallback(
@@ -189,7 +150,6 @@ const AddPostForm: FC = () => {
 		if (!url) return
 		addLink(url)
 	}
-	type TypeFileList = FileList | null
 
 	function findLinkEntities(
 		contentBlock: ContentBlock,
@@ -205,62 +165,9 @@ const AddPostForm: FC = () => {
 		}, callback)
 	}
 
-	const [files, setFiles] = useState<File[]>([])
-
-	const onDragEnter = (e: any) => {
-		e.preventDefault()
-		e.stopPropagation()
-	}
-
-	const filterFiles = (newFiles: TypeFileList): File[] => {
-		if (!newFiles) return []
-
-		const res: File[] = [...files]
-		for (let index = newFiles.length - 1; index >= 0; index--) {
-			const file = newFiles[index]
-
-			if (res.length === maxLength) break
-
-			if ('image/jpeg,image/png'.split(',').includes(file.type)) {
-				res.push(file)
-			} else {
-			}
-		}
-		return res
-	}
-
-	const onDrop = (e: any) => {
-		e.preventDefault()
-		e.stopPropagation()
-		setFiles(filterFiles(e.dataTransfer.files))
-	}
-
-	const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.preventDefault()
-		e.stopPropagation()
-		const input = document.querySelector(
-			'#upload-postImage'
-		) as HTMLInputElement
-		setFiles(filterFiles(input.files))
-	}
-
-	const deleteMedia = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number
-	) => {
-		e.preventDefault()
-		e.stopPropagation()
-
-		const arrFiles = [...files]
-		arrFiles.splice(index, 1)
-		setFiles(arrFiles)
-	}
-
 	const [spellcheckingString, setSpellcheckingString] = useState<string>('')
 	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
 		useState<boolean>(false)
-
-	const { setModal } = useModal('TELEGRAM-PREVIEW', null, {})
 
 	const spellchecking = async () => {
 		setIsSpellcheckingLoading(true)
@@ -289,69 +196,15 @@ const AddPostForm: FC = () => {
 		setIsSpellcheckingLoading(false)
 	}
 
-	const spellcheckingBtnDisabled = useMemo(
-		() => editorState.getCurrentContent().getPlainText().trim().length < 2,
+	const mainBtn = useMemo(
+		() => editorState.getCurrentContent().getPlainText().trim().length > 0,
 		[editorState]
 	)
 
-	const { data: channels, isLoading } = channelsAPI.useGetChannelsQuery(null)
-
-	const continueDisabled = useMemo(
-		() => spellcheckingBtnDisabled,
-		[spellcheckingBtnDisabled]
-	)
-	const continueBtnClick = () => {
-		navigate('#chanelsToPost')
-		setIsSecond(true)
-	}
-
-	const mainBtn = useMemo(
-		() => !ChannelsTarget || continueDisabled,
-		[ChannelsTarget, continueDisabled]
-	)
-
-	const toggleChannels = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.checked) {
-			setChannelsTarget(true)
-		} else {
-			const h =
-				document.querySelectorAll('.channelsCheckbox input:checked').length > 0
-			setChannelsTarget(h)
-		}
-	}
-
-	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-		setDate(e.target.value)
-	const timeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-		setTime(e.target.value)
-	const onDragOver = (e: any) => e.preventDefault()
-
 	return (
 		<div className="AddPostForm">
-			<ImageTable deleteImage={deleteMedia} files={files} />
-			<label
-				className="fileInputLabel"
-				htmlFor="upload-postImage"
-				onDragEnter={onDragEnter}
-				onDrop={onDrop}
-				onDragOver={onDragOver}
-			>
-				<ImageIcon />
-				<h4>Добавить</h4>
-			</label>
 			<h2>Текст поста</h2>
 			<p>Выделите текст и нажмите на кнопку стиля или ссылки.</p>
-			<input
-				type="file"
-				maxLength={maxLength}
-				name="upload-postImage"
-				id="upload-postImage"
-				style={{ display: 'none' }}
-				onChange={changeInput}
-				multiple
-				hidden
-				accept="image/jpeg,image/png"
-			/>
 			<div className="AddPostForm-buttonGroup">
 				<button onClick={onBoldClick}>
 					<FormatBoldIcon />
@@ -376,54 +229,17 @@ const AddPostForm: FC = () => {
 					onChange={setEditorState}
 				/>
 			</div>
-			<Grid container spacing="10px" sx={{ mt: '10px' }}>
-				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
-					<TextField
-						fullWidth
-						size="small"
-						type="date"
-						value={date}
-						onChange={dateChange}
-						placeholder="Дата публикации"
-					/>
-				</Grid>
-				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
-					<TextField
-						fullWidth
-						size="small"
-						value={time}
-						onChange={timeChange}
-						placeholder="Время публикации"
-						type="time"
-					/>
-				</Grid>
-			</Grid>
 			<div className="AddPostForm-btnsbox">
-				<Button
-					variant="contained"
-					onClick={spellchecking}
-					disabled={spellcheckingBtnDisabled}
-				>
+				<Button variant="contained" onClick={spellchecking} disabled={mainBtn}>
 					Проверить орфографию
 				</Button>
 				<Button
 					variant="contained"
-					disabled={spellcheckingBtnDisabled}
-					onClick={() =>
-						setModal({
-							htmlText: stateToHTML(editorState.getCurrentContent()),
-							images: files
-						})
-					}
+					disabled={mainBtn}
+					className="main-btn"
+					onClick={getText}
 				>
-					Показать превью
-				</Button>
-				<Button
-					variant="contained"
-					disabled={continueDisabled}
-					onClick={continueBtnClick}
-				>
-					Продолжить
+					Отправить
 				</Button>
 			</div>
 			{spellcheckingString.length ? (
@@ -443,39 +259,6 @@ const AddPostForm: FC = () => {
 			) : (
 				''
 			)}
-			<Button
-				variant="contained"
-				disabled={mainBtn}
-				className="main-btn"
-				onClick={getText}
-			>
-				Отправить
-			</Button>
-			<div className="chanelsToPost" id="chanelsToPost">
-				<h2>Отметьте каналы в которые нужно послать пост</h2>
-				{isSecond &&
-					(!isLoading ? (
-						channels?.length > 0 ? (
-							channels?.map((channel: ChannelItem) => {
-								return (
-									<div className="chanelsToPost-item" key={channel.id}>
-										<Checkbox
-											data-id={channel.id}
-											className="channelsCheckbox"
-											onChange={toggleChannels}
-										/>
-										<Avatar src={channel.url}>{channel.name}</Avatar>
-										<h3>{channel.name}</h3>
-									</div>
-								)
-							})
-						) : (
-							<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
-						)
-					) : (
-						<CircularProgress className="loader" />
-					))}
-			</div>
 		</div>
 	)
 }

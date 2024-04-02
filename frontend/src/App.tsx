@@ -8,10 +8,12 @@ import MediaSlider from './modules/MediaSlider/MediaSlider.tsx'
 import axios from 'axios'
 import { BACKEND_HOST } from './constants.ts'
 import { TelegramPreview } from './modules/TelegramPreview/TelegramPreview.tsx'
+import { useActions } from './hooks/useActions.ts'
 
 function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
 	const { type, data } = useAppSelector((state) => state.modal)
+	const { setUser } = useActions()
 
 	const theme = useMemo(
 		() =>
@@ -33,6 +35,11 @@ function App() {
 
 	useEffect(() => {
 		axios.get(`http://${BACKEND_HOST}/ping`)
+		const data = localStorage.getItem('userData')
+		if (data) {
+			setUser(JSON.parse(data))
+		} else {
+		}
 	}, [])
 
 	return (
