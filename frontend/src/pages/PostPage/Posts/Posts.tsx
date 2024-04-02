@@ -17,8 +17,10 @@ export const Posts: FC = () => {
   } = postsAPI.useFetchAllPostsQuery(null)
 
   if (isLoading) return <Loading/>
-  if (!posts) return <div className='errorDiv'><p>У вас просроченный токен</p></div>
-  if (posts?.length === 0) return <div className='errorDiv'><p>У вас нет постов</p></div>
+  if (!posts || posts?.length === 0) return <div className='errorDiv'>
+    <p>У вас нет постов или просроченный токен</p>
+    <Link to={paths.TELEGRAMAUTH}><Button variant='contained'>Перейти в авторизацию</Button></Link>
+  </div>
   return (
     <>
       <div className="status-filter">
