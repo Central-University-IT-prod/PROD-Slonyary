@@ -130,13 +130,9 @@ const AddPostForm: FC = () => {
 			const [year, month, day] = date.split('-')
 			const [hours, minut] = time.split(':')
 
-			publish_time = new Date(
-				+year,
-				+month - 1,
-				+day,
-				+hours,
-				+minut
-			).toISOString()
+			publish_time = new Date(+year, +month - 1, +day, +hours, +minut)
+				.toISOString()
+				.replace(/Z^/, '')
 		}
 
 		const channels: any[] = []
@@ -282,7 +278,7 @@ const AddPostForm: FC = () => {
 
 		const contentState = editorState.getCurrentContent()
 		const html = stateToHTML(contentState, options)
-		console.log(html)
+
 		const words = await getSpellcheckingWords(html)
 
 		let text = html
@@ -305,20 +301,30 @@ const AddPostForm: FC = () => {
 		setIsSpellcheckingLoading(false)
 	}
 
+	const [isGptLoading, setIsGptLoading] = useState<boolean | null>(null)
 	const [GPTText, setGPTText] = useState<string>('')
 	const gpt = async () => {
 		try {
 			setSpellcheckingString('')
 			const contentState = editorState.getCurrentContent()
-
 			const text = contentState.getPlainText()
+
+			if (!text.length) return
+			setIsGptLoading(true)
+
 			const gptData = await axios.get(
-				`http://${BACKEND_HOST}/gpt_response?prompt=${text}`
+				`http://${BACKEND_HOST}/gpt_response?prompt=${text}`,
+				{
+					headers: {
+						token: localStorage.getItem('accessToken')
+					}
+				}
 			)
-			console.log(gptData)
+
 			if (gptData) {
 				setGPTText(gptData.data)
 			}
+			setIsGptLoading(false)
 		} catch (error) {
 			console.log(error)
 		}
@@ -456,17 +462,20 @@ const AddPostForm: FC = () => {
 					Показать превью
 				</Button>
 			</div>
-			{GPTText.length ? (
-				<div className="AddPostForm-gpt-box">
-					<h3>Текст от нейросети:</h3>
-					<div
-						className="AddPostForm-gpt"
-						dangerouslySetInnerHTML={{ __html: GPTText }}
-					></div>
-				</div>
-			) : (
-				''
-			)}
+			{isGptLoading !== null &&
+				(!isGptLoading ? (
+					<div className="AddPostForm-gpt-box">
+						<h3>Текст от нейросети:</h3>
+						<div
+							className="AddPostForm-gpt"
+							dangerouslySetInnerHTML={{ __html: GPTText }}
+						></div>
+					</div>
+				) : (
+					<CircularProgress
+						sx={{ margin: 'auto', mt: '20px', display: 'block' }}
+					/>
+				))}
 			{spellcheckingString.length ? (
 				<div className="AddPostForm-spellchecking-box">
 					{isSpellcheckingLoading ? (
@@ -476,7 +485,7 @@ const AddPostForm: FC = () => {
 							<h3>Отредактированный текст:</h3>
 							<div
 								className="AddPostForm-spellchecking"
-								dangerouslySetInnerHTML={{ __html: GPTText }}
+								dangerouslySetInnerHTML={{ __html: spellcheckingString }}
 							></div>
 						</>
 					)}
