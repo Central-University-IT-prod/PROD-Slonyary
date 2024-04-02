@@ -3,7 +3,7 @@ from aiogram import Bot
 from core.settings.config import TOKEN
 
 
-class Logger:
+class TgLogger:
     def __init__(self):
         self.chat_id: int = -1002110986870
         self.bot: Bot = Bot(TOKEN)

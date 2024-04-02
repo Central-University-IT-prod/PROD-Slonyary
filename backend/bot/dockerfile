@@ -9,4 +9,4 @@ COPY ./.env /bot
 RUN pip3 install -r requirements.txt
 RUN pip3 install -r bot/requirements.txt
 
-CMD ["python3", "bot/main.py"]
+CMD ["python3", "-u", "bot/main.py"]
