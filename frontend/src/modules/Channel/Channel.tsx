@@ -25,7 +25,7 @@ const Channel: FC<Props> = (props) => {
     <article className={s.main}>
       <div className={s.avatarContainer}>
         {props.avatar ?
-          <img src={props.avatar.slice[0, 4] === 'http' ? props.avatar : `data:image/gif;base64, ${props.avatar}`}
+          <img src={props.avatar.slice(0, 4) === 'http' ? props.avatar : `data:image/gif;base64, ${props.avatar}`}
                alt="" className={s.avatar}/>
           :
           <Avatar>
