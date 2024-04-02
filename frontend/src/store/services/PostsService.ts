@@ -28,17 +28,20 @@ export const postsAPI = createApi({
   endpoints: (build) => ({
     fetchAllPosts: build.query<IPostRequest[], any>({
         query: () => ({url: `/posts`}),
+        providesTags: ['Posts']
       }
     ),
     getPostInfo: build.query<TPostItem, any>({
       query: ({id}) => ({url: `/post/${id}`}),
+      providesTags: ['Posts']
     }),
     createPost: build.mutation({
         query: (data) => ({
           url: '/posts',
           metod: 'POST',
           body: data
-        })
+        }),
+        invalidatesTags: ['Posts']
       }
     ),
     acceptPost: build.mutation({
@@ -46,7 +49,8 @@ export const postsAPI = createApi({
           url: `/posts/${data}/accept`,
           metod: 'POST',
           body: data
-        })
+        }),
+        invalidatesTags: ['Posts']
       }
     ),
     downgradePost: build.mutation({

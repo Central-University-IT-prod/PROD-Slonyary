@@ -4,11 +4,15 @@ import s from './PostItem.module.scss'
 import {Avatar, AvatarGroup, ImageList, ImageListItem} from '@mui/material'
 import {MediaProvider} from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
-import {IPostRequest} from "../../store/services/PostsService.ts";
+import {IPostRequest, postsAPI} from "../../store/services/PostsService.ts";
 
-export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
+export const PostItem: FC<{
+  data: IPostRequest
+}> = ({data}) => {
+  const [acceptPost, {isLoading, isError, error}] = postsAPI.useAcceptPostMutation()
 
   const {
+    id,
     owner_name: admin,
     status: category,
     publish_time: date,
@@ -29,6 +33,15 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
       rightText = 'На модерации'
   }
 
+  const dateOptions = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }
+
   return (
     <article className={s.post}>
       <div className={s.postInner}>
@@ -43,7 +56,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
             </AvatarGroup>
             <div className={s.leftText}>
               <h4>{channels.length === 1 ? channels[0].name : 'В нескольких каналах'}</h4>
-              <p>{new Date(date).toDateString()}</p>
+              <p>{new Date(date).toLocaleString('ru-RU', dateOptions).replace(',', '')}</p>
             </div>
           </div>
           <div className={s.right}>
@@ -54,7 +67,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
             <p className={s.adminName}>{admin}</p>
           </div>
         </div>
-        {!!postImages?.length && (
+        {postImages.length !== 0 && (
           <ImageList
             sx={{
               width: '100%',
@@ -65,12 +78,12 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
             cols={postImages.length > 3 ? 3 : postImages.length}
           >
             <MediaProvider mediaCount={postImages?.length}>
-              {postImages.map((src, i) => (
-                <MediaView index={i} key={i} src={src}>
+              {postImages.map((imageSrc, i) => (
+                <MediaView index={i} key={i} src={imageSrc.base64}>
                   <ImageListItem key={i}>
                     <img
                       className={`${s.postImage} loaderImg`}
-                      src={src}
+                      src={`data:image/gif;base64,${imageSrc.base64}`}
                       loading="lazy"
                     />
                   </ImageListItem>
@@ -79,7 +92,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
             </MediaProvider>
           </ImageList>
         )}
-        <div className={s.postItemTextContant}>{htmlText}</div>
+        <div dangerouslySetInnerHTML={{__html: htmlText}} className={s.postItemTextContant}></div>
       </div>
       {category === 'pending' && (
         <div className={s.bottomButtons}>
@@ -93,7 +106,10 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
         <div className={s.bottomButtons}>
           <button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
           <button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
-          <button className={`${s.rightButton} ${s.green}`}>Принять
+          <button onClick={() => {
+            console.log('x')
+            acceptPost(id)
+          }} className={`${s.rightButton} ${s.green}`}>Принять
           </button>
         </div>
       )}
