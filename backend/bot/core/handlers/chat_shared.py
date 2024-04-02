@@ -5,15 +5,13 @@ import traceback
 from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import Message
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from core.handlers.logger import TgLogger
 from core.services.database import add_channel, get_channel_by_id
 from core.services.functions import image_to_base64
 from core.settings.config import TOKEN
 from core.utils.keyboards import ready_keyboard, return_keyboard
 from core.utils.messages import BotText
-
+from sqlalchemy.ext.asyncio import AsyncSession
 
 tg_log = TgLogger()
 bot: Bot = Bot(TOKEN)
@@ -100,11 +98,9 @@ async def shared_handler(message: Message, session: AsyncSession):
     except FileExistsError:
         pass
 
-    photos = await message.from_user.get_profile_photos(offset=0, limit=1)
-
     try:
-        if photos.photos:
-            photo = photos.photos[0][-1]
+        if chat_info.photo:
+            photo = chat_info.photo
 
             await bot.download(
                 file=photo.file_id, destination=destination + file_name, seek=False
