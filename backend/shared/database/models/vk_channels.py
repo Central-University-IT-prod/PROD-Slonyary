@@ -23,6 +23,8 @@ class VkChannel(AlchemyBaseModel):
     added_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.now
     )
+    description: Mapped[str] = mapped_column(String, nullable=True)
+    photo_base64: Mapped[str] = mapped_column(String, nullable=True)
 
     owner: Mapped["User"] = relationship(
         "User",

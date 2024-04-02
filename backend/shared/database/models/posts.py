@@ -18,7 +18,6 @@ class Post(AlchemyBaseModel):
     __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    message_id: Mapped[int] = mapped_column(Integer, nullable=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="cascade"))
     html_text: Mapped[str] = mapped_column(String(4096), nullable=False)
     plain_text: Mapped[str] = mapped_column(String(4096), nullable=False)
