@@ -2,10 +2,13 @@
   margin-top: 20px;
   padding: 10px 0;
   display: flex;
-  align-content: stretch;
+  flex-direction: row;
   width: 100%;
   box-shadow: 0 0 5px 2px #00000033;
   border-radius: 40px;
+  @media(max-width: 800px) {
+    flex-direction: column;
+  }
 }
 
 .avatarContainer {
@@ -16,6 +19,12 @@
   justify-content: center;
   align-items: center;
   border-right: 1px solid #d9d9d9;
+  @media(max-width: 800px) {
+    max-width: none;
+    border-right: 0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 15px 0;
+  }
 }
 
 .avatar {
@@ -33,6 +42,14 @@
   justify-content: center;
   flex-direction: column;
   border-right: 1px solid #d9d9d9;
+
+  @media(max-width: 800px) {
+    max-width: none;
+    border-right: 0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 30px 0;
+    align-items: center;
+  }
 
   .title {
     font-size: 20px;
@@ -55,6 +72,14 @@
   justify-content: center;
   flex-direction: column;
   gap: 5px;
+
+  @media(max-width: 800px) {
+    max-width: none;
+    border-right: 0;
+    border-bottom: 1px solid #d9d9d9;
+    align-items: center;
+    padding: 30px 0;
+  }
 }
 
 .postTitle {
@@ -100,6 +125,12 @@
   button {
     cursor: pointer;
   }
+
+  @media(max-width: 800px) {
+    max-width: none;
+    align-items: center;
+    padding: 20px 0;
+  }
 }
 
 .popup {
@@ -112,4 +143,8 @@
   gap: 10px;
   left: 10px;
   bottom: -30px;
+  @media(max-width: 800px) {
+    left: 37%;
+    bottom: -30px;
+  }
 }

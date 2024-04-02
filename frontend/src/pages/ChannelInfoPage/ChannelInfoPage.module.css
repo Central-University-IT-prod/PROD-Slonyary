@@ -46,12 +46,13 @@
 .members {
   background-color: rgba(242, 243, 244, 0.5);
   border-radius: 20px;
-  padding: 20px 40px;
+  padding: 20px 35px;
 }
 
 .membersTitle {
   font-size: 20px;
   font-weight: 500;
+  color: #484E57;
 }
 
 .membersList {
@@ -68,13 +69,14 @@
 }
 
 .number {
-  font-size: 32px;
+  font-size: 40px;
   color: #d9d9d9;
   font-weight: 500;
 }
 
 .userName {
-  font-size: 16px;
+  color: #484E57;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -89,4 +91,15 @@
 }
 .userStatus.redactor {
   color: #5894EF;
+}
+
+.memberLinks {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.memberLinks a {
+  width: 100%;
+  display: block;
 }/*# sourceMappingURL=ChannelInfoPage.module.css.map */

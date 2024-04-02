@@ -103,7 +103,7 @@ export const PostItem: FC<{
             <AvatarGroup max={2}>
               {channels?.map((channel: any, index: number) => (
                 <Avatar src={channel.avatar} key={index}>
-                  {channel.name.slice(2)}
+                  {channel.name.slice(0, 2)}
                 </Avatar>
               ))}
             </AvatarGroup>

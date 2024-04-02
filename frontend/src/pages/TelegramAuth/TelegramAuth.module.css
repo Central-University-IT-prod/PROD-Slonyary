@@ -1,7 +1,12 @@
-.TelegramAuth h4 {
-  font-size: 20px;
-  font-weight: 600;
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 50vh;
 }
-.TelegramAuth .auth-btn {
-  margin-top: 10px;
-}/*# sourceMappingURL=TelegramAuth.css.map */
+.main h4 {
+  font-size: 20px;
+  font-weight: 500;
+}/*# sourceMappingURL=TelegramAuth.module.css.map */

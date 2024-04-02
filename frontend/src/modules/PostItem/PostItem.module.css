@@ -138,4 +138,22 @@
 }
 .bottomButtons .orange {
   background-color: #ffb13c;
+}
+
+.analytics {
+  margin-top: 24px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.analytics p {
+  background: #d9d9d9;
+  border-radius: 20px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.analytics p span {
+  color: #484E57;
 }/*# sourceMappingURL=PostItem.module.css.map */
