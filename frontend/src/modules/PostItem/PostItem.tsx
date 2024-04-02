@@ -7,17 +7,16 @@ import MediaView from '../../Ui/MediaView/MediaView'
 import {IPostRequest} from "../../store/services/PostsService.ts";
 
 export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
+
   const {
     owner_name: admin,
     status: category,
     publish_time: date,
     html_text: htmlText,
     photos: postImages,
-    channels: channels
+    channels,
+    is_owner: isOwner
   } = data
-  const channelName = 'Жопа'
-
-  const mainEditor = true
   let rightText
   switch (category) {
     case 'pending':
@@ -36,7 +35,7 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
         <div className={s.postHeader}>
           <div className={s.left}>
             <AvatarGroup max={2}>
-              {channels?.map((channel, index) => (
+              {channels?.map((channel: any, index: number) => (
                 <Avatar src={channel.avatar} key={index}>
                   CH
                 </Avatar>
@@ -90,11 +89,12 @@ export const PostItem: FC<{ data: IPostRequest }> = ({data}) => {
           </button>
         </div>
       )}
-      {category === 'moderation' && mainEditor && (
+      {category === 'moderation' && isOwner && (
         <div className={s.bottomButtons}>
           <button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
           <button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
-          <button className={`${s.rightButton} ${s.green}`}>Принять</button>
+          <button className={`${s.rightButton} ${s.green}`}>Принять
+          </button>
         </div>
       )}
     </article>

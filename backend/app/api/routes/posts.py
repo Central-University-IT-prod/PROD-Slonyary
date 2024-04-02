@@ -1,10 +1,11 @@
+from fastapi import APIRouter, HTTPException
+from starlette import status
+
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
 from app.schemas import ImageRead, PostCreate, PostIn, PostUpdate, PreviewPost, Result
 from app.schemas.posts import PostChannel
-from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType, PostStatus
 from shared.database.models import Post, PostsToTgChannels, PostsToVkChannels, User
-from starlette import status
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -17,7 +18,7 @@ async def get_post_preview(post: Post, user: User) -> PreviewPost:
                 id=tg_channel.id,
                 name=tg_channel.title,
                 subscribers=tg_channel.subscribers,
-                avatar=tg_channel.photo_url,
+                avatar=tg_channel.photo_base64,
                 type="tg",
             )
         )
@@ -111,7 +112,7 @@ async def get_post(
     if not await crud_post.is_user_access(user, post) and not post.owner_id == user.id:
         raise HTTPException(403, "Нет доступа")
 
-    return get_post_preview(post, user)
+    return await get_post_preview(post, user)
 
 
 @router.delete("/{id}", status_code=202)

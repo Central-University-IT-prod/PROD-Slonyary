@@ -19,7 +19,7 @@ class UserCreate(BaseSchema):
 
 
 class UserUpdate(BaseSchema):
-    pass
+    photo_url: str
 
 
 class UserRead(BaseSchema):

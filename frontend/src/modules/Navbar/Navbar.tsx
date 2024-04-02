@@ -7,6 +7,7 @@ import useAppSelector from "../../hooks/useAppSelector.ts";
 import {useNavigate} from "react-router";
 
 export const Navbar: FC = () => {
+  // @ts-ignore
   const userData: {
     first_name: string,
     photo_url: string

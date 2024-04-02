@@ -11,7 +11,6 @@ from shared.vk.entities.media import Media
 from shared.vk.entities.photo import Photo
 from shared.vk.entities.save_wall_photo import SaveWallPhotoInput
 from shared.vk.entities.upload import UploadPhotoInput, UploadPhotoOutput
-from shared.vk.example import GROUP_ID
 from shared.vk.methods.create_post import VkCreatePost
 from shared.vk.methods.get_wall_upload_server import GetWallUploadServer
 from shared.vk.methods.save_wall_photo import SaveWallPhoto
@@ -80,7 +79,7 @@ class VkBot:
         )
 
         params = CreatePostInput(
-            owner_id=-GROUP_ID,
+            owner_id=-self.group_id,
             from_group=1,
             message=message,
             attachments=attachments,
