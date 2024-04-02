@@ -85,3 +85,19 @@ button, input {
 a {
     text-decoration: none;
 }
+
+a:hover, a:visited {
+    color: #000;
+}
+
+.errorDiv {
+    display: flex;
+    min-height: 50vh;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        font-size: 20px;
+        font-weight: 500;
+    }
+}

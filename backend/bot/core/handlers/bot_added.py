@@ -20,9 +20,12 @@ async def ready_handler(callback: CallbackQuery):
     try:
         msg = await callback.message.edit_text("✅")
     except TelegramBadRequest:
-        msg = await callback.message.answer(text=BotText.ready_step.format(
-                                            name=hbold(callback.message.from_user.first_name)),
-                                            parse_mode="HTML")
+        msg = await callback.message.answer(
+            text=BotText.ready_step.format(
+                name=hbold(callback.message.from_user.first_name)
+            ),
+            parse_mode="HTML",
+        )
     await asyncio.sleep(1)
 
     try:
@@ -30,7 +33,10 @@ async def ready_handler(callback: CallbackQuery):
     except TelegramBadRequest:
         pass
 
-    await callback.message.answer(text=BotText.ready_step.format(
-                                  name=hbold(callback.message.from_user.first_name)),
-                                  parse_mode="HTML",
-                                  reply_markup=reply_keyboard)
+    await callback.message.answer(
+        text=BotText.ready_step.format(
+            name=hbold(callback.message.from_user.first_name)
+        ),
+        parse_mode="HTML",
+        reply_markup=reply_keyboard,
+    )

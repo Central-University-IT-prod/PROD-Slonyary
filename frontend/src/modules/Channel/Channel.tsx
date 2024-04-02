@@ -22,13 +22,13 @@ const Channel: FC<Props> = (props) => {
   const [showPopup, setShowPopup] = useState<boolean>(false)
 
   return (
-    <article className={s.main}>
+    <Link to={NavigatePath(channelInfoPath(props.id.toString()))} className={s.main}>
       <div className={s.avatarContainer}>
         {props.avatar ?
           <img src={props.avatar.slice(0, 4) === 'http' ? props.avatar : `data:image/gif;base64, ${props.avatar}`}
                alt="" className={s.avatar}/>
           :
-          <Avatar>
+          <Avatar sx={{width: '60px', height: '60px'}}>
             {props.title.slice(0, 2)}
           </Avatar>
         }
@@ -48,21 +48,22 @@ const Channel: FC<Props> = (props) => {
           <p>На модерации: {props.posts.moderation}</p>
         </div>
       </div>
-      <div className={s.actions}>
-        <button onClick={() => setShowPopup(show => !show)}>
+      <div onClick={(event) => {
+        event.stopPropagation()
+        event.preventDefault()
+        setShowPopup(show => !show)
+      }} className={s.actions}>
+        <button>
           <MoreHorizIcon sx={{fontSize: 50}} color='primary'/>
         </button>
         {
           showPopup &&
             <div className={s.popup}>
-                <Link to={NavigatePath(channelInfoPath(props.id.toString()))}>
-                    <Button variant='contained'>Открыть</Button>
-                </Link>
                 <Button variant='contained'>Удалить</Button>
             </div>
         }
       </div>
-    </article>
+    </Link>
   )
 }
 

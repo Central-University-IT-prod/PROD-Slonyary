@@ -19,4 +19,3 @@ class TgLogger:
             await self.bot.send_message(chat_id=self.chat_id, text=f"[ERROR]: {text}")
         except Exception:
             pass
-

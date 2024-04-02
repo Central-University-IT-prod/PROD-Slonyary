@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta, timezone
 
-from app.api.deps import CrudUserDepends
-from app.core import security
-from app.schemas import JwtToken, UserCreate, UserTelegramData, UserUpdate
 from fastapi import APIRouter, HTTPException, status
 from jose import jwt
+
+from app.api.deps import CrudUserDepends
+from app.core import security
+from app.schemas import JwtToken, UserCreate, UserTelegramData
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -22,7 +23,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     return encoded_jwt
 
 
-@router.post("/", status_code=200)
+@router.post("", status_code=200)
 async def auth_user(
     user_telegram_data: UserTelegramData,
     user_crud: CrudUserDepends,

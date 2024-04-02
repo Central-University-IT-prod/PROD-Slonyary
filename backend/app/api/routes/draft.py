@@ -5,6 +5,7 @@ from fastapi import APIRouter, File, Form, UploadFile
 
 from app.api.deps import CurrentUserDep, TgBotDepends
 from app.schemas import Result
+from shared.utils.publish_tg_post import set_caption_to_media_group
 
 router = APIRouter(prefix="/posts/draft", tags=["preview"])
 
@@ -20,6 +21,8 @@ async def post_preview_draft(
     """
     Я живу в идеальном мире, где юзер не блочит бота, поэтому никаких проверок нет.
     """
+
+    text = html_text.replace("<p>", "").replace("</p>", "")
     if files:
         media_group = [
             InputMediaPhoto(
@@ -27,9 +30,9 @@ async def post_preview_draft(
             )
             for file in files
         ]
-        media_group[0].caption = html_text
+        set_caption_to_media_group(text, media_group)
         await bot.send_media_group(chat_id=user.id, media=media_group)
     else:
-        await bot.send_message(chat_id=user.id, text=html_text)
+        await bot.send_message(chat_id=user.id, text=text)
 
     return Result(status="ok")

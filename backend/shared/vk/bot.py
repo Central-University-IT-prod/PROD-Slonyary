@@ -24,7 +24,7 @@ class VkBot:
         key: str,
         client: httpx.AsyncClient,
     ) -> None:
-        self.group_id = group_id
+        self.group_id = abs(group_id)
         self.key = key
         self.client = client
 

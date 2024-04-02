@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 // @ts-ignore
 import s from './PostItem.module.scss'
 import { Avatar, AvatarGroup, ImageList, ImageListItem } from '@mui/material'
@@ -6,29 +6,34 @@ import { MediaProvider } from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
 import { IPostRequest, postsAPI } from '../../store/services/PostsService.ts'
 import { Loading } from '../Loading/Loading.tsx'
+import { Bounce, toast } from 'react-toastify'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+import ShareIcon from '@mui/icons-material/Share'
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constants.ts'
-//import { Bounce, toast } from 'react-toastify'
+
+const warningNotify = (text: string) =>
+	toast.error(text, {
+		position: 'top-center',
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		theme: 'light',
+		transition: Bounce
+	})
 
 export const PostItem: FC<{
 	data: IPostRequest
 	refetch: any
 }> = ({ data, refetch }) => {
-	const [acceptPost, { isLoading: isLoadingAccept }] =
+	const [acceptPost, { isLoading: isLoadingAccept, error: acceptError }] =
 		postsAPI.useAcceptPostMutation()
-	const [rejectPost, { isLoading: isLoadingReject }] =
+	const [rejectPost, { isLoading: isLoadingReject, error: rejectError }] =
 		postsAPI.useRejectPostMutation()
-	//toast('🦄 Wow so easy!', {
-	//	position: 'top-right',
-	//	autoClose: 5000,
-	//	hideProgressBar: false,
-	//	closeOnClick: true,
-	//	pauseOnHover: true,
-	//	draggable: true,
-	//	progress: undefined,
-	//	theme: 'light',
-	//	transition: Bounce
-	//})
 
 	const {
 		id,
@@ -38,7 +43,9 @@ export const PostItem: FC<{
 		html_text: htmlText,
 		photos: postImages,
 		channels,
-		is_owner: isOwner
+		views,
+		reactions,
+		shared
 	} = data
 	let rightText
 	switch (category) {
@@ -76,6 +83,16 @@ export const PostItem: FC<{
 			console.log(error)
 		}
 	}
+	useEffect(() => {
+		if (acceptError) {
+			// @ts-ignore
+			warningNotify('Error ' + acceptError?.status ?? '')
+		}
+		if (rejectError) {
+			// @ts-ignore
+			warningNotify('Error ' + rejectError?.status ?? '')
+		}
+	}, [acceptError, rejectError])
 
 	if (isLoadingAccept || isLoadingReject) return <Loading />
 	return (
@@ -140,16 +157,34 @@ export const PostItem: FC<{
 					dangerouslySetInnerHTML={{ __html: htmlText }}
 					className={s.postItemTextContant}
 				></div>
+				{category === 'published' && (
+					<div className={s.analytics}>
+						<p>
+							<RemoveRedEyeIcon sx={{ color: '#484E57' }} />
+							<span>{views}</span>
+						</p>
+						<p>
+							<ShareIcon sx={{ color: '#484E57' }} />
+							<span>{shared}</span>
+						</p>
+						<p>
+							<SentimentSatisfiedAltIcon sx={{ color: '#484E57' }} />
+							<span>{reactions}</span>
+						</p>
+					</div>
+				)}
 			</div>
 			{category === 'pending' && (
 				<div className={s.bottomButtons}>
-					<button className={`${s.leftButton} ${s.grey}`}>Изменить</button>
+					<button onClick={() => {}} className={`${s.leftButton} ${s.grey}`}>
+						Изменить
+					</button>
 					<button onClick={publish} className={`${s.rightButton} ${s.orange}`}>
 						Опубликовать
 					</button>
 				</div>
 			)}
-			{category === 'moderation' && isOwner && (
+			{category === 'moderation' && (
 				<div className={s.bottomButtons}>
 					<button
 						onClick={() => {

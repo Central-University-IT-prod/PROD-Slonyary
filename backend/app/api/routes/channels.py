@@ -64,10 +64,10 @@ async def get_channels(type: str, user: CurrentUserDep) -> list[PreviewTgChannel
     ]
 
 
-@router.get("/{type}/{id}")
+@router.get("/{type}/{post_id}")
 async def get_channel(
     type: str,
-    id: int,
+    post_id: int,
     user: CurrentUserDep,
     crud_tg_channel: CrudTgChannelDepends,
     crud_user_to_tg_channel: CrudUsersToTgChannelsDepends,
@@ -87,7 +87,7 @@ async def get_channel(
     else:
         raise HTTPException(404)
 
-    channel = await crud.get(id)
+    channel = await crud.get(post_id)
     if channel is None:
         raise HTTPException(404, detail="Not found")
 
@@ -118,16 +118,16 @@ async def get_channel(
     )
 
 
-@router.delete("/{type}/{id}", status_code=200)
+@router.delete("/{type}/{post_id}", status_code=200)
 async def delete_channel(
     type: str,
-    id: int,
+    post_id: int,
     user: CurrentUserDep,
     crud_tg_channel: CrudTgChannelDepends,
     crud_vk_channel: CrudVkChannelDepends,
 ) -> Result:
     if type == ChannelType.tg:
-        tg_channel = await crud_tg_channel.get(id)
+        tg_channel = await crud_tg_channel.get(post_id)
 
         if not tg_channel or tg_channel.owner_id != user.id:
             raise HTTPException(404)
@@ -136,7 +136,7 @@ async def delete_channel(
         return Result(status="ok")
 
     elif type == ChannelType.vk:
-        vk_channel = await crud_vk_channel.get(id)
+        vk_channel = await crud_vk_channel.get(post_id)
 
         if not vk_channel or vk_channel.owner_id != user.id:
             raise HTTPException(404)
@@ -148,10 +148,10 @@ async def delete_channel(
         raise HTTPException(404)
 
 
-@router.delete("/{type}/{id}/{user_id}", status_code=200)
+@router.delete("/{type}/{post_id}/{user_id}", status_code=200)
 async def delete_user_from_channel(
     type: str,
-    id: int,
+    post_id: int,
     user_id: int,
     user: CurrentUserDep,
     crud_tg_channel: CrudTgChannelDepends,
@@ -160,7 +160,7 @@ async def delete_user_from_channel(
     crud_users_to_vk_channels: CrudUsersToVkChannelsDepends,
 ) -> Result:
     if type == ChannelType.tg:
-        tg_channel = await crud_tg_channel.get(id)
+        tg_channel = await crud_tg_channel.get(post_id)
 
         if not tg_channel or tg_channel.owner_id != user.id:
             raise HTTPException(404, detail="Не найдено")
@@ -168,11 +168,11 @@ async def delete_user_from_channel(
         if user_id == tg_channel.owner_id:
             raise HTTPException(403, detail="Нельзя удалить самого себя")
 
-        await crud_users_to_tg_channels.delete_relation(user_id, id)
+        await crud_users_to_tg_channels.delete_relation(user_id, post_id)
         return Result(status="ok")
 
     elif type == ChannelType.vk:
-        vk_channel = await crud_vk_channel.get(id)
+        vk_channel = await crud_vk_channel.get(post_id)
 
         if not vk_channel or vk_channel.owner_id != user.id:
             raise HTTPException(404, detail="Не найдено")
@@ -180,7 +180,7 @@ async def delete_user_from_channel(
         if user_id == vk_channel.owner_id:
             raise HTTPException(403, detail="Нельзя удалить самого себя")
 
-        await crud_users_to_vk_channels.delete_relation(user_id, id)
+        await crud_users_to_vk_channels.delete_relation(user_id, post_id)
         return Result(status="ok")
 
     else:
