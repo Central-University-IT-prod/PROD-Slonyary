@@ -1,7 +1,5 @@
 from typing import cast
 
-from fastapi import APIRouter, HTTPException
-
 from app.api.deps import (
     CrudTgChannelDepends,
     CrudUsersToTgChannelsDepends,
@@ -17,10 +15,25 @@ from app.schemas import (
     VkChannelMember,
     VkChannelRead,
 )
+from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType
-from shared.database.models import User
+from shared.database.models import TgChannel, User
 
 router = APIRouter(prefix="/channels", tags=["channels"])
+
+
+def get_posts_on_moderation(channel: TgChannel) -> int:
+    r = 0
+    for post in channel.posts:
+        r += post.status == "moderation"
+    return r
+
+
+def get_posts_on_pending(channel: TgChannel) -> int:
+    r = 0
+    for post in channel.posts:
+        r += post.status == "pending"
+    return r
 
 
 @router.get("/{type}", status_code=200)
@@ -42,6 +55,8 @@ async def get_channels(type: str, user: CurrentUserDep) -> list[PreviewTgChannel
             username=channel.username,
             subscribers=channel.subscribers,
             type=type,
+            on_moderation=get_posts_on_moderation(channel),
+            on_pending=get_posts_on_pending(channel),
         )
         for channel in channels
     ]

@@ -1,6 +1,3 @@
-from fastapi import APIRouter, HTTPException
-from starlette import status
-
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
 from app.schemas import (
     PostCreate,
@@ -11,15 +8,16 @@ from app.schemas import (
     PreviewPost,
     Result,
 )
+from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType
+from starlette import status
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def get_posts(
-    user: CurrentUserDep,
-    crud_post: CrudPostDepends,
+    user: CurrentUserDep, crud_post: CrudPostDepends
 ) -> list[PreviewPost]:
     posts = crud_post.get_user_posts(user)
     result = []
