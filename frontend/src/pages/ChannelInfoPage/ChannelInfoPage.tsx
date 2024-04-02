@@ -1,5 +1,6 @@
 import s from './ChannelInfoPage.module.scss'
 import bobaImg from '../../assets/imgs/biba.jpg'
+import {useParams} from "react-router";
 
 const testData = {
   name: 'Название канала',
@@ -19,6 +20,10 @@ const translateStatus = (status: string): string => {
 }
 
 const ChannelInfoPage = () => {
+  const params = useParams()
+  console.log(params)
+
+
   return (
     <section className={s.main}>
       <div className={s.infoContainer}>

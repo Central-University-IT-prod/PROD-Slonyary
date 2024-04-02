@@ -3,7 +3,7 @@ import {FC, useState} from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Button} from "@mui/material";
 import {Link} from "react-router-dom";
-import {NavigatePath, paths} from "../../routes.ts";
+import {channelInfoPath, NavigatePath} from "../../routes.ts";
 
 type Props = {
   title: string
@@ -13,6 +13,7 @@ type Props = {
     pending: number
     moderation: number
   },
+  id: number
 }
 
 const Channel: FC<Props> = (props) => {
@@ -45,7 +46,7 @@ const Channel: FC<Props> = (props) => {
         {
           showPopup &&
             <div className={s.popup}>
-                <Link to={NavigatePath(paths.CHANNEL_INFO) + '1'}>
+                <Link to={NavigatePath(channelInfoPath(props.id.toString()))}>
                     <Button variant='contained'>Открыть</Button>
                 </Link>
                 <Button variant='contained'>Удалить</Button>

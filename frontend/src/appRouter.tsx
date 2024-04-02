@@ -1,5 +1,5 @@
 import {createBrowserRouter} from 'react-router-dom'
-import {paths} from './routes'
+import {channelInfoPath, paths} from './routes'
 import App from './App'
 import PostPage from './pages/PostPage/PostPage.tsx'
 import {TelegramAuth} from './pages/TelegramAuth/TelegramAuth.tsx'
@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
         element: <ChannelPage/>
       },
       {
-        path: paths.CHANNEL_INFO,
+        path: channelInfoPath(),
         element: <ChannelInfoPage/>
       },
       {
