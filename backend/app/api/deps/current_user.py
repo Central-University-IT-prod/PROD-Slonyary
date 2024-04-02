@@ -1,17 +1,14 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, Header, HTTPException
 from jose import JWTError, jwt
 
 from app.api.deps.crud import CrudUserDepends
 from shared.database.models import User
 
-ouath_sceheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 async def get_current_user(
-    token: Annotated[str, Depends(ouath_sceheme)],
+    token: Annotated[str, Header()],
     user_crud: CrudUserDepends,
 ) -> User:
     try:
