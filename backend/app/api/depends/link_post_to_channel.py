@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from fastapi import Depends, HTTPException
 from starlette import status
 
-from app.api.depends.universal import get_post_with_access_check
+from app.api.depends.universal import get_post_with_privileged_access
 from app.api.deps import CrudTgChannelDepends, CrudVkChannelDepends, SessionDepends
 from app.crud import CrudTgChannel, CrudVkChannel
 from app.schemas import Channel
@@ -34,7 +34,7 @@ async def _get_crud_and_model(
 
 
 async def link_post_dep(
-    post: Annotated[Post, Depends(get_post_with_access_check)],
+    post: Annotated[Post, Depends(get_post_with_privileged_access)],
     session: SessionDepends,
     channel_schema: Channel,
     tg_channel_crud: CrudTgChannelDepends,
@@ -51,7 +51,7 @@ async def link_post_dep(
 
 
 async def dislink_post_dep(
-    post: Annotated[Post, Depends(get_post_with_access_check)],
+    post: Annotated[Post, Depends(get_post_with_privileged_access)],
     channel_schema: Channel,
     tg_channel_crud: CrudTgChannelDepends,
     vk_channel_crud: CrudVkChannelDepends,

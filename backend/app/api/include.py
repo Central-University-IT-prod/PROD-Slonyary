@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.routes import auth, channels, links, moderation, ping, posts
+from app.api.routes import auth, channels, images, links, moderation, ping, posts
 
 api_router = APIRouter()
 
@@ -11,5 +11,6 @@ for router in (
     ping.router,
     links.router,
     moderation.router,
+    images.router,
 ):
     api_router.include_router(router)

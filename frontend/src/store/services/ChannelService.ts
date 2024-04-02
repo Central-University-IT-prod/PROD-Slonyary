@@ -14,5 +14,8 @@ export const channelsAPI = createApi({
         query: () => ({url: `/channels/tg`}),
       }
     ),
+    getChannelsById: build.query({
+      query: (id) => ({url: `/channels/tg/${id}`}),
+    })
   })
 })

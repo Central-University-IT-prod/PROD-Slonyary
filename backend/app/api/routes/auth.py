@@ -71,6 +71,7 @@ async def auth_user(
                 id=user_telegram_data.id,
                 username=user_telegram_data.username,
                 name=user_telegram_data.first_name,
+                photo_url=user_telegram_data.photo_url
             ),
         )
 
