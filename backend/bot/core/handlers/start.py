@@ -64,6 +64,7 @@ async def start_handler(message: Message, command: CommandObject, user: User, se
             return
 
         user_channel_link = await user_in_channel(session, message.from_user.id, channel.id)
+        print(user_channel_link)
 
         if user_channel_link:
             if user_channel_link.role == role:

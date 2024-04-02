@@ -22,7 +22,7 @@ class TgChannel(AlchemyBaseModel):
     title: Mapped[str] = mapped_column(String(1024), nullable=False)
     subscribers: Mapped[int] = mapped_column(default=0)
     description: Mapped[str] = mapped_column(String, nullable=True)
-    photo_url: Mapped[str] = mapped_column(String, nullable=True)
+    photo_base64: Mapped[str] = mapped_column(String, nullable=True)
     added_at: Mapped[datetime.datetime] = Column(
         DateTime,
         default=datetime.datetime.now,
