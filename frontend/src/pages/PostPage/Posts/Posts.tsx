@@ -5,6 +5,8 @@ import {TPostItem} from '../../../models/PostsModels.ts'
 import './Posts.scss'
 import {postsAPI} from "../../../store/services/PostsService.ts";
 import {Loading} from "../../../modules/Loading/Loading.tsx";
+import {paths} from "../../../routes.ts";
+import {Link} from "react-router-dom";
 
 export const Posts: FC = () => {
   const [category, setCategory] = useState<TPostItem['category'] | 'all'>('all')
@@ -57,6 +59,7 @@ export const Posts: FC = () => {
               ))}
           </Grid>
       }
+      <Link to={paths.ADD_POST} className='addPostButton'><span>+</span></Link>
     </>
   )
 }

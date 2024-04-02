@@ -86,7 +86,7 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+a:hover, a:visited {
     color: #000;
 }
 

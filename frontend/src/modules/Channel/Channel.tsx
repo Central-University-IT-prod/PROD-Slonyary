@@ -19,7 +19,6 @@ type Props = {
 // <img src={{uri: `data:image/gif;base64,${this.state.base64File}`}} />
 
 const Channel: FC<Props> = (props) => {
-  1
   const [showPopup, setShowPopup] = useState<boolean>(false)
 
   return (

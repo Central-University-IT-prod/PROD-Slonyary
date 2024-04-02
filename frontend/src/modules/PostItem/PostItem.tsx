@@ -137,6 +137,22 @@ export const PostItem: FC<{
           dangerouslySetInnerHTML={{__html: htmlText}}
           className={s.postItemTextContant}
         ></div>
+        {category === 'published' && (
+          <div className={s.analytics}>
+            <p>
+              <RemoveRedEyeIcon sx={{color: '#484E57'}}/>
+              <span>{views}</span>
+            </p>
+            <p>
+              <ShareIcon sx={{color: '#484E57'}}/>
+              <span>{shared}</span>
+            </p>
+            <p>
+              <SentimentSatisfiedAltIcon sx={{color: '#484E57'}}/>
+              <span>{reactions}</span>
+            </p>
+          </div>
+        )}
       </div>
       {category === 'pending' && (
         <div className={s.bottomButtons}>
@@ -168,22 +184,6 @@ export const PostItem: FC<{
           >
             Принять
           </button>
-        </div>
-      )}
-      {category === 'published' && (
-        <div className={s.analytics}>
-          <p>
-            <RemoveRedEyeIcon/>
-            <span>{views}</span>
-          </p>
-          <p>
-            <ShareIcon/>
-            <span>{shared}</span>
-          </p>
-          <p>
-            <SentimentSatisfiedAltIcon/>
-            <span>{reactions}</span>
-          </p>
         </div>
       )}
     </article>
