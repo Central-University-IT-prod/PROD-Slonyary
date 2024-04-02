@@ -7,4 +7,31 @@
 }
 .status-filter > * {
   flex: 1 1 auto;
+}
+
+.addPostButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  background-color: #FFB13C;
+  box-shadow: 0 0 30px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addPostButton span {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 900;
+  transition: all 0.3s;
+}
+.addPostButton:visited {
+  color: #fff;
+}
+.addPostButton:hover span {
+  scale: 1.2;
 }/*# sourceMappingURL=Posts.css.map */

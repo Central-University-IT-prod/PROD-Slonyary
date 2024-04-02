@@ -70,8 +70,11 @@
   border-radius: 5px;
   color: #000;
 }
+.AddPostForm-gpt {
+  white-space: pre-line;
+}
 .AddPostForm-gpt-box {
-  padding: 10px 15px;
+  padding: 20px 15px 25px 15px;
   background-color: rgba(85, 120, 227, 0.4);
   border-radius: 5px;
   color: #000;
@@ -89,6 +92,16 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
+}
+.AddPostForm .gptButton {
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(27deg, #cbabff 0%, #4ccce8 100%);
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #fff;
 }
 .AddPostForm .chanelsToPost {
   margin-top: 15px;

@@ -15,6 +15,11 @@
   align-items: center;
   gap: 20px;
 }
+@media (max-width: 600px) {
+  .left {
+    display: none;
+  }
+}
 
 .logo {
   width: 35px;
@@ -48,8 +53,42 @@
   height: 35px;
   border-radius: 50%;
 }
+@media (max-width: 600px) {
+  .userLogo {
+    width: 30px;
+    height: 30px;
+  }
+}
 
 .userName {
   font-size: 20px;
   font-weight: 400;
+}
+@media (max-width: 600px) {
+  .userName {
+    font-size: 18px;
+  }
+}
+
+.burgerMenu {
+  display: none;
+}
+@media (max-width: 600px) {
+  .burgerMenu {
+    display: block;
+  }
+}
+
+.burgerMenuInner {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 50vw;
+}
+
+.burgerMenuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }/*# sourceMappingURL=Navbar.module.css.map */
