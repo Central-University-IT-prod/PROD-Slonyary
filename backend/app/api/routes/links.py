@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from starlette import status
 
-from app.api.depends.link_post_to_channel import dislink_post_dep, link_post_dep
+from app.api.deps.link_post_to_channel import dislink_post_dep, link_post_dep
 from app.schemas import Result
 
 router = APIRouter(prefix="/posts/{post_id}", tags=["links"])

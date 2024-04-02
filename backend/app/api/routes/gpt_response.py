@@ -6,14 +6,14 @@ from httpx import Proxy
 
 from shared.core.config import Settings
 
-router = APIRouter(prefix="/gpt_response")
+router = APIRouter(prefix="/gpt_response", tags=["gpt"])
 
 
 settings = Settings()
 
 async_client = anthropic.AsyncClient(
     api_key=settings.GPT_KEY,
-    proxies=Proxy(url="http://196.17.168.135:8000", auth=("uj0t2K", 'EV6Cwa'))
+    proxies=Proxy(url="http://196.17.168.135:8000", auth=("uj0t2K", "EV6Cwa")),
 )
 
 SYSTEM_PROMPT = """
@@ -37,17 +37,7 @@ async def gpt_response(prompt: str) -> str:
             max_tokens=4000,
             temperature=0.3,
             system=SYSTEM_PROMPT,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
-                }
-            ]
+            messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
         )
 
         text = response.content[0].text
@@ -58,7 +48,7 @@ async def gpt_response(prompt: str) -> str:
             return ""
     except Exception:
         print(traceback.format_exc())
-        return ''
+        return ""
 
 
 @router.get("", status_code=200)

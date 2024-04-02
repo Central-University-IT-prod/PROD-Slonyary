@@ -4,8 +4,8 @@ from typing import Annotated, cast
 
 from fastapi import Depends, UploadFile
 
-from app.api.depends.universal import get_post_with_any_access
 from app.api.deps import SessionDepends
+from app.api.deps.universal import get_post_with_any_access
 from shared.database.models import Image, Post
 
 

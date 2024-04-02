@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from app.api.depends.images import (
+from app.api.deps.images import (
     create_image_dep,
     delete_image_dep,
     get_all_images_dep,
