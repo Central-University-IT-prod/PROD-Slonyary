@@ -34,11 +34,14 @@ import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constants'
+import { Bounce, toast } from 'react-toastify'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('00:00')
 	const [ChannelsTarget, setChannelsTarget] = useState(false)
+	const [isGptLoading, setIsGptLoading] = useState<boolean | null>(null)
+	const [GPTText, setGPTText] = useState<string>('')
 
 	let options = {
 		inlineStyles: {
@@ -83,13 +86,27 @@ const AddPostForm: FC = () => {
 	const [editorState, setEditorState] = useState<EditorState>(() =>
 		EditorState.createEmpty(dec)
 	)
-
+	const [spellcheckingString, setSpellcheckingString] = useState<string>('')
+	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
+		useState<boolean>(false)
 	enum InlineStyle {
 		BOLD = 'BOLD',
 		ITALIC = 'ITALIC',
 		UNDERLINE = 'UNDERLINE',
 		STRIKE = 'STRIKETHROUGH'
 	}
+	const successNotify = (text: string) =>
+		toast.success(text, {
+			position: 'top-center',
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: 'light',
+			transition: Bounce
+		})
 
 	const handleKeyCommand = (command: string, editorState: EditorState) => {
 		const newState = RichUtils.handleKeyCommand(editorState, command)
@@ -158,6 +175,19 @@ const AddPostForm: FC = () => {
 			const form = new FormData()
 			form.append('file', files[index])
 			addImageToPost(id, form)
+		}
+		console.log(id)
+		if (id) {
+			setEditorState(() => EditorState.createEmpty(dec))
+			setDate('')
+			setTime('00:00')
+			setIsGptLoading(null)
+			setFiles([])
+			setGPTText('')
+			setSpellcheckingString('')
+			setIsSpellcheckingLoading(false)
+
+			successNotify('Пост успешно создан')
 		}
 	}
 
@@ -266,10 +296,6 @@ const AddPostForm: FC = () => {
 		setFiles(arrFiles)
 	}
 
-	const [spellcheckingString, setSpellcheckingString] = useState<string>('')
-	const [isSpellcheckingLoading, setIsSpellcheckingLoading] =
-		useState<boolean>(false)
-
 	const { setModal } = useModal('TELEGRAM-PREVIEW', null, {})
 
 	const spellchecking = async () => {
@@ -300,8 +326,6 @@ const AddPostForm: FC = () => {
 		setIsSpellcheckingLoading(false)
 	}
 
-	const [isGptLoading, setIsGptLoading] = useState<boolean | null>(null)
-	const [GPTText, setGPTText] = useState<string>('')
 	const gpt = async () => {
 		try {
 			setSpellcheckingString('')
