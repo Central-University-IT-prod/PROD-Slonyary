@@ -46,6 +46,7 @@ class Middleware(BaseMiddleware):
             query = select(User).where(User.id == event.from_user.id)
             user = await session.execute(query)
             user = user.scalar()
+            print("here 1")
 
             if not user:
                 image = None
@@ -76,7 +77,7 @@ class Middleware(BaseMiddleware):
                     id=event.from_user.id,
                     username=event.from_user.username,
                     name=event.from_user.first_name,
-                    photo_base64=image
+                    photo_url=image
                 ).returning(User)
 
                 user = await session.execute(user)

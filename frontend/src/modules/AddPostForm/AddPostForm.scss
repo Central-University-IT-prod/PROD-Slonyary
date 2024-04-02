@@ -79,12 +79,12 @@
 	}
 
 	&-spellchecking-box {
-		margin-top: 10px;
+		margin-top: 20px;
 
 		h3 {
 			font-size: 16px;
 			font-weight: 600;
-			margin-bottom: 10px;
+			margin-bottom: 4px;
 		}
 	}
 	.chanelsToPost {
@@ -109,9 +109,6 @@
 			margin-top: 10px;
 			text-align: center;
 		}
-	}
-	.DraftEditor-root {
-		min-height: 50px;
 	}
 	.loader {
 		display: block;

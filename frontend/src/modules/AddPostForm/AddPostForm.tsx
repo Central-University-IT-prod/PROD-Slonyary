@@ -33,22 +33,28 @@ import { addImageToPost, addMessages, getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
 import AndroidIcon from '@mui/icons-material/Android'
+import axios from 'axios'
+import { BACKEND_HOST } from '../../constants'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('00:00')
 	const [ChannelsTarget, setChannelsTarget] = useState(false)
 
-	//let options = {
-	//	inlineStyles: {
-	//	  BOLD: {element: 'b'},
-	//	  ITALIC: {
-	//		element: 'i'
-	//	  },
-	//	  // Use a custom inline style. Default element is `span`.
-	//	  RED: {style: {color: '#900'}},
-	//	},
-	//  };
+	let options = {
+		inlineStyles: {
+			BOLD: { element: 'b' },
+			ITALIC: {
+				element: 'i'
+			},
+			STRIKETHROUGH: {
+				element: 's'
+			},
+			UNDERLINE: {
+				element: 'u'
+			}
+		}
+	}
 
 	const maxLength = 9
 	type LinkProps = {
@@ -115,7 +121,7 @@ const AddPostForm: FC = () => {
 
 	const getText = async () => {
 		const contentState = editorState.getCurrentContent()
-		let html = stateToHTML(contentState)
+		let html = stateToHTML(contentState, options).replace(/<br>/g, '\n')
 		const text = contentState.getPlainText()
 
 		let publish_time: string = ''
@@ -275,7 +281,7 @@ const AddPostForm: FC = () => {
 		setIsSpellcheckingLoading(true)
 
 		const contentState = editorState.getCurrentContent()
-		const html = stateToHTML(contentState)
+		const html = stateToHTML(contentState, options)
 		console.log(html)
 		const words = await getSpellcheckingWords(html)
 
@@ -297,6 +303,25 @@ const AddPostForm: FC = () => {
 
 		setSpellcheckingString(text)
 		setIsSpellcheckingLoading(false)
+	}
+
+	const [GPTText, setGPTText] = useState<string>('')
+	const gpt = async () => {
+		try {
+			setSpellcheckingString('')
+			const contentState = editorState.getCurrentContent()
+
+			const text = contentState.getPlainText()
+			const gptData = await axios.get(
+				`http://${BACKEND_HOST}/gpt_response?prompt=${text}`
+			)
+			console.log(gptData)
+			if (gptData) {
+				setGPTText(gptData.data)
+			}
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	const spellcheckingBtnDisabled = useMemo(
@@ -374,7 +399,7 @@ const AddPostForm: FC = () => {
 				<button onClick={handlerAddLink}>
 					<LinkIcon />
 				</button>
-				<button onClick={handlerAddLink}>
+				<button onClick={gpt}>
 					<AndroidIcon />
 				</button>
 			</div>
@@ -418,16 +443,30 @@ const AddPostForm: FC = () => {
 				<Button
 					variant="contained"
 					disabled={spellcheckingBtnDisabled}
-					onClick={() =>
-						setModal({
-							htmlText: stateToHTML(editorState.getCurrentContent()),
-							images: files
-						})
-					}
+					onClick={() => {
+						const cont = editorState.getCurrentContent()
+						const data = {
+							htmlText: stateToHTML(cont),
+							images: files,
+							plainText: cont.getPlainText()
+						}
+						setModal(data)
+					}}
 				>
 					Показать превью
 				</Button>
 			</div>
+			{GPTText.length ? (
+				<div className="AddPostForm-gpt-box">
+					<h3>Текст от нейросети:</h3>
+					<div
+						className="AddPostForm-gpt"
+						dangerouslySetInnerHTML={{ __html: GPTText }}
+					></div>
+				</div>
+			) : (
+				''
+			)}
 			{spellcheckingString.length ? (
 				<div className="AddPostForm-spellchecking-box">
 					{isSpellcheckingLoading ? (
@@ -437,7 +476,7 @@ const AddPostForm: FC = () => {
 							<h3>Отредактированный текст:</h3>
 							<div
 								className="AddPostForm-spellchecking"
-								dangerouslySetInnerHTML={{ __html: spellcheckingString }}
+								dangerouslySetInnerHTML={{ __html: GPTText }}
 							></div>
 						</>
 					)}

@@ -7,8 +7,9 @@ enum paths {
   CHANNEL_INFO = "channelinfo",
 }
 
+const changePostPath = (id = ':id') => `post/${id}/change`
 const channelInfoPath = (id = ':id') => `channels/${id}/info`
 
 const NavigatePath = (path: string): string => `/${path}`
 
-export {paths, NavigatePath, channelInfoPath}
+export {paths, NavigatePath, channelInfoPath, changePostPath}

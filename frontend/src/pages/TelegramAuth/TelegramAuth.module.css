@@ -1,4 +1,7 @@
 .TelegramAuth h4 {
   font-size: 20px;
   font-weight: 600;
+}
+.TelegramAuth .auth-btn {
+  margin-top: 10px;
 }/*# sourceMappingURL=TelegramAuth.css.map */
