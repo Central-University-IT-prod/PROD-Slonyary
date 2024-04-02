@@ -1,6 +1,6 @@
-from vk.entities.photo import Photo
-from vk.methods.base import VkBaseMethod
-from vk.entities.save_wall_photo import SaveWallPhotoInput
+from shared.vk.entities.photo import Photo
+from shared.vk.entities.save_wall_photo import SaveWallPhotoInput
+from shared.vk.methods.base import VkBaseMethod
 
 
 # https://dev.vk.com/ru/method/photos.saveWallPhoto

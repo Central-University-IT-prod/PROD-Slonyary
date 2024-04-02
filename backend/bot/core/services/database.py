@@ -2,7 +2,7 @@ import traceback
 from typing import Optional
 
 import sqlalchemy as sa
-from sqlalchemy import insert
+from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,6 +20,12 @@ async def get_channel_by_id(channel_id: int):
     async with db_session_manager() as session:
         query = sa.select(TgChannel.id).where(TgChannel.id == channel_id)
         return await session.scalar(query)
+
+
+async def get_user(session: AsyncSession, user_id: int) -> User:
+    query = select(User).where(User.id == user_id)
+    user = await session.execute(query)
+    return user.scalar()
 
 
 async def add_channel(

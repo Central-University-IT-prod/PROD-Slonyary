@@ -10,6 +10,7 @@ from app.api.deps import (
 from app.schemas import (
     PreviewTgChannel,
     PreviewVkChannel,
+    Result,
     TgChannelMember,
     TgChannelRead,
     VkChannelMember,
@@ -17,9 +18,23 @@ from app.schemas import (
 )
 from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType
-from shared.database.models import User
+from shared.database.models import TgChannel, User
 
 router = APIRouter(prefix="/channels", tags=["channels"])
+
+
+def get_posts_on_moderation(channel: TgChannel) -> int:
+    r = 0
+    for post in channel.posts:
+        r += post.status == "moderation"
+    return r
+
+
+def get_posts_on_pending(channel: TgChannel) -> int:
+    r = 0
+    for post in channel.posts:
+        r += post.status == "pending"
+    return r
 
 
 @router.get("/{type}", status_code=200)
@@ -39,8 +54,10 @@ async def get_channels(type: str, user: CurrentUserDep) -> list[PreviewTgChannel
             photo_url=channel.photo_url,
             name=channel.title,
             username=channel.username,
-            subscribers=0,
+            subscribers=channel.subscribers,
             type=type,
+            on_moderation=get_posts_on_moderation(channel),
+            on_pending=get_posts_on_pending(channel),
         )
         for channel in channels
     ]
@@ -84,7 +101,7 @@ async def get_channel(
                 user_id=user.id,
                 role=relation.role,
                 name=user.name,
-                photo_url=user.photo_url
+                photo_url=user.photo_url,
             )
         )
     return read(
@@ -92,9 +109,39 @@ async def get_channel(
         photo_url=channel.photo_url,
         name=channel.title,
         username=channel.username,
-        subscribers=0,
+        subscribers=channel.subscribers,
         description=channel.description,
         workers=workers,
         type=ChannelType.tg,
-        owner_id=channel.owner_id
+        owner_id=channel.owner_id,
     )
+
+
+@router.delete("/{type}/{id}", status_code=200)
+async def delete_channel(
+    type: str,
+    id: int,
+    user: CurrentUserDep,
+    crud_tg_channel: CrudTgChannelDepends,
+    crud_vk_channel: CrudVkChannelDepends,
+) -> Result:
+    if type == ChannelType.tg:
+        tg_channel = await crud_tg_channel.get(id)
+
+        if not tg_channel or tg_channel.owner_id != user.id:
+            raise HTTPException(404)
+
+        await crud_tg_channel.delete(tg_channel.id)
+        return Result(status="ok")
+
+    elif type == ChannelType.vk:
+        vk_channel = await crud_vk_channel.get(id)
+
+        if not vk_channel or vk_channel.owner_id != user.id:
+            raise HTTPException(404)
+
+        await crud_vk_channel.delete(vk_channel.id)
+        return Result(status="ok")
+
+    else:
+        raise HTTPException(404)

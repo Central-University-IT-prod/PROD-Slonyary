@@ -2,16 +2,10 @@ from fastapi import APIRouter, HTTPException
 from starlette import status
 
 from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
-from app.schemas import (
-    PostCreate,
-    PostIn,
-    PostsToTgChannelsCreate,
-    PostsToVkChannelsCreate,
-    PostUpdate,
-    PreviewPost,
-    Result,
-)
-from shared.core.enums import ChannelType
+from app.schemas import PostCreate, PostIn, PostUpdate, PreviewPost, Result
+from app.schemas.posts import PostChannel
+from shared.core.enums import ChannelType, PostStatus
+from shared.database.models import PostsToTgChannels, PostsToVkChannels
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -21,19 +15,36 @@ async def get_posts(
     user: CurrentUserDep,
     crud_post: CrudPostDepends,
 ) -> list[PreviewPost]:
-    posts = crud_post.get_user_posts(user)
+    posts = await crud_post.get_user_posts(user)
     result = []
 
     for post in posts:
-        channel_avatars = []
+        channels = []
         for tg_channel in post.tg_channels:
-            channel_avatars.append(tg_channel.photo_url)
+            channels.append(
+                PostChannel(
+                    id=tg_channel.id,
+                    name=tg_channel.title,
+                    subscribers=tg_channel.subscribers,
+                    avatar=tg_channel.photo_url,
+                    type="tg",
+                )
+            )
+        for vk_channel in post.vk_channels:
+            channels.append(
+                PostChannel(
+                    id=vk_channel.id,
+                    name=vk_channel.title,
+                    subscribers=0,
+                    type="vk",
+                )
+            )
 
         result.append(
             PreviewPost(
                 id=post.id,
                 status=post.status,
-                channel_avatars=channel_avatars,
+                channels=channels,
                 publish_time=post.publish_time,
                 owner_name=post.owner.name,
                 html_text=post.html_text,
@@ -66,14 +77,15 @@ async def create_post(
         plain_text=post_in.plain_text,
         publish_time=post_in.publish_time,
         owner_id=user.id,
+        status=PostStatus.moderation,
     )
     post = await crud_post.create(post_create)
 
     for channel in post_in.channels:
         if channel.type == ChannelType.tg:
-            relation_model = PostsToTgChannelsCreate
+            relation_model = PostsToTgChannels
         elif channel.type == ChannelType.vk:
-            relation_model = PostsToVkChannelsCreate
+            relation_model = PostsToVkChannels
         else:
             raise HTTPException(400, detail="wrong channel type")
         relation = relation_model(channel_id=channel.id, post_id=post.id)
@@ -90,7 +102,6 @@ async def get_post(
     crud_post: CrudPostDepends,
     user: CurrentUserDep,
 ) -> PreviewPost:
-    """Получение preview поста."""
     post = await crud_post.get(id)
 
     if not post:
@@ -140,7 +151,6 @@ async def update_post(
     user: CurrentUserDep,
     post_update: PostUpdate,
 ) -> Result:
-    """Updating post."""
     post = await crud_post.get(id)
 
     if not post:

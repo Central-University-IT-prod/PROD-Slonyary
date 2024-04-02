@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from vk.entities.base import VkMethodInputParams
+from shared.vk.entities.base import VkMethodInputParams
 
 
 class SaveWallPhotoInput(VkMethodInputParams):

@@ -3,9 +3,10 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from shared.database.models.base import AlchemyBaseModel
 from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from shared.database.models.base import AlchemyBaseModel
 
 if TYPE_CHECKING:
     from shared.database.models.posts import Post
@@ -20,9 +21,7 @@ class TgChannel(AlchemyBaseModel):
     username: Mapped[str] = mapped_column(String(64), unique=True, nullable=True)
     title: Mapped[str] = mapped_column(String(1024), nullable=False)
     subscribers: Mapped[int] = mapped_column(default=0)
-    description: Mapped[str] = mapped_column(
-        String, nullable=True
-    )
+    description: Mapped[str] = mapped_column(String, nullable=True)
     photo_url: Mapped[str] = mapped_column(String, nullable=True)
     added_at: Mapped[datetime.datetime] = Column(
         DateTime,

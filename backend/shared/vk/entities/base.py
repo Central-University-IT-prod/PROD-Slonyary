@@ -2,7 +2,6 @@ from abc import ABC
 
 from pydantic import BaseModel, ConfigDict
 
-
 API_VERSION = "5.199"
 LANG = "ru"
 

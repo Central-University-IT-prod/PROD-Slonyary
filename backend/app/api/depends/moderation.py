@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from starlette import status
 
 from app.api.depends.universal import get_post_with_privileged_access
-from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
+from app.api.deps import SessionDepends
 from shared.core.enums import PostStatus
 from shared.database.models import Post
 
@@ -19,17 +19,13 @@ async def accept_post_dep(
 
 
 async def downgrade_post_dep(
-    post_id: int,
-    user: CurrentUserDep,
     session: SessionDepends,
-    post_crud: CrudPostDepends,
+    post: Annotated[Post, Depends(get_post_with_privileged_access)],
 ) -> Post:
-    post = await get_post_with_privileged_access(post_id, user.id, post_crud)
-
-    if post.status == PostStatus.pending:
-        post.status = PostStatus.moderation
-    else:
+    if post.status != PostStatus.pending:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+    post.status = PostStatus.moderation
     await session.commit()
 
     return post
