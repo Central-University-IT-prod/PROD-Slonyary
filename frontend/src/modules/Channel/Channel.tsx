@@ -2,6 +2,8 @@ import s from './Channel.module.scss'
 import {FC, useState} from "react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Button} from "@mui/material";
+import {Link} from "react-router-dom";
+import {NavigatePath, paths} from "../../routes.ts";
 
 type Props = {
   title: string
@@ -10,7 +12,7 @@ type Props = {
   posts: {
     pending: number
     moderation: number
-  }
+  },
 }
 
 const Channel: FC<Props> = (props) => {
@@ -43,7 +45,9 @@ const Channel: FC<Props> = (props) => {
         {
           showPopup &&
             <div className={s.popup}>
-                <Button variant='contained'>Открыть</Button>
+                <Link to={NavigatePath(paths.CHANNEL_INFO) + '1'}>
+                    <Button variant='contained'>Открыть</Button>
+                </Link>
                 <Button variant='contained'>Удалить</Button>
             </div>
         }

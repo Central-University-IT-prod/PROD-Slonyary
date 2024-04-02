@@ -1,6 +1,6 @@
 enum paths {
   TELEGRAMAUTH = 'telegramauth',
-  HOME = 'home',
+  HOME = '',
   POSTS = 'posts',
   CHANNELS = "channels",
   ADD_POST = "addpost",
