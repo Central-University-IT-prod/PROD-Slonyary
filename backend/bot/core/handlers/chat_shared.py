@@ -1,4 +1,6 @@
 import asyncio
+import os
+import traceback
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest
@@ -6,6 +8,7 @@ from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.handlers.logger import TgLogger
+from core.services.functions import image_to_base64
 from core.settings.config import TOKEN
 from core.utils.messages import BotText
 from core.utils.keyboards import ready_keyboard
@@ -15,6 +18,19 @@ from core.services.database import get_channel_by_id, add_channel
 
 tg_log = TgLogger()
 bot: Bot = Bot(TOKEN)
+
+
+async def folder_clean(file_path: str):
+    try:
+        for filename in os.listdir(file_path):
+            file_path = os.path.join(file_path, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+            except Exception:
+                print(traceback.format_exc())
+    except Exception:
+        print(traceback.format_exc())
 
 
 async def shared_handler(message: Message, session: AsyncSession):
@@ -63,6 +79,30 @@ async def shared_handler(message: Message, session: AsyncSession):
     except Exception:
         subscribers = 0
 
+    image = None
+
+    destination = "media/profile_photo/"
+    file_name = f"/{message.chat.id}_{message.message_id}.png"
+
+    try:
+        os.mkdir(destination)
+    except FileExistsError:
+        pass
+
+    photos = await message.from_user.get_profile_photos(offset=0, limit=1)
+
+    try:
+        if photos.photos:
+            photo = photos.photos[0][-1]
+
+            await bot.download(file=photo.file_id, destination=destination + file_name, seek=False)
+
+            image = await image_to_base64(destination + file_name)
+    except Exception:
+        print(traceback.format_exc())
+    finally:
+        await folder_clean(destination)
+
     print(f"Канал {chat_info.title} добавлен")
 
     await add_channel(session=session,
@@ -71,7 +111,8 @@ async def shared_handler(message: Message, session: AsyncSession):
                       title=chat_info.title,
                       subscribers=subscribers,
                       description=chat_info.description,
-                      username=username)
+                      username=username,
+                      photo_url=image)
 
     await tg_log.message(text=f"Канал {chat_info.title} добавлен")
 

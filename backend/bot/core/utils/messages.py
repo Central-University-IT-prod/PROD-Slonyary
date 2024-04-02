@@ -24,5 +24,8 @@ class BotText:
     added_to_channel = ("🎉 <b>Вы добавлены в канал {channel_title}!</b>\n\n"
                         "🔥 <b>{owner_name}</b> назначил(а) Вас <b>{role_name}</b>")
 
+    edited_to_channel = ("✏️ <b>Ваша роль в канале {channel_title} была изменена!</b>\n\n"
+                         "💫 <b>{owner_name}</b> назначил(а) Вас <b>{role_name}</b>")
+
     error = ("❌ <b>Произошла ошибка!</b>\n\n"
              "{reason}")
