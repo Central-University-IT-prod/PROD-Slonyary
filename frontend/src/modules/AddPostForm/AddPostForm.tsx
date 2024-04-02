@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import React, { FC, useCallback, useMemo, useState } from 'react'
 import {
 	CompositeDecorator,
@@ -22,8 +24,13 @@ import './AddPostForm.scss'
 import ImageTable from '../ImageTable/ImageTable'
 import { getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
+import { channelsAPI } from '../../store/services/ChannelService'
+import { CheckBox } from '@mui/icons-material'
 
 const AddPostForm: FC = () => {
+	const [date, setDate] = useState('')
+	const [time, setTime] = useState('00:00')
+
 	const maxLength = 9
 	type LinkProps = {
 		children: React.ReactNode
@@ -91,7 +98,31 @@ const AddPostForm: FC = () => {
 		const contentState = editorState.getCurrentContent()
 		let html = stateToHTML(contentState)
 		const text = contentState.getPlainText()
-		console.log(html, text)
+
+		let publish_time: string | null
+
+		if (!date) {
+			publish_time = null
+		} else {
+			const [day, month, year] = date.split('.')
+			const [hours, minut] = time.split(':')
+			publish_time = new Date(
+				+year,
+				+month - 1,
+				+day,
+				+hours,
+				+minut
+			).toISOString()
+		}
+		console.log(publish_time)
+		const formData = new FormData()
+		for (let index = 0; index < files.length; index++) {
+			const element = files[index]
+			formData.append('file', element)
+		}
+
+		formData.append('plain_text', text)
+		formData.append('html_text', html)
 	}
 
 	const addEntity = useCallback(
@@ -237,6 +268,21 @@ const AddPostForm: FC = () => {
 		[editorState]
 	)
 
+	const { data: channels } = channelsAPI.useGetChannelsQuery(null)
+	const [targetChannels] = useState<{ type: string; id: number }[]>([])
+	const setChannel = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		channelId: number
+	) => {
+		console.log(e)
+		const newList = targetChannels
+		newList.push({ type: 'tg', id: channelId })
+	}
+
+	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setDate(e.target.value)
+	const timeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+		setTime(e.target.value)
 	const onDragOver = (e: any) => e.preventDefault()
 	return (
 		<div className="AddPostForm">
@@ -294,23 +340,19 @@ const AddPostForm: FC = () => {
 						fullWidth
 						size="small"
 						type="date"
+						value={date}
+						onChange={dateChange}
 						placeholder="Дата публикации"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
 					/>
 				</Grid>
 				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
 					<TextField
 						fullWidth
 						size="small"
+						value={time}
+						onChange={timeChange}
 						placeholder="Время публикации"
 						type="time"
-						sx={{
-							display: 'flex',
-							alignItems: 'flex-end'
-						}}
 					/>
 				</Grid>
 			</Grid>
@@ -335,6 +377,9 @@ const AddPostForm: FC = () => {
 					Показать превью
 				</Button>
 				<Button variant="contained" onClick={getText}>
+					Продолжить
+				</Button>
+				<Button variant="contained" onClick={getText}>
 					Отправить
 				</Button>
 			</div>
@@ -355,6 +400,17 @@ const AddPostForm: FC = () => {
 			) : (
 				''
 			)}
+			<div className="chanelsToPost">
+				{channels?.map((channel: ChannelItem) => {
+					return (
+						<div className="chanelsToPost-item" key={channel.id}>
+							<CheckBox onChange={(e: any) => setChannel(e, channel.id)} />
+							<img src={channel.url} />
+							<h3>{channel.name}</h3>
+						</div>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

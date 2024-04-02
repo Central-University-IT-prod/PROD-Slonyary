@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(tags=["ping"])
 
 
 @router.get("/ping", status_code=200)

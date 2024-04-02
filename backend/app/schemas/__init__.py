@@ -1,4 +1,5 @@
 from .image import ImageCreate, ImageRead, ImageUpdate
+from .jwt_token import JwtToken
 from .post import Channel, PostCreate, PostIn, PostRead, PostUpdate, PreviewPost
 from .posts_to_tg import PostsToTgChannelsCreate
 from .posts_to_vk import PostsToVkChannelsCreate
@@ -13,9 +14,18 @@ from .tg_channel import (
 from .user import UserCreate, UserRead, UserTelegramData, UserUpdate
 from .users_to_tg_channels import UsersToTgChannelsCreate
 from .users_to_vk_channels import UsersToVkChannelsCreate
-from .vk_channel import VkChannelCreate, VkChannelRead, VkChannelUpdate
+from .vk_channel import (
+    PreviewVkChannel,
+    VkChannelCreate,
+    VkChannelMember,
+    VkChannelRead,
+    VkChannelUpdate,
+)
 
 __all__ = (
+    "JwtToken",
+    "PreviewVkChannel",
+    "VkChannelMember",
     "PostsToVkChannelsCreate",
     "PostsToTgChannelsCreate",
     "UsersToVkChannelsCreate",

@@ -16,3 +16,4 @@ python-dotenv==1.0.1
 SQLAlchemy==2.0.29
 typing_extensions==4.10.0
 yarl==1.9.4
+psycopg2-binary==2.9.9

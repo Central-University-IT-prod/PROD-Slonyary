@@ -6,8 +6,8 @@ import { IUserModel } from '../../models/UserModels.ts';
 export const usersAPI = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({baseUrl: BACKEND_HOST, prepareHeaders: (headers) => {
-    headers.set('authorization', `Bearer ${localStorage.getItem('accessToken')}`)
-  } }),
+    headers.set('token', localStorage.getItem('accessToken') as string)  
+  }}),
   tagTypes: ['User'],
   endpoints: (build) => ({
     getUser: build.query<IUserModel[], any>({

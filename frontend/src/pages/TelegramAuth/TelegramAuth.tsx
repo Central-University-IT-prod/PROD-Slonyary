@@ -4,6 +4,7 @@ import { FC } from 'react'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constants'
 import { useActions } from '../../hooks/useActions'
+import './TelegramAuth.scss'
 
 export const TelegramAuth: FC = () => {
 	const { setUser } = useActions()

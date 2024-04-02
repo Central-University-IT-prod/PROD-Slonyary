@@ -8,7 +8,7 @@ interface IPostRequest {
   channel_avatars: [
     string
   ],
-  publish_time: '2024-04-01T16:43:09.344Z',
+  publish_time: string,
   owner_name: string,
   photos: string[],
   html_text: string,
@@ -19,13 +19,11 @@ interface IPostRequest {
   is_owner: true
 }
 
-
 export const postsAPI = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
-      headers.set('authorization', `Bearer ${localStorage.getItem('accessToken')}`)
-    }
+      headers.set('token', localStorage.getItem('accessToken') as string)    }
   }),
   tagTypes: ['Posts'],
   endpoints: (build) => ({

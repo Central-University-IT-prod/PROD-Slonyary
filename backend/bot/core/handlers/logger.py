@@ -14,3 +14,9 @@ class Logger:
         except Exception:
             pass
 
+    async def error(self, text: str):
+        try:
+            await self.bot.send_message(chat_id=self.chat_id, text=f"[ERROR]: {text}")
+        except Exception:
+            pass
+
