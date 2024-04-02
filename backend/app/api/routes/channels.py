@@ -10,6 +10,7 @@ from app.api.deps import (
 from app.schemas import (
     PreviewTgChannel,
     PreviewVkChannel,
+    Result,
     TgChannelMember,
     TgChannelRead,
     VkChannelMember,
@@ -114,3 +115,33 @@ async def get_channel(
         type=ChannelType.tg,
         owner_id=channel.owner_id,
     )
+
+
+@router.delete("/{type}/{id}", status_code=200)
+async def delete_channel(
+    type: str,
+    id: int,
+    user: CurrentUserDep,
+    crud_tg_channel: CrudTgChannelDepends,
+    crud_vk_channel: CrudVkChannelDepends,
+) -> Result:
+    if type == ChannelType.tg:
+        tg_channel = await crud_tg_channel.get(id)
+
+        if not tg_channel or tg_channel.owner_id != user.id:
+            raise HTTPException(404)
+
+        await crud_tg_channel.delete(tg_channel.id)
+        return Result(status="ok")
+
+    elif type == ChannelType.vk:
+        vk_channel = await crud_vk_channel.get(id)
+
+        if not vk_channel or vk_channel.owner_id != user.id:
+            raise HTTPException(404)
+
+        await crud_vk_channel.delete(vk_channel.id)
+        return Result(status="ok")
+
+    else:
+        raise HTTPException(404)
