@@ -5,11 +5,25 @@ import {Avatar, AvatarGroup, ImageList, ImageListItem} from '@mui/material'
 import {MediaProvider} from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
 import {IPostRequest, postsAPI} from "../../store/services/PostsService.ts";
+import {Loading} from "../Loading/Loading.tsx";
+import {Bounce, toast} from "react-toastify";
 
 export const PostItem: FC<{
   data: IPostRequest
 }> = ({data}) => {
-  const [acceptPost, {isLoading, isError, error}] = postsAPI.useAcceptPostMutation()
+  const [acceptPost, {isLoading: isLoadingAccept}] = postsAPI.useAcceptPostMutation()
+  const [rejectPost, {isLoading: isLoadingReject}] = postsAPI.useRejectPostMutation()
+  toast('🦄 Wow so easy!', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Bounce,
+  });
 
   const {
     id,
@@ -34,7 +48,6 @@ export const PostItem: FC<{
   }
 
   const dateOptions = {
-    year: '2-digit',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
@@ -42,6 +55,7 @@ export const PostItem: FC<{
     hour12: false,
   }
 
+  if (isLoadingAccept || isLoadingReject) return <Loading/>
   return (
     <article className={s.post}>
       <div className={s.postInner}>
@@ -56,6 +70,7 @@ export const PostItem: FC<{
             </AvatarGroup>
             <div className={s.leftText}>
               <h4>{channels.length === 1 ? channels[0].name : 'В нескольких каналах'}</h4>
+              // @ts-ignore
               <p>{new Date(date).toLocaleString('ru-RU', dateOptions).replace(',', '')}</p>
             </div>
           </div>
@@ -104,10 +119,12 @@ export const PostItem: FC<{
       )}
       {category === 'moderation' && isOwner && (
         <div className={s.bottomButtons}>
-          <button className={`${s.leftButton} ${s.red}`}>Отклонить</button>
+          <button onClick={() => {
+            rejectPost(id)
+          }} className={`${s.leftButton} ${s.red}`}>Отклонить
+          </button>
           <button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
           <button onClick={() => {
-            console.log('x')
             acceptPost(id)
           }} className={`${s.rightButton} ${s.green}`}>Принять
           </button>

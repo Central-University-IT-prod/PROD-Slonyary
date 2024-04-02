@@ -9,6 +9,7 @@ import axios from 'axios'
 import {BACKEND_HOST} from './constants.ts'
 import {TelegramPreview} from './modules/TelegramPreview/TelegramPreview.tsx'
 import {useActions} from './hooks/useActions.ts'
+import {ToastContainer} from "react-toastify";
 
 function App() {
   const {mode: themeMode} = useAppSelector((state) => state.theme)
@@ -49,6 +50,18 @@ function App() {
           <Outlet/>
           {type === 'MEDIA-SLIDER-MODAL' && <MediaSlider data={data}/>}
           {type === 'TELEGRAM-PREVIEW' && <TelegramPreview data={data}/>}
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
       </ThemeProvider>
     </div>
