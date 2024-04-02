@@ -96,16 +96,16 @@ services:
     stdin_open: true
     tty: true
 
-  redis:
-    image: redis:7.2.1
-    ports:
-      - "6370:6379"
-    volumes:
-      - /var/prod/smm/redis:/data
-    environment:
-      - REDIS_PASSWORD=prod_smm
-      - REDIS_PORT=6379
-      - REDIS_DATABASES=2
+#  redis:
+#    image: redis:7.2.1
+#    ports:
+#      - "6370:6379"
+#    volumes:
+#      - /var/prod/smm/redis:/data
+#    environment:
+#      - REDIS_PASSWORD=prod_smm
+#      - REDIS_PORT=6379
+#      - REDIS_DATABASES=2
 
   bot:
     container_name: prod-smm-bot
