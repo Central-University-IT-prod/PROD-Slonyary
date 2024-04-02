@@ -60,6 +60,7 @@ services:
       - PROJECT_NAME=prodsmm
       - FIRST_SUPERUSER=prodsmm
       - FIRST_SUPERUSER_PASSWORD=prodsmm
+      - GPT_KEY=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
     depends_on:
       - database
       - migrations
@@ -96,16 +97,16 @@ services:
     stdin_open: true
     tty: true
 
-#  redis:
-#    image: redis:7.2.1
-#    ports:
-#      - "6370:6379"
-#    volumes:
-#      - /var/prod/smm/redis:/data
-#    environment:
-#      - REDIS_PASSWORD=prod_smm
-#      - REDIS_PORT=6379
-#      - REDIS_DATABASES=2
+  redis:
+    image: redis:7.2.1
+    ports:
+      - "6370:6379"
+    volumes:
+      - /var/prod/smm/redis:/data
+    environment:
+      - REDIS_PASSWORD=prod_smm
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=2
 
   bot:
     container_name: prod-smm-bot

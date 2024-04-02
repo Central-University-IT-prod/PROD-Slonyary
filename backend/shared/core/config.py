@@ -37,6 +37,7 @@ class Settings(BaseSettings):
 
     # Bot settings.
     BOT_TOKEN: str
+    GPT_KEY: str
 
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
