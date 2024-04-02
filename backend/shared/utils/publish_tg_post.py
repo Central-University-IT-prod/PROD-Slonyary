@@ -7,7 +7,6 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError
 from aiogram.types import BufferedInputFile, InputMediaPhoto
 from sqlalchemy.ext.asyncio import AsyncSession
-from sulguk import RenderResult, transform_html
 
 from shared.core.enums import PostStatus
 from shared.database.models import Image, Post, PostsToTgChannels, TgChannel
@@ -15,20 +14,15 @@ from shared.database.models import Image, Post, PostsToTgChannels, TgChannel
 
 async def publish_tg_post(post: Post, bot: Bot, session: AsyncSession) -> None:
     media_group = await images_to_file_id_media(post, bot)
-
-    result = transform_html(post.html_text)
+    text = post.html_text.replace("<p>", "").replace("</p>", "")
     if media_group:
-        set_caption_to_media_group(result, media_group)
+        set_caption_to_media_group(text, media_group)
         for channel in cast(list[TgChannel], post.tg_channels):
             msgs = await bot.send_media_group(chat_id=channel.id, media=media_group)
             await link_post_message_id(post.id, channel.id, msgs[0].message_id, session)
     else:
         for channel in cast(list[TgChannel], post.tg_channels):
-            msg = await bot.send_message(
-                chat_id=channel.id,
-                text=result.text,
-                entities=result.entities,  # type: ignore
-            )
+            msg = await bot.send_message(chat_id=channel.id, text=text)
             await link_post_message_id(post.id, channel.id, msg.message_id, session)
 
 
@@ -48,11 +42,10 @@ def image_to_media_photo(image: Image) -> InputMediaPhoto:
 
 
 def set_caption_to_media_group(
-    result: RenderResult,
+    caption: str,
     media_group: list[InputMediaPhoto],
 ) -> None:
-    media_group[0].caption = result.text
-    media_group[0].caption_entities = result.entities
+    media_group[0].caption = caption
 
 
 async def link_post_message_id(
