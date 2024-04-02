@@ -17,7 +17,7 @@ const useModal = (modalType:string, wrapperSelector:string | null, data:any) => 
         if (e.target === wrapper) {
             e.preventDefault();
             e.stopPropagation();
-            toggleModal({type: ''})
+            toggleModal({type: '', data: {}})
         }
     }
 

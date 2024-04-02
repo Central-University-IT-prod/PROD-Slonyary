@@ -13,4 +13,4 @@ async def get_posts_to_publish(db: AsyncSession) -> list[Post]:
         Post.status == PostStatus.pending,
         Post.publish_time <= datetime.utcnow(),
     )
-    return cast(list[Post], await db.scalars(query))
+    return cast(list[Post], list(await db.scalars(query)))
