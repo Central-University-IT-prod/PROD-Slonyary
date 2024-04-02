@@ -15,3 +15,4 @@ class PostsToTgChannels(AlchemyBaseModel):
         ForeignKey("tg_channels.id", ondelete="cascade"),
         primary_key=True,
     )
+    message_id: Mapped[int] = mapped_column(nullable=False)
