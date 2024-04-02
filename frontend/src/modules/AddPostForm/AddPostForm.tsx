@@ -32,10 +32,12 @@ import ImageTable from '../ImageTable/ImageTable'
 import { getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
+import { useNavigate } from 'react-router'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('00:00')
+	const navigate = useNavigate()
 
 	const maxLength = 9
 	type LinkProps = {
@@ -286,7 +288,18 @@ const AddPostForm: FC = () => {
 	)
 
 	const { data: channels, isLoading } = channelsAPI.useGetChannelsQuery(null)
-	console.log(isLoading)
+
+	const continueDisabled = useMemo(
+		() => spellcheckingBtnDisabled,
+		[spellcheckingBtnDisabled]
+	)
+	const continueBtnClick = () => navigate('#chanelsToPost')
+
+	const mainBtn = useMemo(
+		() => document.querySelectorAll('.channelsCheckbox').length <= 0,
+		[document.querySelectorAll('.channelsCheckbox')]
+	)
+
 	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setDate(e.target.value)
 	const timeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -384,11 +397,12 @@ const AddPostForm: FC = () => {
 				>
 					Показать превью
 				</Button>
-				<Button variant="contained" onClick={getText}>
+				<Button
+					variant="contained"
+					disabled={continueDisabled}
+					onClick={continueBtnClick}
+				>
 					Продолжить
-				</Button>
-				<Button variant="contained" onClick={getText}>
-					Отправить
 				</Button>
 			</div>
 			{spellcheckingString.length ? (
@@ -408,7 +422,15 @@ const AddPostForm: FC = () => {
 			) : (
 				''
 			)}
-			<div className="chanelsToPost">
+			<Button
+				variant="contained"
+				hidden={mainBtn}
+				className="main-btn"
+				onClick={getText}
+			>
+				Отправить
+			</Button>
+			<div className="chanelsToPost" id="chanelsToPost">
 				<h2>Ваши каналы</h2>
 				{!isLoading ? (
 					channels?.lenght > 0 ? (
@@ -422,7 +444,7 @@ const AddPostForm: FC = () => {
 							)
 						})
 					) : (
-						<h3>У вас нет каналов добавьте их</h3>
+						<h3 className="noHaveChannels">У вас нет каналов добавьте их</h3>
 					)
 				) : (
 					<CircularProgress className="loader" />

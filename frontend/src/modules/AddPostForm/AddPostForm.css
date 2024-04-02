@@ -93,8 +93,20 @@
   font-weight: 600;
   font-size: 18px;
 }
+.AddPostForm .chanelsToPost .noHaveChannels {
+  margin-top: 10px;
+  text-align: center;
+}
+.AddPostForm .DraftEditor-root {
+  min-height: 50px;
+}
 .AddPostForm .loader {
   display: block;
   margin: auto;
   margin-top: 10px;
+}
+.AddPostForm .main-btn {
+  margin: auto;
+  margin-top: 15px;
+  display: block;
 }/*# sourceMappingURL=AddPostForm.css.map */
