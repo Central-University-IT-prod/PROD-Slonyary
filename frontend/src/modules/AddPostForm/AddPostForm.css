@@ -75,6 +75,12 @@
   font-weight: 600;
   margin-bottom: 10px;
 }
+.AddPostForm .chanelsToPost {
+  margin-top: 15px;
+}
+.AddPostForm .chanelsToPost h2 {
+  text-align: center;
+}
 .AddPostForm .chanelsToPost-item {
   border-radius: var(--alpha3);
   padding: 10px 15px;
@@ -86,4 +92,9 @@
 .AddPostForm .chanelsToPost-item h3 {
   font-weight: 600;
   font-size: 18px;
+}
+.AddPostForm .loader {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
 }/*# sourceMappingURL=AddPostForm.css.map */
