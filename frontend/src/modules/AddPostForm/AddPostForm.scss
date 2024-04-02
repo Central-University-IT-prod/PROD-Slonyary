@@ -87,6 +87,10 @@
 		}
 	}
 	.chanelsToPost {
+		margin-top: 15px;
+		h2 {
+			text-align: center;
+		}
 		&-item {
 			border-radius: var(--alpha3);
 			padding: 10px 15px;
@@ -100,5 +104,10 @@
 				font-size: 18px;
 			}
 		}
+	}
+	.loader {
+		display: block;
+		margin: auto;
+		margin-top: 10px;
 	}
 }

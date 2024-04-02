@@ -285,8 +285,8 @@ const AddPostForm: FC = () => {
 		[editorState]
 	)
 
-	const { data: channels } = channelsAPI.useGetChannelsQuery(null)
-
+	const { data: channels, isLoading } = channelsAPI.useGetChannelsQuery(null)
+	console.log(isLoading)
 	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setDate(e.target.value)
 	const timeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -410,18 +410,22 @@ const AddPostForm: FC = () => {
 			)}
 			<div className="chanelsToPost">
 				<h2>Ваши каналы</h2>
-				{channels?.lenght ? (
-					channels?.map((channel: ChannelItem) => {
-						return (
-							<div className="chanelsToPost-item" key={channel.id}>
-								<Checkbox data-id={channel.id} className="channelsCheckbox" />
-								<Avatar src={channel.url} />
-								<h3>{channel.name}</h3>
-							</div>
-						)
-					})
+				{!isLoading ? (
+					channels?.lenght > 0 ? (
+						channels?.map((channel: ChannelItem) => {
+							return (
+								<div className="chanelsToPost-item" key={channel.id}>
+									<Checkbox data-id={channel.id} className="channelsCheckbox" />
+									<Avatar src={channel.url} />
+									<h3>{channel.name}</h3>
+								</div>
+							)
+						})
+					) : (
+						<h3>У вас нет каналов добавьте их</h3>
+					)
 				) : (
-					<h3>У вас нет каналов добавьте их</h3>
+					<CircularProgress className="loader" />
 				)}
 			</div>
 		</div>
