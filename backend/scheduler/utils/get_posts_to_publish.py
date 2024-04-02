@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import cast
 
 import sqlalchemy as sa
@@ -9,9 +9,8 @@ from shared.database.models import Post
 
 
 async def get_posts_to_publish(db: AsyncSession) -> list[Post]:
-    moscow_time_now = datetime.utcnow() + timedelta(hours=2)
     query = sa.select(Post).where(
         Post.status == PostStatus.pending,
-        Post.publish_time <= moscow_time_now,
+        Post.publish_time <= datetime.utcnow(),
     )
     return cast(list[Post], list(await db.scalars(query)))
