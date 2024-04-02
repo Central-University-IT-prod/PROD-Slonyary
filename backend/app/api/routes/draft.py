@@ -1,5 +1,7 @@
+from typing import Annotated
+
 from aiogram.types import BufferedInputFile, InputMediaPhoto
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, File, Form, UploadFile
 
 from app.api.deps import CurrentUserDep, TgBotDepends
 from app.schemas import Result
@@ -7,13 +9,13 @@ from app.schemas import Result
 router = APIRouter(prefix="/posts/draft", tags=["preview"])
 
 
-@router.get("", status_code=200)
+@router.post("", status_code=200)
 async def post_preview_draft(
     bot: TgBotDepends,
     user: CurrentUserDep,
+    files: Annotated[list[UploadFile], File(default_factory=list)],
     html_text: str = Form(...),
     plain_text: str = Form(...),
-    files: list[UploadFile] = Form(...),
 ) -> Result:
     """
     Я живу в идеальном мире, где юзер не блочит бота, поэтому никаких проверок нет.
