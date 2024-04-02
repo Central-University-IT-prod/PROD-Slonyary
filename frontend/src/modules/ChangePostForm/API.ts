@@ -1,9 +1,9 @@
 import axios from "axios";
 import { BACKEND_HOST } from "../../constants";
 
-export const changeMessage = async (id:string, data:any) => {
+export const changeMessage = async (id:number, data:any) => {
     try {
-        const response = await axios.post(`http://${BACKEND_HOST}/posts/${id}`, data, {
+        const response = await axios.patch(`http://${BACKEND_HOST}/posts/${id}`, data, {
             headers: {
                 'token': localStorage.getItem('accessToken')
             }

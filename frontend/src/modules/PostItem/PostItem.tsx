@@ -6,26 +6,30 @@ import {MediaProvider} from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
 import {IPostRequest, postsAPI} from '../../store/services/PostsService.ts'
 import {Loading} from '../Loading/Loading.tsx'
-import {Bounce, toast} from "react-toastify";
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import ShareIcon from '@mui/icons-material/Share';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import {Bounce, toast} from 'react-toastify'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+import ShareIcon from '@mui/icons-material/Share'
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt'
+import axios from 'axios'
+import {BACKEND_HOST} from '../../constants.ts'
 
-const warningNotify = (text: string) => toast.error(text, {
-  position: 'top-center',
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'light',
-  transition: Bounce
-})
+const warningNotify = (text: string) =>
+  toast.error(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    transition: Bounce
+  })
 
 export const PostItem: FC<{
   data: IPostRequest
-}> = ({data}) => {
+  refetch: any
+}> = ({data, refetch}) => {
   const [acceptPost, {isLoading: isLoadingAccept, error: acceptError}] =
     postsAPI.useAcceptPostMutation()
   const [rejectPost, {isLoading: isLoadingReject, error: rejectError}] =
@@ -63,6 +67,22 @@ export const PostItem: FC<{
     hour12: false
   }
 
+  const publish = async () => {
+    try {
+      await axios.post(
+        `http://${BACKEND_HOST}/posts/${id}/publish`,
+        {},
+        {
+          headers: {
+            token: localStorage.getItem('accessToken')
+          }
+        }
+      )
+      refetch()
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     if (acceptError) {
       // @ts-ignore
@@ -72,7 +92,7 @@ export const PostItem: FC<{
       // @ts-ignore
       warningNotify('Error ' + rejectError?.status ?? '')
     }
-  }, [acceptError, rejectError]);
+  }, [acceptError, rejectError])
 
   if (isLoadingAccept || isLoadingReject) return <Loading/>
   return (
@@ -83,7 +103,7 @@ export const PostItem: FC<{
             <AvatarGroup max={2}>
               {channels?.map((channel: any, index: number) => (
                 <Avatar src={channel.avatar} key={index}>
-                  CH
+                  {channel.name.slice(2)}
                 </Avatar>
               ))}
             </AvatarGroup>
@@ -137,13 +157,30 @@ export const PostItem: FC<{
           dangerouslySetInnerHTML={{__html: htmlText}}
           className={s.postItemTextContant}
         ></div>
+        {category === 'published' && (
+          <div className={s.analytics}>
+            <p>
+              <RemoveRedEyeIcon sx={{color: '#484E57'}}/>
+              <span>{views}</span>
+            </p>
+            <p>
+              <ShareIcon sx={{color: '#484E57'}}/>
+              <span>{shared}</span>
+            </p>
+            <p>
+              <SentimentSatisfiedAltIcon sx={{color: '#484E57'}}/>
+              <span>{reactions}</span>
+            </p>
+          </div>
+        )}
       </div>
       {category === 'pending' && (
         <div className={s.bottomButtons}>
           <button onClick={() => {
-          }} className={`${s.leftButton} ${s.grey}`}>Изменить
+          }} className={`${s.leftButton} ${s.grey}`}>
+            Изменить
           </button>
-          <button className={`${s.rightButton} ${s.orange}`}>
+          <button onClick={publish} className={`${s.rightButton} ${s.orange}`}>
             Опубликовать
           </button>
         </div>
@@ -158,8 +195,7 @@ export const PostItem: FC<{
           >
             Отклонить
           </button>
-          <button className={`${s.middleButton} ${s.grey}`}>Изменить
-          </button>
+          <button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
           <button
             onClick={() => {
               acceptPost(id)
@@ -168,22 +204,6 @@ export const PostItem: FC<{
           >
             Принять
           </button>
-        </div>
-      )}
-      {category === 'published' && (
-        <div className={s.analytics}>
-          <p>
-            <RemoveRedEyeIcon/>
-            <span>{views}</span>
-          </p>
-          <p>
-            <ShareIcon/>
-            <span>{shared}</span>
-          </p>
-          <p>
-            <SentimentSatisfiedAltIcon/>
-            <span>{reactions}</span>
-          </p>
         </div>
       )}
     </article>

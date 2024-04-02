@@ -93,6 +93,7 @@ const ChangePostForm: FC = () => {
 	}
 
 	const getText = async () => {
+		if (!Number(id)) return
 		let options = {
 			inlineStyles: {
 				BOLD: { element: 'b' },
@@ -108,7 +109,10 @@ const ChangePostForm: FC = () => {
 			}
 		}
 		const contentState = editorState.getCurrentContent()
-		let html = stateToHTML(contentState, options).replace(/<br>/g, '\n')
+		let html = stateToHTML(contentState, options)
+			.replace(/<br>/g, '\n')
+			.replace(/<p>/g, '')
+			.replace(/<\/p>/g, '')
 		const text = contentState.getPlainText()
 
 		let publish_time: string = ''
@@ -117,13 +121,9 @@ const ChangePostForm: FC = () => {
 			const [year, month, day] = date.split('-')
 			const [hours, minut] = time.split(':')
 
-			publish_time = new Date(
-				+year,
-				+month - 1,
-				+day,
-				+hours,
-				+minut
-			).toISOString()
+			publish_time = new Date(+year, +month - 1, +day, +hours, +minut)
+				.toISOString()
+				.replace(/Z/, '')
 		}
 
 		const data = {
@@ -131,7 +131,7 @@ const ChangePostForm: FC = () => {
 			html_text: html,
 			publish_time: publish_time ? publish_time : null
 		}
-		await changeMessage(id as string, data)
+		await changeMessage(Number(id), data)
 	}
 
 	const addEntity = useCallback(

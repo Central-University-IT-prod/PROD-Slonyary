@@ -3,15 +3,21 @@ import {Button, Grid} from '@mui/material'
 import {PostItem} from '../../../modules/PostItem/PostItem.tsx'
 import {TPostItem} from '../../../models/PostsModels.ts'
 import './Posts.scss'
-import {postsAPI} from "../../../store/services/PostsService.ts";
-import {Loading} from "../../../modules/Loading/Loading.tsx";
+import {postsAPI} from '../../../store/services/PostsService.ts'
+import {Loading} from '../../../modules/Loading/Loading.tsx'
+import {paths} from '../../../routes.ts'
+import {Link} from 'react-router-dom'
 
 export const Posts: FC = () => {
   const [category, setCategory] = useState<TPostItem['category'] | 'all'>('all')
-  const {data: posts, isLoading} = postsAPI.useFetchAllPostsQuery(null)
+  const {
+    data: posts,
+    isLoading,
+    refetch
+  } = postsAPI.useFetchAllPostsQuery(null)
 
   if (isLoading) return <Loading/>
-  if (!posts) return <div className='errorDiv'><p>У вас просрочен токен</p></div>
+  if (!posts) return <div className='errorDiv'><p>У вас просроченный токен</p></div>
   return (
     <>
       <div className="status-filter">
@@ -44,19 +50,27 @@ export const Posts: FC = () => {
           Опубликованные
         </Button>
       </div>
-      {posts &&
-          <Grid maxWidth="sm" sx={{mx: 'auto', pb: '20px'}} rowSpacing={4} mt={1}>
-            {posts
-              .filter((post) =>
-                category === 'all' ? true : post.status === category
-              )
-              .map((post, index: number) => (
-                <Grid mt={2} item xs={12} key={index}>
-                  <PostItem data={post}/>
-                </Grid>
-              ))}
-          </Grid>
-      }
+      {posts && (
+        <Grid
+          maxWidth="sm"
+          sx={{mx: 'auto', pb: '20px'}}
+          rowSpacing={4}
+          mt={1}
+        >
+          {posts
+            .filter((post) =>
+              category === 'all' ? true : post.status === category
+            )
+            .map((post, index: number) => (
+              <Grid mt={2} item xs={12} key={index}>
+                <PostItem data={post} refetch={refetch}/>
+              </Grid>
+            ))}
+        </Grid>
+      )}
+      <Link to={paths.ADD_POST} className="addPostButton">
+        <span>+</span>
+      </Link>
     </>
   )
 }

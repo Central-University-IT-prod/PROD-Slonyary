@@ -77,7 +77,18 @@
 		border-radius: 5px;
 		color: #000;
 	}
-
+	&-gpt-box {
+		padding: 10px 15px;
+		background-color: rgba($color: #5578e3, $alpha: 0.4);
+		border-radius: 5px;
+		color: #000;
+		margin-top: 20px;
+		h3 {
+			text-align: center;
+			font-weight: 600;
+			margin-bottom: 10px;
+		}
+	}
 	&-spellchecking-box {
 		margin-top: 20px;
 

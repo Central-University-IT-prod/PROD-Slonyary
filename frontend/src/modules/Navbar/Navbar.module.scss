@@ -52,11 +52,18 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  @media(max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .userName {
   font-size: 20px;
   font-weight: 400;
+  @media(max-width: 600px) {
+    font-size: 18px;
+  }
 }
 
 .burgerMenu {
@@ -67,10 +74,11 @@
 }
 
 .burgerMenuInner {
-  padding: 30px 15px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 50vw;
 }
 
 .burgerMenuHeader {
