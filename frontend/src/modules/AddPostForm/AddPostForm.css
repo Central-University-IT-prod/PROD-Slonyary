@@ -78,11 +78,12 @@
 .AddPostForm .chanelsToPost-item {
   border-radius: var(--alpha3);
   padding: 10px 15px;
-  border-radius: 10px;
   display: flex;
-  gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid var(--alpha3);
+  gap: 15px;
 }
 .AddPostForm .chanelsToPost-item h3 {
-  display: block;
-  margin-left: auto;
+  font-weight: 600;
+  font-size: 18px;
 }/*# sourceMappingURL=AddPostForm.css.map */
