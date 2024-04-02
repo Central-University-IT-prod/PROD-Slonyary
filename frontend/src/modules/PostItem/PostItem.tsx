@@ -6,11 +6,14 @@ import { MediaProvider } from '../MediaProvider/MediaProvider'
 import MediaView from '../../Ui/MediaView/MediaView'
 import { IPostRequest, postsAPI } from '../../store/services/PostsService.ts'
 import { Loading } from '../Loading/Loading.tsx'
+import axios from 'axios'
+import { BACKEND_HOST } from '../../constants.ts'
 //import { Bounce, toast } from 'react-toastify'
 
 export const PostItem: FC<{
 	data: IPostRequest
-}> = ({ data }) => {
+	refetch: any
+}> = ({ data, refetch }) => {
 	const [acceptPost, { isLoading: isLoadingAccept }] =
 		postsAPI.useAcceptPostMutation()
 	const [rejectPost, { isLoading: isLoadingReject }] =
@@ -55,6 +58,23 @@ export const PostItem: FC<{
 		hour: '2-digit',
 		minute: '2-digit',
 		hour12: false
+	}
+
+	const publish = async () => {
+		try {
+			await axios.post(
+				`http://${BACKEND_HOST}/posts/${id}/publish`,
+				{},
+				{
+					headers: {
+						token: localStorage.getItem('accessToken')
+					}
+				}
+			)
+			refetch()
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	if (isLoadingAccept || isLoadingReject) return <Loading />
@@ -124,7 +144,7 @@ export const PostItem: FC<{
 			{category === 'pending' && (
 				<div className={s.bottomButtons}>
 					<button className={`${s.leftButton} ${s.grey}`}>Изменить</button>
-					<button className={`${s.rightButton} ${s.orange}`}>
+					<button onClick={publish} className={`${s.rightButton} ${s.orange}`}>
 						Опубликовать
 					</button>
 				</div>

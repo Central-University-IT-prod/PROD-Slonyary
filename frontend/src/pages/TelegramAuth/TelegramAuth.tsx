@@ -28,6 +28,7 @@ export const TelegramAuth: FC = () => {
 		<div className="TelegramAuth">
 			<h4>Зарегистрируйтесь через телеграмм:</h4>
 			<TelegramLoginButton
+				className="auth-btn"
 				dataOnauth={handleTelegramResponse}
 				botName="StackSMM_Bot"
 			/>

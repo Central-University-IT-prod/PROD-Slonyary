@@ -15,9 +15,13 @@ const MediaSlider = ({ data }: any) => {
 
 		switch (element.mediaType) {
 			case 'image':
-				return <img src={element.src} loading="lazy" />
+				return (
+					<img src={`data:image/gif;base64, ${element.src}`} loading="lazy" />
+				)
 			default:
-				return <img src={element.src} loading="lazy" />
+				return (
+					<img src={`data:image/gif;base64, ${element.src}`} loading="lazy" />
+				)
 		}
 	}, [index])
 
