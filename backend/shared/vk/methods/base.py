@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar, Generic, TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, TypeVar
 
 from httpx import AsyncClient
 from pydantic import BaseModel
 
-from vk.entities.base import VkMethodInputParams, VkMethodOutputParams
-from vk.exceptions import VkApiError
-
+from shared.vk.entities.base import VkMethodInputParams, VkMethodOutputParams
+from shared.vk.exceptions import VkApiError
 
 VK_API = "https://api.vk.com/method/{method}"
 
@@ -71,5 +70,5 @@ class VkBaseMethod(Generic[InputParams, OutputParams], ABC):
     ) -> VkApiResponse[OutputParams]:
         response_type = VkApiResponse[self.__output__]
         if "error" in data:
-            raise VkApiError(f'{data}')
+            raise VkApiError(f"{data}")
         return response_type.model_validate(data)

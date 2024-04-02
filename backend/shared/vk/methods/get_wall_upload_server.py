@@ -1,8 +1,8 @@
-from vk.methods.base import VkBaseMethod
-from vk.entities.get_wall_upload_server import (
-    GetWallUploadServerOutput,
+from shared.vk.entities.get_wall_upload_server import (
     GetWallUploadServerInput,
+    GetWallUploadServerOutput,
 )
+from shared.vk.methods.base import VkBaseMethod
 
 
 # https://dev.vk.com/ru/method/photos.getWallUploadServer

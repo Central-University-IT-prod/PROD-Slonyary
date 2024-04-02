@@ -1,7 +1,6 @@
 from typing import Literal
 
-from vk.entities.base import VkObject
-
+from shared.vk.entities.base import VkObject
 
 MediaTypes = Literal[
     "photo",

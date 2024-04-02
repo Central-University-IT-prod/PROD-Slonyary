@@ -1,4 +1,4 @@
-from vk.entities.base import VkMethodInputParams, VkMethodOutputParams
+from shared.vk.entities.base import VkMethodInputParams, VkMethodOutputParams
 
 
 class GetWallUploadServerInput(VkMethodInputParams):
