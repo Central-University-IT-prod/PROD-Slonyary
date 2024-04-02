@@ -8,7 +8,9 @@ export interface IPostRequest {
   channels: any[]
   publish_time: string,
   owner_name: string,
-  photos: string[],
+  photos: {
+    base64: string
+  }[],
   html_text: string,
   plain_text: string,
   views: number,
@@ -28,33 +30,37 @@ export const postsAPI = createApi({
   endpoints: (build) => ({
     fetchAllPosts: build.query<IPostRequest[], any>({
         query: () => ({url: `/posts`}),
+        providesTags: ['Posts']
       }
     ),
     getPostInfo: build.query<TPostItem, any>({
       query: ({id}) => ({url: `/post/${id}`}),
+      providesTags: ['Posts']
     }),
     createPost: build.mutation({
         query: (data) => ({
           url: '/posts',
-          metod: 'POST',
+          method: 'POST',
           body: data
-        })
+        }),
+        invalidatesTags: ['Posts']
       }
     ),
     acceptPost: build.mutation({
         query: (data) => ({
           url: `/posts/${data}/accept`,
-          metod: 'POST',
-          body: data
-        })
+          method: 'POST',
+        }),
+        invalidatesTags: ['Posts']
       }
     ),
-    downgradePost: build.mutation({
+    rejectPost: build.mutation({
         query: (data) => ({
-          url: `/posts/${data}/downgrade`,
-          metod: 'POST',
+          url: `/posts/${data}/reject`,
+          method: 'DELETE',
           body: data
-        })
+        }),
+        invalidatesTags: ['Posts']
       }
     )
   })

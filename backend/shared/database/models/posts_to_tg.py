@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.database.models.base import AlchemyBaseModel
@@ -15,4 +15,4 @@ class PostsToTgChannels(AlchemyBaseModel):
         ForeignKey("tg_channels.id", ondelete="cascade"),
         primary_key=True,
     )
-    message_id: Mapped[int] = mapped_column(nullable=False)
+    message_id: Mapped[int] = mapped_column(Integer, nullable=True)
