@@ -1,12 +1,14 @@
 enum paths {
   TELEGRAMAUTH = 'telegramauth',
-  HOME = 'home',
+  HOME = '',
   POSTS = 'posts',
   CHANNELS = "channels",
   ADD_POST = "addpost",
   CHANNEL_INFO = "channelinfo",
 }
 
+const channelInfoPath = (id = ':id') => `channels/${id}/info`
+
 const NavigatePath = (path: string): string => `/${path}`
 
-export {paths, NavigatePath}
+export {paths, NavigatePath, channelInfoPath}

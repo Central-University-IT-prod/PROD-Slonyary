@@ -15,7 +15,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+        expire = datetime.now(timezone.utc) + timedelta(days=1)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         to_encode, "LcH6ouNfUvAhn4AdmjkwkvfzbUHn3ViVHqjt8P1umPc", algorithm="HS256"
@@ -62,7 +62,7 @@ async def auth_user(
             detail="Данные неверны",
         )
 
-    is_user = await user_crud.is_exists(telegram_id=user_telegram_data.id)
+    is_user = await user_crud.is_exists(id=user_telegram_data.id)
 
     # Добавляем пользователя в базу, елси он авторизовывается впервые.
     if not is_user:
@@ -71,10 +71,11 @@ async def auth_user(
                 id=user_telegram_data.id,
                 username=user_telegram_data.username,
                 name=user_telegram_data.first_name,
+                photo_url=user_telegram_data.photo_url
             ),
         )
 
-    access_token_expires = timedelta(minutes=180)
+    access_token_expires = timedelta(days=1)
     access_token = create_access_token(
         data={"sub": str(user_telegram_data.id)}, expires_delta=access_token_expires
     )

@@ -1,9 +1,10 @@
 import sqlalchemy as sa
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.crud.base import CrudBase
 from app.schemas import PostCreate, PostRead, PostUpdate
 from shared.core.enums import UserChannelRole
 from shared.database.models import Post, User, UsersToTgChannels
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):

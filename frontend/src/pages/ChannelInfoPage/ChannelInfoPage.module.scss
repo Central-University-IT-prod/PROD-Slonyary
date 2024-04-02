@@ -32,3 +32,52 @@
   font-size: 16px;
   font-weight: 400;
 }
+
+.members {
+  background-color: rgba(#f2f3f4, 0.5);
+  border-radius: 20px;
+  padding: 20px 40px;
+}
+
+.membersTitle {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.membersList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.number {
+  font-size: 32px;
+  color: #d9d9d9;
+  font-weight: 500;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.userStatus {
+  &.owner {
+    color: #FFB13C;
+  }
+
+  &.moderator {
+    color: #A146CF;
+  }
+
+  &.redactor {
+    color: #5894EF;
+  }
+}

@@ -13,7 +13,14 @@ import {
 	RichUtils
 } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { Button, CircularProgress, Grid, TextField } from '@mui/material'
+import {
+	Avatar,
+	Button,
+	Checkbox,
+	CircularProgress,
+	Grid,
+	TextField
+} from '@mui/material'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
@@ -25,7 +32,6 @@ import ImageTable from '../ImageTable/ImageTable'
 import { getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
-import { CheckBox } from '@mui/icons-material'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
@@ -121,6 +127,17 @@ const AddPostForm: FC = () => {
 			formData.append('file', element)
 		}
 
+		const channels = []
+
+		document.querySelectorAll('.channelsCheckbox').forEach((i) => {
+			const input = i.querySelector('input')
+			const id = i.getAttribute('date-id')
+			if (input?.checked) {
+				channels.push({ id: Number(id), type: 'tg' })
+			}
+		})
+
+		formData.append('', text)
 		formData.append('plain_text', text)
 		formData.append('html_text', html)
 	}
@@ -269,15 +286,6 @@ const AddPostForm: FC = () => {
 	)
 
 	const { data: channels } = channelsAPI.useGetChannelsQuery(null)
-	const [targetChannels] = useState<{ type: string; id: number }[]>([])
-	const setChannel = (
-		e: React.ChangeEvent<HTMLInputElement>,
-		channelId: number
-	) => {
-		console.log(e)
-		const newList = targetChannels
-		newList.push({ type: 'tg', id: channelId })
-	}
 
 	const dateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setDate(e.target.value)
@@ -401,15 +409,20 @@ const AddPostForm: FC = () => {
 				''
 			)}
 			<div className="chanelsToPost">
-				{channels?.map((channel: ChannelItem) => {
-					return (
-						<div className="chanelsToPost-item" key={channel.id}>
-							<CheckBox onChange={(e: any) => setChannel(e, channel.id)} />
-							<img src={channel.url} />
-							<h3>{channel.name}</h3>
-						</div>
-					)
-				})}
+				<h2>Ваши каналы</h2>
+				{channels?.lenght ? (
+					channels?.map((channel: ChannelItem) => {
+						return (
+							<div className="chanelsToPost-item" key={channel.id}>
+								<Checkbox data-id={channel.id} className="channelsCheckbox" />
+								<Avatar src={channel.url} />
+								<h3>{channel.name}</h3>
+							</div>
+						)
+					})
+				) : (
+					<h3>У вас нет каналов добавьте их</h3>
+				)}
 			</div>
 		</div>
 	)

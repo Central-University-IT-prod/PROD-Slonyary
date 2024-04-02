@@ -1,7 +1,5 @@
 from typing import cast
 
-from fastapi import APIRouter, HTTPException
-
 from app.api.deps import (
     CrudTgChannelDepends,
     CrudUsersToTgChannelsDepends,
@@ -17,6 +15,7 @@ from app.schemas import (
     VkChannelMember,
     VkChannelRead,
 )
+from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType
 from shared.database.models import User
 
@@ -38,7 +37,7 @@ async def get_channels(type: str, user: CurrentUserDep) -> list[PreviewTgChannel
         preview(
             id=channel.id,
             photo_url=channel.photo_url,
-            name=channel.name,
+            name=channel.title,
             username=channel.username,
             subscribers=0,
             type=type,
@@ -85,15 +84,17 @@ async def get_channel(
                 user_id=user.id,
                 role=relation.role,
                 name=user.name,
+                photo_url=user.photo_url
             )
         )
     return read(
         id=channel.id,
         photo_url=channel.photo_url,
-        name=channel.name,
+        name=channel.title,
         username=channel.username,
         subscribers=0,
         description=channel.description,
         workers=workers,
         type=ChannelType.tg,
+        owner_id=channel.owner_id
     )

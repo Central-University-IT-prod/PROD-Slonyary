@@ -1,14 +1,9 @@
 import sqlalchemy as sa
-from app.crud.base import CrudBase
-from app.schemas import (
-    TgChannelRead,
-    TgChannelUpdate,
-    UsersToVkChannelsCreate,
-    VkChannelRead,
-    VkChannelUpdate,
-)
-from shared.database.models import User, UsersToVkChannels, VkChannel
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.crud.base import CrudBase
+from app.schemas import TgChannelRead, TgChannelUpdate, UsersToVkChannelsCreate
+from shared.database.models import User, UsersToVkChannels, VkChannel
 
 
 class CrudUsersToVkChannels(
