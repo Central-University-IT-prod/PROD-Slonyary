@@ -12,6 +12,9 @@
 
 .postInner {
   padding: 24px;
+  @media(max-width: 600px) {
+    padding: 16px;
+  }
 }
 
 .postHeader {
@@ -40,12 +43,20 @@
   h4 {
     font-size: 16px;
     font-weight: 500;
+    max-width: 150px;
+    word-wrap: break-word;
+    @media(max-width: 600px) {
+      font-size: 14px;
+    }
   }
 
   p {
     color: #e49701;
     font-size: 16px;
     font-weight: 400;
+    @media(max-width: 600px) {
+      font-size: 14px;
+    }
   }
 }
 
@@ -61,16 +72,26 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  @media(max-width: 600px) {
+    gap: 5px;
+  }
 
   div {
     width: 16px;
     height: 16px;
     border-radius: 50%;
+    @media(max-width: 600px) {
+      width: 14px;
+      height: 14px;
+    }
   }
 
   span {
     font-size: 16px;
     font-weight: 500;
+    @media(max-width: 600px) {
+      font-size: 14px;
+    }
   }
 
   &.published {
@@ -107,6 +128,9 @@
 .adminName {
   font-size: 16px;
   color: #a146cf;
+  @media(max-width: 600px) {
+    font-size: 14px;
+  }
 }
 
 .postImage {
@@ -116,6 +140,9 @@
 .postText {
   margin-top: 16px;
   font-size: 16px;
+  @media(max-width: 600px) {
+    font-size: 14px;
+  }
 }
 
 .bottomButtons {
