@@ -1,25 +1,20 @@
-from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
-from app.schemas import (
-    PostCreate,
-    PostIn,
-    PostsToTgChannelsCreate,
-    PostsToVkChannelsCreate,
-    PostUpdate,
-    PreviewPost,
-    Result,
-)
 from fastapi import APIRouter, HTTPException
-from shared.core.enums import ChannelType
 from starlette import status
+
+from app.api.deps import CrudPostDepends, CurrentUserDep, SessionDepends
+from app.schemas import PostCreate, PostIn, PostUpdate, PreviewPost, Result
+from shared.core.enums import ChannelType, PostStatus
+from shared.database.models import PostsToTgChannels, PostsToVkChannels
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def get_posts(
-    user: CurrentUserDep, crud_post: CrudPostDepends
+    user: CurrentUserDep,
+    crud_post: CrudPostDepends,
 ) -> list[PreviewPost]:
-    posts = crud_post.get_user_posts(user)
+    posts = await crud_post.get_user_posts(user)
     result = []
 
     for post in posts:
@@ -64,14 +59,15 @@ async def create_post(
         plain_text=post_in.plain_text,
         publish_time=post_in.publish_time,
         owner_id=user.id,
+        status=PostStatus.moderation,
     )
     post = await crud_post.create(post_create)
 
     for channel in post_in.channels:
         if channel.type == ChannelType.tg:
-            relation_model = PostsToTgChannelsCreate
+            relation_model = PostsToTgChannels
         elif channel.type == ChannelType.vk:
-            relation_model = PostsToVkChannelsCreate
+            relation_model = PostsToVkChannels
         else:
             raise HTTPException(400, detail="wrong channel type")
         relation = relation_model(channel_id=channel.id, post_id=post.id)
@@ -88,7 +84,6 @@ async def get_post(
     crud_post: CrudPostDepends,
     user: CurrentUserDep,
 ) -> PreviewPost:
-    """Получение preview поста."""
     post = await crud_post.get(id)
 
     if not post:
@@ -138,7 +133,6 @@ async def update_post(
     user: CurrentUserDep,
     post_update: PostUpdate,
 ) -> Result:
-    """Updating post."""
     post = await crud_post.get(id)
 
     if not post:

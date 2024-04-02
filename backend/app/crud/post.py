@@ -70,4 +70,5 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
         posts = []
         for tg_channel in user.tg_channels:
             posts.extend(tg_channel.posts)
+        posts.sort(key=lambda p: p.id, reverse=True)
         return posts

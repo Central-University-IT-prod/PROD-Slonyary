@@ -38,11 +38,13 @@ class VkBot:
     async def upload_photo(
         self,
         photo: BytesIO,
+        filename: str,
         upload_server: GetWallUploadServerOutput,
     ) -> UploadPhotoOutput:
         upload_photo_method = UploadPhoto(self.client, self.key)
         params = UploadPhotoInput(
             upload_url=upload_server.upload_url,
+            filename=filename,
             photo=photo,
         )
         result = await upload_photo_method(params)
