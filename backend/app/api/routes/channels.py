@@ -1,5 +1,7 @@
 from typing import cast
 
+from fastapi import APIRouter, HTTPException
+
 from app.api.deps import (
     CrudTgChannelDepends,
     CrudUsersToTgChannelsDepends,
@@ -15,7 +17,6 @@ from app.schemas import (
     VkChannelMember,
     VkChannelRead,
 )
-from fastapi import APIRouter, HTTPException
 from shared.core.enums import ChannelType
 from shared.database.models import User
 
@@ -84,7 +85,7 @@ async def get_channel(
                 user_id=user.id,
                 role=relation.role,
                 name=user.name,
-                photo_url=user.photo_url
+                photo_url=user.photo_url,
             )
         )
     return read(
@@ -96,5 +97,5 @@ async def get_channel(
         description=channel.description,
         workers=workers,
         type=ChannelType.tg,
-        owner_id=channel.owner_id
+        owner_id=channel.owner_id,
     )

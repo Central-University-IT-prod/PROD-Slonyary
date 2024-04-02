@@ -1,5 +1,5 @@
-from vk.entities.base import VkObject
-from vk.entities.size import Size
+from shared.vk.entities.base import VkObject
+from shared.vk.entities.size import Size
 
 
 class Photo(VkObject):

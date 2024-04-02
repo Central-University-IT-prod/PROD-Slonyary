@@ -2,7 +2,7 @@ import secrets
 import warnings
 from typing import Any, Literal
 
-from pydantic import HttpUrl, PostgresDsn, computed_field, model_validator
+from pydantic import PostgresDsn, computed_field, model_validator
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self

@@ -1,5 +1,5 @@
-from vk.methods.base import VkBaseMethod
-from vk.entities.create_post import CreatePostInput, CreatePostOutput
+from shared.vk.entities.create_post import CreatePostInput, CreatePostOutput
+from shared.vk.methods.base import VkBaseMethod
 
 
 # https://dev.vk.com/ru/method/wall.post

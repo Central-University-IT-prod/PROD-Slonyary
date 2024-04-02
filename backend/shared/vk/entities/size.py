@@ -1,4 +1,4 @@
-from vk.entities.base import VkObject
+from shared.vk.entities.base import VkObject
 
 
 class Size(VkObject):

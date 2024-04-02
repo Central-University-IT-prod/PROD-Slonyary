@@ -5,7 +5,7 @@ from aiogram import Bot
 from aiogram.enums import ParseMode
 from sqlalchemy.orm import close_all_sessions
 
-from scheduler.tasks.publish import tg_post_publisher
+from scheduler.tasks.publish import post_publisher
 from shared.core.config import settings
 from shared.database.session import db_session_manager
 
@@ -18,7 +18,7 @@ async def main() -> None:
     )
     async with bot.context(), db_session_manager() as session:
         try:
-            await tg_post_publisher(bot, session, interval=60)
+            await post_publisher(bot, session, interval=60)
         finally:
             close_all_sessions()
 
