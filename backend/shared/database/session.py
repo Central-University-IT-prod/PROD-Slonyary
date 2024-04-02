@@ -35,11 +35,11 @@ def async_session_factory(
         async with session_factory() as db:
             try:
                 yield db
-                await db.commit()
             except Exception as e:
                 await db.rollback()
                 raise e
             finally:
+                await db.commit()
                 await db.close()
 
     return (
