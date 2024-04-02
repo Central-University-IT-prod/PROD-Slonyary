@@ -41,7 +41,7 @@ async def add_channel(
     title: str,
     subscribers: int = 0,
     description: Optional[str] = None,
-    photo_url: Optional[str] = None,
+    photo_base64: Optional[str] = None,
     username: Optional[str] = None,
 ) -> bool:
     query = insert(TgChannel).values(
@@ -49,7 +49,7 @@ async def add_channel(
         owner_id=owner_id,
         username=username,
         title=title,
-        photo_url=photo_url,
+        photo_base64=photo_base64,
         subscribers=subscribers,
         description=description
     )
