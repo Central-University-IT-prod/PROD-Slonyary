@@ -9,7 +9,7 @@ from aiogram.utils.markdown import hbold
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.services.database import get_user, user_in_channel
-from core.utils.keyboards import ready_keyboard
+from core.utils.keyboards import ready_keyboard, open_keyboard
 from core.utils.messages import BotText
 from sqlalchemy import select, insert, update
 from sqlalchemy.exc import IntegrityError
@@ -106,18 +106,17 @@ async def start_handler(message: Message, command: CommandObject, user: User, se
                 channel_title=channel.title,
                 owner_name=owner_user.name,
                 role_name=role_name[role]
-            ), parse_mode="HTML")
+            ), parse_mode="HTML", reply_markup=open_keyboard)
         else:
             await message.answer(text=BotText.added_to_channel.format(
                 channel_title=channel.title,
                 owner_name=owner_user.name,
                 role_name=role_name[role]
-            ), parse_mode="HTML")
+            ), parse_mode="HTML", reply_markup=open_keyboard)
 
         await tg_log.message(text=f"Создана связь")
         print(f"Создана связь")
         return
-
 
     msg = await message.answer('⚡')
     await asyncio.sleep(1)

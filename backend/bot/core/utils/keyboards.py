@@ -29,3 +29,9 @@ return_keyboard = InlineKeyboardMarkup(
         [InlineKeyboardButton(text="Вернуться на сайт", url="http://prod.zzentqgpt.ru/channels")]
     ]
 )
+
+open_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="Перейти сайт", url="http://prod.zzentqgpt.ru/channels")]
+    ]
+)
