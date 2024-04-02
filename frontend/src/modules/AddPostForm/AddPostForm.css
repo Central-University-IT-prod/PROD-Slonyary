@@ -9,6 +9,9 @@
   padding: 10px 5px;
 }
 
+.AddPostForm {
+  padding-bottom: 50px;
+}
 .AddPostForm h2 {
   font-size: 18px;
   font-weight: 600;
@@ -55,7 +58,7 @@
   background-color: rgba(85, 120, 227, 0.5);
 }
 .AddPostForm-btnsbox {
-  justify-content: flex-end;
+  justify-content: center;
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
@@ -107,6 +110,6 @@
 }
 .AddPostForm .main-btn {
   margin: auto;
-  margin-top: 15px;
+  margin-top: 20px;
   display: block;
 }/*# sourceMappingURL=AddPostForm.css.map */
