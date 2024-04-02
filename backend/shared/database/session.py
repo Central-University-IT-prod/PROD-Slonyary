@@ -32,15 +32,14 @@ def async_session_factory(
     )
 
     async def get_async_session() -> AsyncIterator[AsyncSession]:
-        db = session_factory()
-        try:
-            yield db
-        except Exception as e:
-            await db.rollback()
-            raise e
-        finally:
-            await db.commit()
-            await db.close()
+        async with session_factory() as db:
+            try:
+                yield db
+                # Здесь может быть выполнен commit, если всё прошло успешно
+            except Exception as e:
+                # Rollback выполняется автоматически, если случилось исключение
+                raise e
+            # Закрытие сессии также происходит автоматически
 
     return (
         get_async_session,
