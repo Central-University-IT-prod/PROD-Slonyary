@@ -84,15 +84,17 @@ async def get_channel(
                 user_id=user.id,
                 role=relation.role,
                 name=user.name,
+                photo_url=user.photo_url
             )
         )
     return read(
         id=channel.id,
         photo_url=channel.photo_url,
-        name=channel.name,
+        name=channel.title,
         username=channel.username,
         subscribers=0,
         description=channel.description,
         workers=workers,
         type=ChannelType.tg,
+        owner_id=channel.owner_id
     )
