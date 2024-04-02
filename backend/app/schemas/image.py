@@ -14,3 +14,7 @@ class ImageRead(BaseSchema):
     id: int
     post_id: int
     base64: str
+
+
+class ImageUpdate(BaseSchema):
+    pass

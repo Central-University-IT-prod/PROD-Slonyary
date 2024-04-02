@@ -1,4 +1,4 @@
-from .image import ImageCreate, ImageIn, ImageRead
+from .image import ImageCreate, ImageIn, ImageRead, ImageUpdate
 from .jwt_token import JwtToken
 from .post import Channel, PostCreate, PostIn, PostRead, PostUpdate, PreviewPost
 from .posts_to_tg import PostsToTgChannelsCreate
