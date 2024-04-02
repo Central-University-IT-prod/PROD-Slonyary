@@ -5,9 +5,7 @@ import {TPostItem} from '../../models/PostsModels.ts';
 export interface IPostRequest {
   id: number,
   status: string,
-  channel_avatars: [
-    string
-  ],
+  channels: any[]
   publish_time: string,
   owner_name: string,
   photos: string[],
@@ -16,7 +14,7 @@ export interface IPostRequest {
   views: number,
   reactions: number,
   shared: number,
-  is_owner: true
+  is_owner: true,
 }
 
 export const postsAPI = createApi({
@@ -38,6 +36,22 @@ export const postsAPI = createApi({
     createPost: build.mutation({
         query: (data) => ({
           url: '/posts',
+          metod: 'POST',
+          body: data
+        })
+      }
+    ),
+    acceptPost: build.mutation({
+        query: (data) => ({
+          url: `/posts/${data}/accept`,
+          metod: 'POST',
+          body: data
+        })
+      }
+    ),
+    downgradePost: build.mutation({
+        query: (data) => ({
+          url: `/posts/${data}/downgrade`,
           metod: 'POST',
           body: data
         })
