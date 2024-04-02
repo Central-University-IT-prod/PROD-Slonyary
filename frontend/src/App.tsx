@@ -14,14 +14,19 @@ function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
 	const { type, data } = useAppSelector((state) => state.modal)
 	const user = useAppSelector((state) => state.user)
-	const { setUser } = useActions()
+	const { isAuth } = useAppSelector((state) => state.auth)
+
+	const { setUser, setAuth } = useActions()
 	const location = useLocation()
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if (user?.id || location.pathname === paths.TELEGRAMAUTH) return
+		if (isAuth === true || isAuth === null) return
+
+		if (user?.id || location.pathname === '/' + paths.TELEGRAMAUTH) return
+
 		navigate(NavigatePath(paths.TELEGRAMAUTH))
-	}, [location])
+	}, [location.pathname, isAuth])
 
 	const theme = useMemo(
 		() =>
@@ -45,6 +50,9 @@ function App() {
 		const data = localStorage.getItem('userData')
 		if (data) {
 			setUser(JSON.parse(data))
+			setAuth(true)
+		} else {
+			setAuth(false)
 		}
 	}, [])
 

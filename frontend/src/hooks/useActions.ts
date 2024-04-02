@@ -4,11 +4,13 @@ import { useMemo } from "react"
 import { bindActionCreators } from "@reduxjs/toolkit"
 import { actions as themeActions } from "../store/slices/themeSlice"
 import { actions as modalActions } from "../store/slices/modalSlice"
+import { actions as authActions } from "../store/slices/authSlice"
 
 const rootActions = {
     ...userActions,
     ...themeActions,
-    ...modalActions
+    ...modalActions,
+    ...authActions
 }
 
 export const useActions = () => {

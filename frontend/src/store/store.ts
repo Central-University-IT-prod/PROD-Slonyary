@@ -4,11 +4,13 @@ import {reducer as themeReducer} from "./slices/themeSlice";
 import {reducer as modalReducer} from "./slices/modalSlice";
 import {postsAPI} from "./services/PostsService.ts";
 import {channelsAPI} from "./services/ChannelService.ts";
+import { reducer as authReducer } from "./slices/authSlice.ts";
 
 const reducer = combineReducers({
   user: userReducer,
   theme: themeReducer,
   modal: modalReducer,
+  auth: authReducer,
   [postsAPI.reducerPath]: postsAPI.reducer,
   [channelsAPI.reducerPath]: channelsAPI.reducer,
 })
