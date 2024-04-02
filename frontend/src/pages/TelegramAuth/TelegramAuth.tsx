@@ -15,7 +15,7 @@ export const TelegramAuth: FC = () => {
 			const res = await axios.post(`http://${BACKEND_HOST}/auth`, {
 				...response
 			})
-			console.log(res)
+
 			if (res) {
 				localStorage.setItem('accessToken', res.data.token)
 				localStorage.setItem('userData', JSON.stringify(response))
