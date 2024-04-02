@@ -15,6 +15,7 @@ class UserCreate(BaseSchema):
     id: int
     username: str | None = None
     name: str
+    photo_url: str | None
 
 
 class UserUpdate(BaseSchema):
