@@ -32,7 +32,6 @@ import ImageTable from '../ImageTable/ImageTable'
 import { addImageToPost, addMessages, getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
-import AndroidIcon from '@mui/icons-material/Android'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constants'
 
@@ -405,9 +404,6 @@ const AddPostForm: FC = () => {
 				<button onClick={handlerAddLink}>
 					<LinkIcon />
 				</button>
-				<button onClick={gpt}>
-					<AndroidIcon />
-				</button>
 			</div>
 			<div className="AddPost_input">
 				<Editor
@@ -446,6 +442,9 @@ const AddPostForm: FC = () => {
 				>
 					Проверить орфографию
 				</Button>
+				<button className="gptButton" onClick={gpt}>
+					Сгенерировать текст
+				</button>
 				<Button
 					variant="contained"
 					disabled={spellcheckingBtnDisabled}
