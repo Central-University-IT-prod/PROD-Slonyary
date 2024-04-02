@@ -1,5 +1,7 @@
+import ChangePostForm from '../../modules/ChangePostForm/ChangePostForm'
+
 function ChangePostPage() {
-	return <ChangePostPage />
+	return <ChangePostForm />
 }
 
 export default ChangePostPage

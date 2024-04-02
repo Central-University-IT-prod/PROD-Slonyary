@@ -1,0 +1,92 @@
+.infoContainer {
+  display: flex;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #d9d9d9;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  gap: 24px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.channelTitle {
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.channelLink {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #E49701;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 15px;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.channelLink:hover {
+  scale: 1.2;
+}
+
+.channelDescription {
+  margin-top: 24px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.members {
+  background-color: rgba(242, 243, 244, 0.5);
+  border-radius: 20px;
+  padding: 20px 40px;
+}
+
+.membersTitle {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.membersList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.number {
+  font-size: 32px;
+  color: #d9d9d9;
+  font-weight: 500;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.userStatus {
+  text-transform: capitalize;
+}
+.userStatus.owner {
+  color: #FFB13C;
+}
+.userStatus.moderator {
+  color: #A146CF;
+}
+.userStatus.redactor {
+  color: #5894EF;
+}/*# sourceMappingURL=ChannelInfoPage.module.css.map */

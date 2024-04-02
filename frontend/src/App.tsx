@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import './App.css'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material'
 import useAppSelector from './hooks/useAppSelector'
 import { Navbar } from './modules/Navbar/Navbar.tsx'
@@ -10,11 +10,20 @@ import { BACKEND_HOST } from './constants.ts'
 import { TelegramPreview } from './modules/TelegramPreview/TelegramPreview.tsx'
 import { useActions } from './hooks/useActions.ts'
 import { ToastContainer } from 'react-toastify'
+import { NavigatePath, paths } from './routes.ts'
 
 function App() {
 	const { mode: themeMode } = useAppSelector((state) => state.theme)
 	const { type, data } = useAppSelector((state) => state.modal)
+	const user = useAppSelector((state) => state.user)
 	const { setUser } = useActions()
+	const location = useLocation()
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (user?.id || location.pathname === paths.TELEGRAMAUTH) return
+		navigate(NavigatePath(paths.TELEGRAMAUTH))
+	}, [location])
 
 	const theme = useMemo(
 		() =>

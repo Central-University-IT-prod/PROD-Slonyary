@@ -1,6 +1,6 @@
 // @ts-ignore
 
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { ChangeEvent, FC, useCallback, useMemo, useState } from 'react'
 import {
 	CompositeDecorator,
 	ContentBlock,
@@ -13,16 +13,23 @@ import {
 	RichUtils
 } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Grid, TextField } from '@mui/material'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import FormatStrikethroughIcon from '@mui/icons-material/FormatStrikethrough'
 import LinkIcon from '@mui/icons-material/Link'
-import './AddPostForm.scss'
+import './ChangePostForm.scss'
 import { getSpellcheckingWords } from '../AddPostForm/API'
+import { changeMessage } from './API'
+import { useParams } from 'react-router'
 
-const AddPostForm: FC = () => {
+const ChangePostForm: FC = () => {
+	const [date, setDate] = useState('')
+	const [time, setTime] = useState('00:00')
+
+	const { id } = useParams()
+
 	type LinkProps = {
 		children: React.ReactNode
 		contentState: ContentState
@@ -86,14 +93,45 @@ const AddPostForm: FC = () => {
 	}
 
 	const getText = async () => {
-		//const contentState = editorState.getCurrentContent()
-		//let html = stateToHTML(contentState)
-		//const text = contentState.getPlainText()
-		//const data = {
-		//	plain_text: text,
-		//	html_text: html
-		//}
-		//const t = await addMessages(data, formData)
+		let options = {
+			inlineStyles: {
+				BOLD: { element: 'b' },
+				ITALIC: {
+					element: 'i'
+				},
+				STRIKETHROUGH: {
+					element: 's'
+				},
+				UNDERLINE: {
+					element: 'u'
+				}
+			}
+		}
+		const contentState = editorState.getCurrentContent()
+		let html = stateToHTML(contentState, options).replace(/<br>/g, '\n')
+		const text = contentState.getPlainText()
+
+		let publish_time: string = ''
+
+		if (date) {
+			const [year, month, day] = date.split('-')
+			const [hours, minut] = time.split(':')
+
+			publish_time = new Date(
+				+year,
+				+month - 1,
+				+day,
+				+hours,
+				+minut
+			).toISOString()
+		}
+
+		const data = {
+			plain_text: text,
+			html_text: html,
+			publish_time: publish_time ? publish_time : null
+		}
+		await changeMessage(id as string, data)
 	}
 
 	const addEntity = useCallback(
@@ -185,11 +223,15 @@ const AddPostForm: FC = () => {
 		[editorState]
 	)
 
+	const dateChange = (e: ChangeEvent<HTMLInputElement>) =>
+		setDate(e.target.value)
+	const timeChange = (e: ChangeEvent<HTMLInputElement>) =>
+		setTime(e.target.value)
 	return (
-		<div className="AddPostForm">
-			<h2>Текст поста</h2>
+		<div className="ChangePostForm">
+			<h2>Изменение текста поста</h2>
 			<p>Выделите текст и нажмите на кнопку стиля или ссылки.</p>
-			<div className="AddPostForm-buttonGroup">
+			<div className="ChangePostForm-buttonGroup">
 				<button onClick={onBoldClick}>
 					<FormatBoldIcon />
 				</button>
@@ -213,13 +255,35 @@ const AddPostForm: FC = () => {
 					onChange={setEditorState}
 				/>
 			</div>
-			<div className="AddPostForm-btnsbox">
-				<Button variant="contained" onClick={spellchecking} disabled={mainBtn}>
+			<Grid container spacing="10px" sx={{ mt: '10px' }}>
+				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+					<TextField
+						fullWidth
+						size="small"
+						type="date"
+						value={date}
+						onChange={dateChange}
+						placeholder="Дата публикации"
+					/>
+				</Grid>
+				<Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+					<TextField
+						fullWidth
+						size="small"
+						value={time}
+						onChange={timeChange}
+						placeholder="Время публикации"
+						type="time"
+					/>
+				</Grid>
+			</Grid>
+			<div className="ChangePostForm-btnsbox">
+				<Button variant="outlined" onClick={spellchecking} disabled={!mainBtn}>
 					Проверить орфографию
 				</Button>
 				<Button
 					variant="contained"
-					disabled={mainBtn}
+					disabled={!mainBtn}
 					className="main-btn"
 					onClick={getText}
 				>
@@ -227,14 +291,14 @@ const AddPostForm: FC = () => {
 				</Button>
 			</div>
 			{spellcheckingString.length ? (
-				<div className="AddPostForm-spellchecking-box">
+				<div className="ChangePostForm-spellchecking-box">
 					{isSpellcheckingLoading ? (
 						<CircularProgress sx={{ margin: 'auto', display: 'block' }} />
 					) : (
 						<>
 							<h3>Отредактированный текст:</h3>
 							<div
-								className="AddPostForm-spellchecking"
+								className="ChangePostForm-spellchecking"
 								dangerouslySetInnerHTML={{ __html: spellcheckingString }}
 							></div>
 						</>
@@ -247,4 +311,4 @@ const AddPostForm: FC = () => {
 	)
 }
 
-export default AddPostForm
+export default ChangePostForm
