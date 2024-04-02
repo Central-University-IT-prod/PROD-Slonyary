@@ -40,7 +40,7 @@ async def get_channels(type: str, user: CurrentUserDep) -> list[PreviewTgChannel
             photo_url=channel.photo_url,
             name=channel.title,
             username=channel.username,
-            subscribers=0,
+            subscribers=channel.subscribers,
             type=type,
         )
         for channel in channels
@@ -93,7 +93,7 @@ async def get_channel(
         photo_url=channel.photo_url,
         name=channel.title,
         username=channel.username,
-        subscribers=0,
+        subscribers=channel.subscribers,
         description=channel.description,
         workers=workers,
         type=ChannelType.tg,
