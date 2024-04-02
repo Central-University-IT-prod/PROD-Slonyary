@@ -93,7 +93,7 @@ class CrudPost(CrudBase[Post, PostCreate, PostRead, PostUpdate]):
                     )
                 )
             )
-            .order_by(Post.id.desc())
+            .order_by(Post.publish_time.desc(), Post.id.desc())
         )
         posts = list(await self.db.scalars(query))
         return posts
