@@ -6,16 +6,16 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import CommandObject
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
-from sqlalchemy import insert, select, update
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.asyncio import AsyncSession
-from shared.database.models import TgChannel, User, UsersToTgChannels
-
 from core.handlers.logger import TgLogger
 from core.services.database import get_user, user_in_channel
 from core.settings.config import TOKEN
 from core.utils.keyboards import open_keyboard, ready_keyboard
 from core.utils.messages import BotText
+from sqlalchemy import insert, select, update
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from shared.database.models import TgChannel, User, UsersToTgChannels
 
 tg_log = TgLogger()
 bot: Bot = Bot(TOKEN)
@@ -49,7 +49,7 @@ async def start_handler(
             return
 
         try:
-            query = select(TgChannel).where(TgChannel.id == int(channel_id))
+            int(channel_id)
         except ValueError:
             await message.answer(
                 text=BotText.error.format(reason="Некорректная пригласительная ссылка"),
@@ -57,6 +57,7 @@ async def start_handler(
             )
             return
 
+        query = select(TgChannel).where(TgChannel.id == int(channel_id))
         channel = await session.execute(query)
         channel = channel.scalar()
 
@@ -75,7 +76,7 @@ async def start_handler(
         print(user_channel_link)
 
         if user_channel_link:
-            if user_channel_link.role == role:
+            if user_channel_link.role in [role, "owner"]:
                 await message.answer(
                     text=BotText.error.format(
                         reason="Вы уже состоите в этом канале с этой ролью"
