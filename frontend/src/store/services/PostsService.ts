@@ -5,9 +5,10 @@ import {TPostItem} from '../../models/PostsModels.ts';
 export interface IPostRequest {
   id: number,
   status: string,
-  channel_avatars: [
-    string
-  ],
+  channels: [{
+    avatar: string,
+    name: string
+  }],
   publish_time: string,
   owner_name: string,
   photos: string[],

@@ -86,29 +86,13 @@ const AddPostForm: FC = () => {
 	}
 
 	const getText = async () => {
-		const contentState = editorState.getCurrentContent()
-		let html = stateToHTML(contentState)
-		const text = contentState.getPlainText()
-
-		let publish_time: string = ''
-
-		const channels: any[] = []
-
-		document.querySelectorAll('.channelsCheckbox').forEach((i) => {
-			const input = i.querySelector('input')
-			const id = i.getAttribute('date-id')
-			if (input?.checked) {
-				channels.push({ id: Number(id), type: 'tg' })
-			}
-		})
-
-		const data = {
-			publish_time: publish_time,
-			channels: channels,
-			plain_text: text,
-			html_text: html
-		}
-
+		//const contentState = editorState.getCurrentContent()
+		//let html = stateToHTML(contentState)
+		//const text = contentState.getPlainText()
+		//const data = {
+		//	plain_text: text,
+		//	html_text: html
+		//}
 		//const t = await addMessages(data, formData)
 	}
 

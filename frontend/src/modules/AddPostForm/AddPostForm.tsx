@@ -29,10 +29,11 @@ import LinkIcon from '@mui/icons-material/Link'
 import ImageIcon from '@mui/icons-material/Image'
 import './AddPostForm.scss'
 import ImageTable from '../ImageTable/ImageTable'
-import { addMessages, getSpellcheckingWords } from './API'
+import { addImageToPost, addMessages, getSpellcheckingWords } from './API'
 import useModal from '../../hooks/useModal'
 import { channelsAPI } from '../../store/services/ChannelService'
 import { useNavigate } from 'react-router'
+import AndroidIcon from '@mui/icons-material/Android'
 
 const AddPostForm: FC = () => {
 	const [date, setDate] = useState('')
@@ -110,7 +111,6 @@ const AddPostForm: FC = () => {
 		const text = contentState.getPlainText()
 
 		let publish_time: string = ''
-		const images = []
 
 		if (date) {
 			const [year, month, day] = date.split('-')
@@ -124,31 +124,32 @@ const AddPostForm: FC = () => {
 				+minut
 			).toISOString()
 		}
-		const formData = new FormData()
-		for (let index = 0; index < files.length; index++) {
-			images.push(files[index])
-			formData.append('images', files[index])
-		}
 
 		const channels: any[] = []
 
 		document.querySelectorAll('.channelsCheckbox').forEach((i) => {
 			const input = i.querySelector('input')
-			const id = i.getAttribute('date-id')
+			const id = i.getAttribute('data-id')
+
 			if (input?.checked) {
 				channels.push({ id: Number(id), type: 'tg' })
 			}
 		})
 
 		const data = {
-			publish_time: publish_time,
+			publish_time: publish_time ? publish_time : null,
 			channels: channels,
 			plain_text: text,
 			html_text: html
 		}
 
-		const t = await addMessages(data, formData)
-		console.log(t)
+		const { id } = await addMessages(data)
+
+		for (let index = 0; index < files.length; index++) {
+			const form = new FormData()
+			form.append('file', files[index])
+			addImageToPost(id, form)
+		}
 	}
 
 	const addEntity = useCallback(
@@ -367,6 +368,9 @@ const AddPostForm: FC = () => {
 				</button>
 				<button onClick={handlerAddLink}>
 					<LinkIcon />
+				</button>
+				<button onClick={handlerAddLink}>
+					<AndroidIcon />
 				</button>
 			</div>
 			<div className="AddPost_input">
