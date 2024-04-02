@@ -35,11 +35,12 @@ def async_session_factory(
         async with session_factory() as db:
             try:
                 yield db
-                # Здесь может быть выполнен commit, если всё прошло успешно
+                await db.commit()
             except Exception as e:
-                # Rollback выполняется автоматически, если случилось исключение
+                await db.rollback()
                 raise e
-            # Закрытие сессии также происходит автоматически
+            finally:
+                await db.close()
 
     return (
         get_async_session,

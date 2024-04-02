@@ -1,6 +1,8 @@
 import s from './ChannelInfoPage.module.scss'
 import bobaImg from '../../assets/imgs/biba.jpg'
 import {useParams} from "react-router";
+import {channelsAPI} from "../../store/services/ChannelService.ts";
+import {Loading} from "../../modules/Loading/Loading.tsx";
 
 const testData = {
   name: 'Название канала',
@@ -21,9 +23,10 @@ const translateStatus = (status: string): string => {
 
 const ChannelInfoPage = () => {
   const params = useParams()
-  console.log(params)
+  const {data: channel, isLoading} = channelsAPI.useGetChannelByIdQuery(params.id)
 
-
+  if (!channel) return <p>ты еблан</p>
+  if (isLoading) return <Loading/>
   return (
     <section className={s.main}>
       <div className={s.infoContainer}>
