@@ -17,8 +17,8 @@ export const Posts: FC = () => {
   } = postsAPI.useFetchAllPostsQuery(null)
 
   if (isLoading) return <Loading/>
-  if (!posts || posts?.length === 0) return <div className='errorDiv'>
-    <p>У вас нет постов или просроченный токен</p>
+  if (!posts) return <div className='errorDiv'>
+    <p>У вас просроченный токен</p>
     <Link to={paths.TELEGRAMAUTH}><Button variant='contained'>Перейти в авторизацию</Button></Link>
   </div>
   return (
@@ -53,6 +53,12 @@ export const Posts: FC = () => {
           Опубликованные
         </Button>
       </div>
+      {
+        posts?.length === 0 &&
+          <div className='errorDiv'>
+              <p>У вас нет постов</p>
+          </div>
+      }
       {posts && (
         <Grid
           maxWidth="sm"
