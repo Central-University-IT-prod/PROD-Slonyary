@@ -103,6 +103,12 @@
   font-weight: 500;
   color: #fff;
 }
+.AddPostForm .gptButton:disabled {
+  cursor: auto;
+  background: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
+}
 .AddPostForm .chanelsToPost {
   margin-top: 15px;
 }

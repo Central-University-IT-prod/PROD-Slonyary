@@ -186,6 +186,7 @@ const AddPostForm: FC = () => {
 			setGPTText('')
 			setSpellcheckingString('')
 			setIsSpellcheckingLoading(false)
+			document.querySelectorAll('')
 
 			successNotify('Пост успешно создан')
 		}
@@ -466,7 +467,11 @@ const AddPostForm: FC = () => {
 				>
 					Проверить орфографию
 				</Button>
-				<button className="gptButton" onClick={gpt}>
+				<button
+					disabled={spellcheckingBtnDisabled}
+					className="gptButton"
+					onClick={gpt}
+				>
 					Сгенерировать текст
 				</button>
 				<Button

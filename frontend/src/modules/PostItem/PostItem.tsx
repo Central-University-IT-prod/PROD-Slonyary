@@ -37,7 +37,7 @@ export const PostItem: FC<{
 	const [rejectPost, { isLoading: isLoadingReject, error: rejectError }] =
 		postsAPI.useRejectPostMutation()
 
-	const navidate = useNavigate()
+	const navigate = useNavigate()
 
 	const {
 		id,
@@ -184,7 +184,7 @@ export const PostItem: FC<{
 				<div className={s.bottomButtons}>
 					<button
 						onClick={() => {
-							navidate(NavigatePath(changePostPath(String(id))))
+							navigate(NavigatePath(changePostPath(String(id))))
 						}}
 						className={`${s.leftButton} ${s.grey}`}
 					>
@@ -205,7 +205,12 @@ export const PostItem: FC<{
 					>
 						Отклонить
 					</button>
-					<button className={`${s.middleButton} ${s.grey}`}>Изменить</button>
+					<button
+						onClick={() => navigate(NavigatePath(changePostPath(String(id))))}
+						className={`${s.middleButton} ${s.grey}`}
+					>
+						Изменить
+					</button>
 					<button
 						onClick={() => {
 							acceptPost(id)
