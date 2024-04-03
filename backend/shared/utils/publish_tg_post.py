@@ -15,7 +15,7 @@ from shared.database.models import Image, Post, PostsToTgChannels, TgChannel
 
 async def publish_tg_post(post: Post, bot: Bot, session: AsyncSession) -> None:
     media_group = await images_to_file_id_media(post, bot)
-    text = post.html_text.replace("<p>", "").replace("</p>", "")
+    text = post.html_text.replace("<p>", "").replace("</p>", "").replace("<br>", "")
     if media_group:
         logging.info(f"Отправка поста #{post.id} с медиагруппой")
 

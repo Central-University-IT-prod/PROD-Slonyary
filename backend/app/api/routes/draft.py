@@ -22,7 +22,7 @@ async def post_preview_draft(
     Я живу в идеальном мире, где юзер не блочит бота, поэтому никаких проверок нет.
     """
 
-    text = html_text.replace("<p>", "").replace("</p>", "")
+    text = html_text.replace("<p>", "").replace("</p>", "").replace("<br>", "")
     if files:
         media_group = [
             InputMediaPhoto(
