@@ -4,7 +4,7 @@ import {BACKEND_HOST} from "../../constants.ts";
 export const channelsAPI = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
+    baseUrl: `${BACKEND_HOST}`, prepareHeaders: (headers) => {
       headers.set('token', localStorage.getItem('accessToken') as string)
     }
   }),

@@ -74,7 +74,7 @@ export const PostItem: FC<{
 	const publish = async () => {
 		try {
 			await axios.post(
-				`http://${BACKEND_HOST}/posts/${id}/publish`,
+				`${BACKEND_HOST}/posts/${id}/publish`,
 				{},
 				{
 					headers: {

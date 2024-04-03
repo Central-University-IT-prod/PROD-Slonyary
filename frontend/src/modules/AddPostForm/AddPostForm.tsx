@@ -337,7 +337,7 @@ const AddPostForm: FC = () => {
 			setIsGptLoading(true)
 
 			const gptData = await axios.get(
-				`http://${BACKEND_HOST}/gpt_response?prompt=${text}`,
+				`${BACKEND_HOST}/gpt_response?prompt=${text}`,
 				{
 					headers: {
 						token: localStorage.getItem('accessToken')

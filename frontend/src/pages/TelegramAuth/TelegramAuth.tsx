@@ -5,14 +5,18 @@ import axios from 'axios'
 import { BACKEND_HOST } from '../../constants'
 import { useActions } from '../../hooks/useActions'
 import './TelegramAuth.scss'
+import { useNavigate } from 'react-router'
+import { NavigatePath, paths } from '../../routes'
 
 export const TelegramAuth: FC = () => {
 	const { setUser } = useActions()
+	const navigate = useNavigate()
+
 	const handleTelegramResponse = async (response: any) => {
 		if (response) {
 			setUser(response)
 
-			const res = await axios.post(`http://${BACKEND_HOST}/auth`, {
+			const res = await axios.post(`${BACKEND_HOST}/auth`, {
 				...response
 			})
 
@@ -20,6 +24,7 @@ export const TelegramAuth: FC = () => {
 				localStorage.setItem('accessToken', res.data.token)
 				localStorage.setItem('userData', JSON.stringify(response))
 				setUser(response)
+				navigate(NavigatePath(paths.HOME))
 			}
 		}
 	}

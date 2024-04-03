@@ -82,7 +82,7 @@ const ChannelInfoPage = () => {
 						<h5 className={s.membersTitle}>Участники</h5>
 						<div className={s.membersList}>
 							{channel.workers.map((user: any, index: number) => (
-								<div className={s.user}>
+								<div className={s.user} key={user.id}>
 									<span className={s.number}>{index + 1}.</span>
 									<div className={s.userText}>
 										<h5 className={s.userName}>{user.name}</h5>
