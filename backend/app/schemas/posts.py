@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import Field
 
 from app.schemas import ImageRead
-from app.schemas.base import BaseSchema
+from app.schemas.base import BaseSchema, BaseSchemaPublishTime
 
 
 class Channel(BaseSchema):
@@ -19,20 +19,20 @@ class ChannelRead(BaseSchema):
     type: str
 
 
-class PostUpdate(BaseSchema):
+class PostUpdate(BaseSchemaPublishTime):
     html_text: str | None = None
     plain_text: str | None = None
     publish_time: datetime | None = None
 
 
-class PostIn(BaseSchema):
+class PostIn(BaseSchemaPublishTime):
     html_text: str | None
     plain_text: str | None
     publish_time: datetime | None = None
     channels: list[Channel] = Field(default_factory=list)
 
 
-class PostCreate(BaseSchema):
+class PostCreate(BaseSchemaPublishTime):
     html_text: str | None = None
     plain_text: str | None = None
     publish_time: datetime | None = None
@@ -48,7 +48,7 @@ class PostChannel(BaseSchema):
     type: str
 
 
-class PreviewPost(BaseSchema):
+class PreviewPost(BaseSchemaPublishTime):
     id: int
     status: str
     channels: list[PostChannel]

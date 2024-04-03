@@ -82,7 +82,7 @@ const ChannelInfoPage = () => {
 						<h5 className={s.membersTitle}>Участники</h5>
 						<div className={s.membersList}>
 							{channel.workers.map((user: any, index: number) => (
-								<div className={s.user}>
+								<div className={s.user} key={user.id}>
 									<span className={s.number}>{index + 1}.</span>
 									<div className={s.userText}>
 										<h5 className={s.userName}>{user.name}</h5>
@@ -93,7 +93,33 @@ const ChannelInfoPage = () => {
 								</div>
 							))}
 							<div className={s.memberLinks}>
-								<div
+								<Button
+									sx={{ width: '100%' }}
+									onClick={() => {
+										navigator.clipboard
+											.writeText(
+												`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`
+											)
+											.then(
+												function () {
+													successNotify(
+														'Ссылка успешно скопирован в буфер обмена!'
+													)
+												},
+												function (err) {
+													warningNotify(
+														'Произошла ошибка при копировании текста: ' + err
+													)
+												}
+											)
+									}}
+									variant="contained"
+								>
+									Добавить модератора
+								</Button>
+								<Button
+									sx={{ width: '100%' }}
+									variant="contained"
 									onClick={() => {
 										navigator.clipboard
 											.writeText(
@@ -113,34 +139,8 @@ const ChannelInfoPage = () => {
 											)
 									}}
 								>
-									<Button sx={{ width: '100%' }} variant="contained">
-										Добавить модератора
-									</Button>
-								</div>
-								<a
-									onClick={() => {
-										navigator.clipboard
-											.writeText(
-												`https://t.me/StackSMM_Bot?start=invite${channel.id}_editor`
-											)
-											.then(
-												function () {
-													successNotify(
-														'Ссылка успешно скопирован в буфер обмена!'
-													)
-												},
-												function (err) {
-													warningNotify(
-														'Произошла ошибка при копировании текста: ' + err
-													)
-												}
-											)
-									}}
-								>
-									<Button sx={{ width: '100%' }} variant="contained">
-										Добавить редактора
-									</Button>
-								</a>
+									Добавить редактора
+								</Button>
 							</div>
 						</div>
 					</div>

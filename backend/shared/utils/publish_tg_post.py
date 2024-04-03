@@ -30,6 +30,14 @@ async def publish_tg_post(post: Post, bot: Bot, session: AsyncSession) -> None:
             msg = await bot.send_message(chat_id=channel.id, text=text)
             await link_post_message_id(post.id, channel.id, msg.message_id, session)
 
+    logging.info(f"Отправил пост #{post.id}")
+
+    await mark_post_as_published(post, session)
+    logging.info(f"Отметил пост #{post.id} опубликованным")
+
+    await notify_owner_about_publish(post, bot)
+    logging.info(f"Сообщил создателю поста #{post.id} о публикации")
+
 
 async def images_to_file_id_media(post: Post, bot: Bot) -> list[InputMediaPhoto]:
     images = [image_to_media_photo(image) for image in post.images]
@@ -68,7 +76,7 @@ async def link_post_message_id(
         .values(message_id=message_id)
     )
     await session.execute(query)
-    await session.flush()
+    await session.commit()
 
 
 async def mark_post_as_published(post: Post, session: AsyncSession) -> None:
@@ -77,6 +85,6 @@ async def mark_post_as_published(post: Post, session: AsyncSession) -> None:
 
 
 async def notify_owner_about_publish(post: Post, bot: Bot) -> None:
-    text = f"Пост №{post.id} опубликован!!!"
+    text = f"Пост #{post.id} опубликован!!!"
     with contextlib.suppress(TelegramAPIError):  # чтоб не сломалося
         await bot.send_message(chat_id=post.owner_id, text=text)

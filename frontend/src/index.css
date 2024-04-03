@@ -95,6 +95,8 @@ a:hover, a:visited {
     min-height: 50vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 10px;
 
     p {
         font-size: 20px;

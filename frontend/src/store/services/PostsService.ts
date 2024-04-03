@@ -25,7 +25,7 @@ export interface IPostRequest {
 export const postsAPI = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://${BACKEND_HOST}`, prepareHeaders: (headers) => {
+    baseUrl: `${BACKEND_HOST}`, prepareHeaders: (headers) => {
       headers.set('token', localStorage.getItem('accessToken') as string)
     }
   }),

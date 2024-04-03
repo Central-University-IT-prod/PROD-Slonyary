@@ -36,7 +36,7 @@ export const TelegramPreview: FC<{ data: Props }> = ({ data }) => {
 			}
 		}
 
-		await axios.post(`http://${BACKEND_HOST}/posts/draft`, formData, {
+		await axios.post(`${BACKEND_HOST}/posts/draft`, formData, {
 			headers: {
 				token: localStorage.getItem('accessToken')
 			}

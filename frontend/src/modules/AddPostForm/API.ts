@@ -12,7 +12,7 @@ export const getSpellcheckingWords = async (html:string) => {
 
 export const addMessages = async (data:any) => {
     try {
-        const response = await axios.post(`http://${BACKEND_HOST}/posts`, data, {
+        const response = await axios.post(`${BACKEND_HOST}/posts`, data, {
             headers: {
                 'token': localStorage.getItem('accessToken')
             }
@@ -26,7 +26,7 @@ export const addMessages = async (data:any) => {
 
 export const addImageToPost = async (id: number, form: FormData) => {
     try {
-        const response = await axios.post(`http://${BACKEND_HOST}/posts/${id}/images`, form, {
+        const response = await axios.post(`${BACKEND_HOST}/posts/${id}/images`, form, {
             headers: {
                 'token': localStorage.getItem('accessToken')
             }

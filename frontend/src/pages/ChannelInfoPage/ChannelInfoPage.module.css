@@ -5,6 +5,11 @@
   border-bottom: 1px solid #d9d9d9;
   justify-content: space-between;
 }
+@media (max-width: 800px) {
+  .infoContainer {
+    flex-direction: column;
+  }
+}
 
 .left {
   display: flex;
@@ -26,7 +31,7 @@
   margin-top: 8px;
   font-size: 14px;
   font-weight: 400;
-  background-color: #E49701;
+  background-color: #e49701;
   color: #fff;
   border-radius: 20px;
   padding: 5px 15px;
@@ -44,15 +49,20 @@
 }
 
 .members {
-  background-color: rgba(242, 243, 244, 0.5);
+  background-color: rgb(224, 224, 224);
   border-radius: 20px;
   padding: 20px 35px;
+}
+@media (max-width: 800px) {
+  .members {
+    padding: 20px;
+  }
 }
 
 .membersTitle {
   font-size: 20px;
   font-weight: 500;
-  color: #484E57;
+  color: rgba(0, 0, 0, 0.895);
 }
 
 .membersList {
@@ -70,12 +80,12 @@
 
 .number {
   font-size: 40px;
-  color: #d9d9d9;
+  color: rgba(16, 16, 16, 0.645);
   font-weight: 500;
 }
 
 .userName {
-  color: #484E57;
+  color: #26282c;
   font-size: 18px;
   font-weight: 500;
 }
@@ -84,13 +94,13 @@
   text-transform: capitalize;
 }
 .userStatus.owner {
-  color: #FFB13C;
+  color: #ffb13c;
 }
 .userStatus.moderator {
-  color: #A146CF;
+  color: #a146cf;
 }
 .userStatus.redactor {
-  color: #5894EF;
+  color: #5894ef;
 }
 
 .memberLinks {
